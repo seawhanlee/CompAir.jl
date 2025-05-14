@@ -7,7 +7,7 @@ include("cone_shock.jl")
 include("isentropic.jl")
 include("normal_shock.jl")
 include("nozzle.jl")
-include("oblique_shcok.jl")
+include("oblique_shock.jl")
 include("prandtl_expand.jl")
 
 
