@@ -21,21 +21,21 @@
 """
 function atmos1976_at(alt)
     t0, p0, rho0, a0 = 288.15, 101325.0, 1.225, 340.294
-    
+
     # Compute ratio
     rhor, pr, tr = _air1976(alt)
-    
+
     # Get density, pressure, temperature
-    temperature = t0*tr
-    pressure = p0*pr
-    density = rho0*rhor
-    
+    temperature = t0 * tr
+    pressure = p0 * pr
+    density = rho0 * rhor
+
     # Speed of sound
-    asound = a0*np.sqrt(tr)
-    
+    asound = a0 * sqrt(tr)
+
     # Get viscosity
     viscosity = sutherland_mu(tr)
-    
+
     return density, pressure, temperature, asound, viscosity
 end
 
@@ -56,7 +56,7 @@ Geometric 고도 (Z)를 Geopotential 고도 (H)로 변환
 
 """
 function geopot_alt(alt, rearth=6369.0)
-    return alt*rearth/(rearth + alt)
+    return alt * rearth / (rearth + alt)
 end
 
 """
@@ -75,18 +75,18 @@ end
         Geometric 고도 (km))
 """
 function geometrric_alt(alt, rearth=6369.0)
-    return alt*rearth/(rearth - alt)
+    return alt * rearth / (rearth - alt)
 end
 
 function _air1976(alt, gmr=34.163195)
     # Seven Layer model up to 86km
     air_layers = [
-        0.0  11.0  20.0  32.0  47.0  51.0  71.0  84.852;
-        288.15  216.65  216.65  228.65  270.65  270.65  214.65  186.946;
-        1.0  2.2336110E-1  5.4032950E-2  8.5666784E-3  1.0945601E-3  6.6063531E-4  3.9046834E-5  3.68501E-6;
-        -6.5  0.0  1.0  2.8  0.0  -2.8  -2.0  0.0
+        0.0 11.0 20.0 32.0 47.0 51.0 71.0 84.852;
+        288.15 216.65 216.65 228.65 270.65 270.65 214.65 186.946;
+        1.0 2.2336110E-1 5.4032950E-2 8.5666784E-3 1.0945601E-3 6.6063531E-4 3.9046834E-5 3.68501E-6;
+        -6.5 0.0 1.0 2.8 0.0 -2.8 -2.0 0.0
     ]
-    
+
     tbase0 = air_layers[2, 1]
 
     # Compute geopotential altitude
@@ -100,5 +100,49 @@ function _air1976(alt, gmr=34.163195)
     end
 
     # Get values
-    hbase, tbase, pbase, tgrad = air_layers[idx]
+    hbase, tbase, pbase, tgrad = air_layers[:, idx]
+
+    # Computet temperature and ratio
+    dh = h - hbase
+    tlocal = tbase + tgrad * dh
+    theta = tlocal / tbase0
+
+    # Compute pressure ratio
+    if abs(tgrad) < 1e-6
+        delta = pbase * exp(-gmr * dg / tbase)
+    else
+        delta = pbase * (tbase / tlocal)^(gmr / tgrad)
+    end
+
+    # Compute density ratio
+    sigma = delta / theta
+
+    return sigma, delta, theta
+end
+
+"""
+    Sutherland law for viscosity
+
+    온도에 따른 Dynamics 점도 계산
+
+    Parameters
+    ----------
+    theta : float
+        온도 비 (15C 대비 현재 온도)
+    t0 : float, optional
+        기준 온도, 기본값은 15C
+    mu0 : float, optional
+        기준 온도에서 점도, 기본값은 1.458e-6
+    suth : float, optional
+        Sutherland 관계식 계수, 기본값은 110.4
+
+    Returns
+    -------
+    mu : float
+        온도에 따른 Dynamic 점도
+"""
+function sutherland_mu(theta, t0=288.15, mu0=1.458e-6, suth=110.4)
+
+    t = t0 * theta
+    return mu0 * t * sqrt(t) / (t + suth)
 end
