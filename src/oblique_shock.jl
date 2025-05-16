@@ -43,9 +43,9 @@ function _beta_weak(M, theta, gamma=1.4)
 end
 
 """
-Theta-Beta-M 관계식을 수치적으로 계산하여
-마하수 `M` , 쐐기 각도 :math:`\beta` 일 때
-경사 충격파 각도 :math:`\beta` 를 계산한다.
+``\\theta-\\beta-M`` 관계식을 수치적으로 계산하여
+마하수 `M` , 쐐기 각도 ``\beta`` 일 때
+경사 충격파 각도 ``\beta`` 를 계산한다.
 
 Parameters
 ----------
@@ -61,7 +61,7 @@ Returns
 beta : float
     경사 충격파 각도 (degree)
 """
-function beta_weak(M, theta, gamma=1.4)
+function oblique_beta_weak(M, theta, gamma=1.4)
     # Convert rad to deg
     return rad2deg(_beta_weak(M, theta, gamma))
 end
