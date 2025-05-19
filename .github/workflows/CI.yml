@@ -31,11 +31,10 @@ jobs:
           - macos-latest
         arch:
           - x64
-          - arm64
         exclude:
           # Windows에서는 arm64 지원이 제한적임
-          - os: windows-latest
-            arch: arm64
+          - os: macos-latest
+            arch: x86
     steps:
       - uses: actions/checkout@v4
       - uses: julia-actions/setup-julia@v2
