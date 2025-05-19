@@ -40,21 +40,17 @@ function _integrate_tm(M, angle, theta, gamma=1.4)
 end
 
 """
+    theta_eff(M, angle, gamma=1.4)
+
 Cone 형상 각도 계산
 
-Parameters
-------------
-M : float  
-    마하수  
-angle : float  
-    Cone 반각 (degree)  
-gamma : float  
-    비열비  
-    
-Returns
---------
-theta_eff : float  
-    형상 각도 (degree)  
+# Arguments
+- `M::Float64`: 마하수
+- `angle::Float64`: Cone 반각 (degree)
+- `gamma::Float64=1.4`: 비열비
+
+# Returns
+- `theta_eff::Float64`: 형상 각도 (degree)
 """
 function theta_eff(M, angle, gamma=1.4)
     f(x) = _integrate_tm(M, angle, x, gamma).y[end, end]
@@ -62,21 +58,17 @@ function theta_eff(M, angle, gamma=1.4)
 end
 
 """
-마하수 ``M`` , Cone 반각 ``\\theta`` 일때 Cone 충격파 각도 계산
+    cone_beta_weak(M, angle, gamma=1.4)
 
-Parameters
-----------
-M : float
-    충격파 전 마하수
-angle : float
-Cone 반각 (degree)
-gamma : float, optional
-    비열비
+마하수 `M`, Cone 반각 `θ` 일때 Cone 충격파 각도 계산
 
-Returns
---------
-beta : float
-    경사 충격파 각도 (degree)
+# Arguments
+- `M::Float64`: 충격파 전 마하수
+- `angle::Float64`: Cone 반각 (degree)
+- `gamma::Float64=1.4`: 비열비
+
+# Returns
+- `beta::Float64`: 경사 충격파 각도 (degree)
 """
 function cone_beta_weak(M, angle, gamma=1.4)
     theta = theta_eff(M, angle, gamma)
@@ -84,22 +76,17 @@ function cone_beta_weak(M, angle, gamma=1.4)
 end
 
 """
-마하수 ``M`` , Cone 반각 ``\\theta`` 일때 발생한 경사충격파를
-지난 후 마하수
+    cone_mach2(M, angle, gamma=1.4)
 
-Parameters
-----------
-M : float
-    충격파 전 마하수
-angle : float
-    Cone 반각 (degree)
-gamma : float, optional
-    비열비
+마하수 `M`, Cone 반각 `θ` 일때 발생한 경사충격파를 지난 후 마하수
 
-Returns
---------
-M2 : float
-    경사 충격파후 마하수
+# Arguments
+- `M::Float64`: 충격파 전 마하수
+- `angle::Float64`: Cone 반각 (degree)
+- `gamma::Float64=1.4`: 비열비
+
+# Returns
+- `M2::Float64`: 경사 충격파후 마하수
 """
 function cone_mach2(M, angle, gamma=1.4)
     theta = theta_eff(M, angle, gamma)
@@ -116,21 +103,17 @@ function _cone_mach(M, angle, theta, gamma)
 end
 
 """
-마하수 ``M`` , Cone 반각 ``\\theta`` 일때 Cone 표면 마하수
+    cone_mach(M, angle, gamma=1.4)
 
-Parameters
-----------
-M : float
-    충격파 전 마하수
-angle : float
-    Cone 반각 (degree)
-gamma : float, optional
-    비열비
+마하수 `M`, Cone 반각 `θ` 일때 Cone 표면 마하수
 
-Returns
---------
-M2 : float
-    경사 충격파후 마하수
+# Arguments
+- `M::Float64`: 충격파 전 마하수
+- `angle::Float64`: Cone 반각 (degree)
+- `gamma::Float64=1.4`: 비열비
+
+# Returns
+- `M2::Float64`: 경사 충격파후 마하수
 """
 function cone_mach(M, angle, gamma=1.4)
     theta = theta_eff(M, angle, gamma)
@@ -138,30 +121,21 @@ function cone_mach(M, angle, gamma=1.4)
 end
 
 """
-마하수 ``M`` , Cone 반각 ``\theta`` 일때 발생한 경사충격파를
-지난 후 물성치 계산
+    solve_shock(M, angle, gamma=1.4)
 
-Parameters
-----------
-M : float
-    충격파 전 마하수
-angle : float
-    쇄기 각도 (degree)
-gamma : float, optional
-    비열비
+마하수 `M`, Cone 반각 `θ` 일때 발생한 경사충격파를 지난 후 물성치 계산
 
-Returns
---------
-m2 : float
-    수직충격파 후 마하수
-rho2 : float
-    수직충격파 전/후 밀도비
-p2 : float
-    수직충격파 전/후 압력비
-p0ratio : float
-    수직충격파 전/후 전압력비
-beta : float
-    경사 충격파 각도 (degree)
+# Arguments
+- `M::Float64`: 충격파 전 마하수
+- `angle::Float64`: 쇄기 각도 (degree)
+- `gamma::Float64=1.4`: 비열비
+
+# Returns
+- `m2::Float64`: 수직충격파 후 마하수
+- `rho2::Float64`: 수직충격파 전/후 밀도비
+- `p2::Float64`: 수직충격파 전/후 압력비
+- `p0ratio::Float64`: 수직충격파 전/후 전압력비
+- `beta::Float64`: 경사 충격파 각도 (degree)
 """
 function solve_shock(M, angle, gamma=1.4)
     theta = theta_eff(M, angle, gamma)
@@ -169,29 +143,21 @@ function solve_shock(M, angle, gamma=1.4)
 end
 
 """
-마하수 ``M`` , Cone 반각 ``\theta`` 일때 발생한 Cone 표면에서 물성치
+    solve_cone(M, angle; gamma=1.4)
 
-Parameters
-----------
-M : float
-    충격파 전 마하수
-angle : float
-    쇄기 각도 (degree)
-gamma : float, optional
-    비열비
+마하수 `M`, Cone 반각 `θ` 일때 발생한 Cone 표면에서 물성치
 
-Returns
---------
-mcone : float
-    콘 표면 마하수
-rho2 : float
-    콘 표면 밀도비
-p2 : float
-    콘 표면 압력비
-p0ratio : float
-    콘 표면 전압력비
-beta : float
-    경사 충격파 각도 (degree)
+# Arguments
+- `M::Float64`: 충격파 전 마하수
+- `angle::Float64`: 쇄기 각도 (degree)
+- `gamma::Float64=1.4`: 비열비
+
+# Returns
+- `mcone::Float64`: 콘 표면 마하수
+- `rho2::Float64`: 콘 표면 밀도비
+- `p2::Float64`: 콘 표면 압력비
+- `p0ratio::Float64`: 콘 표면 전압력비
+- `beta::Float64`: 경사 충격파 각도 (degree)
 """
 function solve_cone(M, angle; gamma=1.4)
     mc, rhoc, pc, p0ratio, beta, _ = solve(M, angle, angle, gamma=gamma)
@@ -199,33 +165,23 @@ function solve_cone(M, angle; gamma=1.4)
 end
 
 """
-마하수 ``M``, Cone 반각 ``\\theta`` 일때 ray 각도 ``\\psi`` 발생한 Cone 표면에서 물성치
+    solve(M, angle, psi; gamma=1.4)
 
-Parameters
-----------
-M : float
-    충격파 전 마하수
-angle : float
-    쇄기 각도 (degree)
-psi : float
-    Ray 각도 (degree)
-gamma : float, optional
-    비열비
+마하수 `M`, Cone 반각 `θ` 일때 ray 각도 `ψ` 발생한 Cone 표면에서 물성치
 
-Returns
---------
-mcone : float
-    콘 표면 마하수
-rho2 : float
-    콘 표면 밀도비
-p2 : float
-    콘 표면 압력비
-p0ratio : float
-    콘 표면 전압력비
-beta : float
-    경사 충격파 각도 (degree)
-phi : float
-        유동 방향 (degree)
+# Arguments
+- `M::Float64`: 충격파 전 마하수
+- `angle::Float64`: 쇄기 각도 (degree)
+- `psi::Float64`: Ray 각도 (degree)
+- `gamma::Float64=1.4`: 비열비
+
+# Returns
+- `Mc::Float64`: 콘 표면 마하수
+- `rhoc::Float64`: 콘 표면 밀도비
+- `pc::Float64`: 콘 표면 압력비
+- `p0ratio::Float64`: 콘 표면 전압력비
+- `beta::Float64`: 경사 충격파 각도 (degree)
+- `phi::Float64`: 유동 방향 (degree)
 """
 function solve(M, angle, psi; gamma=1.4)
     theta = theta_eff(M, angle, gamma)

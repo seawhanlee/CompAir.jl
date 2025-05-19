@@ -1,23 +1,17 @@
 """
-    고도에 따른 표준 대기 (US Standard 1976) 물성치 계산
+    atmos1976_at(alt)
 
-    Parameters
-    ----------
-    alt : float
-        고도 (km))
+고도에 따른 표준 대기 (US Standard 1976) 물성치 계산
 
-    Returns
-    -------
-    density : float
-        밀도 (kg/m^3)
-    pressure : float
-        압력 (Pa)
-    temperature : float
-        온도 (K)
-    asound : float
-        음속 (m/s^2)
-    viscosity : float
-        Dynamics 점도 (Pa s)
+# Arguments
+- `alt::Float64`: 고도 (km)
+
+# Returns
+- `density::Float64`: 밀도 (kg/m^3)
+- `pressure::Float64`: 압력 (Pa)
+- `temperature::Float64`: 온도 (K)
+- `asound::Float64`: 음속 (m/s^2)
+- `viscosity::Float64`: Dynamics 점도 (Pa s)
 """
 function atmos1976_at(alt)
     t0, p0, rho0, a0 = 288.15, 101325.0, 1.225, 340.294
@@ -40,39 +34,32 @@ function atmos1976_at(alt)
 end
 
 """
+    geopot_alt(alt, rearth=6369.0)
+
 Geometric 고도 (Z)를 Geopotential 고도 (H)로 변환
 
-    Parameters
-    ----------
-    alt : float
-        Geometric 고도 (km)
-    Rearth : float, optional
-        지구 반지름, 기본값은 6369.0km.
+# Arguments
+- `alt::Float64`: Geometric 고도 (km)
+- `rearth::Float64=6369.0`: 지구 반지름(km)
 
-    Returns
-    -------
-    H : float
-        Geopotential 고도 (km)
-
+# Returns
+- `H::Float64`: Geopotential 고도 (km)
 """
 function geopot_alt(alt, rearth=6369.0)
     return alt * rearth / (rearth + alt)
 end
 
 """
-    Geopotential 고도 (H)를 Geometric 고도 (Z)로 변환
+    geometrric_alt(alt, rearth=6369.0)
 
-    Parameters
-    ----------
-    alt : float
-        Geopotential 고도 (km)
-    Rearth : float, optional
-        지구 반지름, 기본값은 6369.0km.
+Geopotential 고도 (H)를 Geometric 고도 (Z)로 변환
 
-    Returns
-    -------
-    Z : float
-        Geometric 고도 (km))
+# Arguments
+- `alt::Float64`: Geopotential 고도 (km)
+- `rearth::Float64=6369.0`: 지구 반지름(km)
+
+# Returns
+- `Z::Float64`: Geometric 고도 (km)
 """
 function geometrric_alt(alt, rearth=6369.0)
     return alt * rearth / (rearth - alt)
@@ -121,25 +108,18 @@ function _air1976(alt, gmr=34.163195)
 end
 
 """
-    Sutherland law for viscosity
+    sutherland_mu(theta, t0=288.15, mu0=1.458e-6, suth=110.4)
 
-    온도에 따른 Dynamics 점도 계산
+Sutherland law for viscosity - 온도에 따른 Dynamics 점도 계산
 
-    Parameters
-    ----------
-    theta : float
-        온도 비 (15C 대비 현재 온도)
-    t0 : float, optional
-        기준 온도, 기본값은 15C
-    mu0 : float, optional
-        기준 온도에서 점도, 기본값은 1.458e-6
-    suth : float, optional
-        Sutherland 관계식 계수, 기본값은 110.4
+# Arguments
+- `theta::Float64`: 온도 비 (15C 대비 현재 온도)
+- `t0::Float64=288.15`: 기준 온도(K)
+- `mu0::Float64=1.458e-6`: 기준 온도에서 점도
+- `suth::Float64=110.4`: Sutherland 관계식 계수
 
-    Returns
-    -------
-    mu : float
-        온도에 따른 Dynamic 점도
+# Returns
+- `mu::Float64`: 온도에 따른 Dynamic 점도(Pa s)
 """
 function sutherland_mu(theta, t0=288.15, mu0=1.458e-6, suth=110.4)
 
