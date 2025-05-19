@@ -1,7 +1,7 @@
 import Roots
 
 """
-    mdot(M, area, p0, t0, gamma=1.4, R)
+    mdot(M, area, p0, t0, R, gamma=1.4)
 
 노즐 내 유량 계산
 
@@ -10,13 +10,13 @@ import Roots
 - `area::Float64`: 입구 면적
 - `p0::Float64`: 전압력
 - `t0::Float64`: 전 온도
-- `gamma::Float64=1.4`: 비열비
 - `R::Float64`: Gas 상수
+- `gamma::Float64=1.4`: 비열비
 
 # Returns
 - `Float64`: 질량 유량
 """
-function mdot(M, area, p0, t0, gamma=1.4, R)
+function mdot(M, area, p0, t0, R, gamma=1.4)
     mdot_a = sqrt(gamma/R/t0)*p0*M/(1+(gamma-1)/2*M^2)^((gamma+1)/2/(gamma-1))
     return mdot_a*area
 end
