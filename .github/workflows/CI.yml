@@ -34,7 +34,7 @@ jobs:
           - aarch64
         exclude:
           # Windows에서는 arm64 지원이 제한적임
-          - os: macos-latest
+          - os: windows-latest
             arch: aarch64
     steps:
       - uses: actions/checkout@v4
