@@ -44,17 +44,17 @@ Cone 형상 각도 계산
 
 Parameters
 ------------
-M : float
-    마하수
-angle : float
-    Cone 반각 (degree)
-gamma : float
-    비열비
+M : float  
+    마하수  
+angle : float  
+    Cone 반각 (degree)  
+gamma : float  
+    비열비  
     
 Returns
 --------
-theta_eff : float
-    형상 각도 (degree)
+theta_eff : float  
+    형상 각도 (degree)  
 """
 function theta_eff(M, angle, gamma=1.4)
     f(x) = _integrate_tm(M, angle, x, gamma).y[end, end]
@@ -228,19 +228,19 @@ phi : float
         유동 방향 (degree)
 """
 function solve(M, angle, psi; gamma=1.4)
-    theta = theta_eff(M, angle, gamma=gamma)
+    theta = theta_eff(M, angle, gamma)
     
     # 충격파 전/후 물성치 계산
-    m2, rho2, p2, p0ratio, beta = obq.solve(M, theta, gamma=gamma)
+    M2, rho2, p2, p0ratio, beta = solve_oblique(M, theta, gamma)
     
     # Cone 마하수, 속도 방향
-    mc, phi = _Mcone(M, psi, theta, gamma=gamma)
+    Mc, phi = _Mcone(M, psi, theta, gamma)
     
     # 밀도
-    rhoc = rho2*isen.rho0_rho(m2, gamma=gamma)/isen.rho0_rho(mc, gamma=gamma)
+    rhoc = rho2*rho0_over_rho(M2, gamma)/rho0_over_rho(Mc, gamma)
     
     # 압력
-    pc = p2*isen.p0_p(m2, gamma=gamma) / isen.p0_p(mc, gamma=gamma)
+    pc = p2*p0_over_p(M2, gamma) / p0_over_p(Mc, gamma)
     
-    return mc, rhoc, pc, p0ratio, beta, phi
+    return Mc, rhoc, pc, p0ratio, beta, phi
 end
