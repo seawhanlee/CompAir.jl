@@ -33,7 +33,7 @@ function _integrate_tm(M, angle, theta, gamma=1.4)
     # Integrate over [beta, angle]
     tspan = (deg2rad(beta), deg2rad(angle))
     prob = ODEProblem(_taylor_maccoll, [v_r, v_theta], tspan, gamma)
-    sol = solve(prob)
+    sol = solve_cone_theta_phi(prob)
 
     # Return solution
     return sol
@@ -159,8 +159,8 @@ end
 - `p0ratio::Float64`: 콘 표면 전압력비
 - `beta::Float64`: 경사 충격파 각도 (degree)
 """
-function solve_cone(M, angle; gamma=1.4)
-    mc, rhoc, pc, p0ratio, beta, _ = solve(M, angle, angle, gamma=gamma)
+function solve_cone_theta(M, angle; gamma=1.4)
+    mc, rhoc, pc, p0ratio, beta, _ = solve_cone_theta_phi(M, angle, angle, gamma=gamma)
     return mc, rhoc, pc, p0ratio, beta
 end
 
@@ -183,14 +183,14 @@ end
 - `beta::Float64`: 경사 충격파 각도 (degree)
 - `phi::Float64`: 유동 방향 (degree)
 """
-function solve(M, angle, psi; gamma=1.4)
+function solve_cone_theta_phi(M, angle, psi; gamma=1.4)
     theta = theta_eff(M, angle, gamma)
     
     # 충격파 전/후 물성치 계산
     M2, rho2, p2, p0ratio, beta = solve_oblique(M, theta, gamma)
     
     # Cone 마하수, 속도 방향
-    Mc, phi = _Mcone(M, psi, theta, gamma)
+    Mc, phi = _cone_mach(M, psi, theta, gamma)
     
     # 밀도
     rhoc = rho2*rho0_over_rho(M2, gamma)/rho0_over_rho(Mc, gamma)

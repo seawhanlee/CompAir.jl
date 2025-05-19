@@ -169,8 +169,8 @@ function solve_oblique(M, theta, gamma=1.4)
     Mn2, rho2, p2, p0ratio = solve_normal(Mn1, gamma)
 
     # Compute M2
-    theta_r = np.deg2rad(theta)
-    M2 = Mn2 / np.sin(beta_r - theta_r)
+    theta_r = deg2rad(theta)
+    M2 = Mn2 / sin(beta_r - theta_r)
 
     return M2, rho2, p2, p0ratio, beta
 end
