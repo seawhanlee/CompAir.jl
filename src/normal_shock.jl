@@ -77,7 +77,7 @@ end
 # Returns
 - `p0::Float64`: 충격파 후 전압력
 """
-function p02(M, gamma=1.4)
+function normal_p02(M, gamma=1.4)
     p2 = p2_over_p1(M)
     M2 = normal_mach2(M)
     return p0_over_p(M2, gamma) * p2
@@ -97,7 +97,7 @@ end
 """
 function p02_over_p01(M, gamma=1.4)
     p01 = p0_over_p(M, gamma)
-    p02 = p02(M, gamma)
+    p02 = normal_p02(M, gamma)
     return p02 / p01
 end
 
