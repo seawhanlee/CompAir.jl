@@ -1,7 +1,20 @@
-using Roots
-using DifferentialEquations
-using LinearAlgebra
+import Roots
+import DifferentialEquations
+import LinearAlgebra
 
+"""
+    _taylor_maccoll(theta, y, gamma=1.4)
+
+Taylor-Maccoll 방정식의 미분 방정식을 계산하는 내부 함수
+
+# Arguments
+- `theta::Float64`: 각도 (radian)
+- `y::Vector{Float64}`: [v_r, v_theta] 속도 벡터 
+- `gamma::Float64=1.4`: 비열비
+
+# Returns
+- `dydt::Vector{Float64}`: 미분 방정식의 우변 벡터
+"""
 function _taylor_maccoll(theta, y, gamma=1.4)
     # Taylor-Maccoll function
     # Source: https://www.grc.nasa.gov/www/k-12/airplane/coneflow.html
@@ -15,6 +28,20 @@ function _taylor_maccoll(theta, y, gamma=1.4)
     return dydt
 end
 
+"""
+    _integrate_tm(M, angle, theta, gamma=1.4)
+
+Taylor-Maccoll 방정식을 수치적으로 적분하는 내부 함수
+
+# Arguments
+- `M::Float64`: 충격파 전 마하수
+- `angle::Float64`: 계산하려는 각도 (degree)
+- `theta::Float64`: 쇄기 각도 (degree)
+- `gamma::Float64=1.4`: 비열비
+
+# Returns
+- `sol`: DifferentialEquations.jl의 해 객체
+"""
 function _integrate_tm(M, angle, theta, gamma=1.4)
     theta_max_val = theta_max(M, gamma)
 
@@ -32,8 +59,8 @@ function _integrate_tm(M, angle, theta, gamma=1.4)
 
     # Integrate over [beta, angle]
     tspan = (deg2rad(beta), deg2rad(angle))
-    prob = ODEProblem(_taylor_maccoll, [v_r, v_theta], tspan, gamma)
-    sol = solve_cone_theta_phi(prob)
+    prob = DifferentialEquations.ODEProblem(_taylor_maccoll, [v_r, v_theta], tspan, gamma)
+    sol = DifferentialEquations.solve(prob)
 
     # Return solution
     return sol
@@ -54,7 +81,7 @@ Cone 형상 각도 계산
 """
 function theta_eff(M, angle, gamma=1.4)
     f(x) = _integrate_tm(M, angle, x, gamma).y[end, end]
-    return find_zero(f, 1e-3, Newton())
+    return Roots.find_zero(f, 1e-3, Roots.Newton())
 end
 
 """
@@ -93,10 +120,25 @@ function cone_mach2(M, angle, gamma=1.4)
     return oblique_mach2(M, theta, gamma)
 end
 
+"""
+    _cone_mach(M, angle, theta, gamma)
+
+주어진 마하수, 각도에서 콘 표면의 마하수와 유동 방향을 계산하는 내부 함수
+
+# Arguments
+- `M::Float64`: 충격파 전 마하수
+- `angle::Float64`: 계산하려는 각도 (degree)
+- `theta::Float64`: 쇄기 각도 (degree)
+- `gamma::Float64`: 비열비
+
+# Returns
+- `M2::Float64`: 표면에서의 마하수
+- `phi::Float64`: 유동 방향 각도 (degree)
+"""
 function _cone_mach(M, angle, theta, gamma)
     vec = _integrate_tm(M, angle, theta, gamma).y[:, end]
 
-    v = norm(vec)
+    v = LinearAlgebra.norm(vec)
     phi = angle + rad2deg(atan(vec[2] / vec[1]))
 
     return sqrt(2 / (gamma - 1) * (v^2 / (1 - v^2))), phi

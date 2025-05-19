@@ -1,6 +1,19 @@
-using Roots
-using Optim
+import Roots
+import Optim
 
+"""
+    _tangent_theta(beta_r, M, gamma=1.4)
+
+경사 충격파 각도 `β`와 마하수 `M`을 이용하여 쇄기 각도 `θ`의 탄젠트 값을 계산하는 내부 함수.
+
+# Arguments
+- `beta_r::Float64`: 경사 충격파 각도 (radian)
+- `M::Float64`: 충격파 전 마하수
+- `gamma::Float64=1.4`: 비열비
+
+# Returns
+- `Float64`: tan(θ) 값
+"""
 function _tangent_theta(beta_r, M, gamma=1.4)
     return 2 / tan(beta_r) * ((M * sin(beta_r))^2 - 1) / (M^2 * (gamma + cos(2 * beta_r)) + 2)
 end
@@ -28,6 +41,20 @@ function theta_beta(beta, M, gamma=1.4)
     return rad2deg(atan(tan_theta))
 end
 
+"""
+    _beta_weak(M, theta, gamma=1.4)
+
+마하수 `M`과 쇄기 각도 `θ`를 이용하여 약한 경사 충격파 각도 `β`를 계산하는 내부 함수.
+Newton-Raphson 방법을 사용하여 수치적으로 해를 구한다.
+
+# Arguments
+- `M::Float64`: 충격파 전 마하수
+- `theta::Float64`: 쇄기 각도 (degree)
+- `gamma::Float64=1.4`: 비열비
+
+# Returns
+- `Float64`: 경사 충격파 각도 (radian)
+"""
 function _beta_weak(M, theta, gamma=1.4)
     # Convert deg to rad
     theta_r = deg2rad(theta)
@@ -35,7 +62,7 @@ function _beta_weak(M, theta, gamma=1.4)
     f(x) = _tangent_theta(x, M, gamma) - tan(theta_r)
 
     # Solve theta-beta-M using Newton-Raphson method
-    return find_zero(f, 1e-3, newton())
+    return Roots.find_zero(f, 1e-3, newton())
 end
 
 """
@@ -74,7 +101,7 @@ function theta_max(M, gamma=1.4)
     f(x) = -_tangent_theta(x, M, gamma)
 
     # Optimization using Optim package
-    res = optimize(f, 1e-3)
+    res = Optim.optimize(f, 1e-3)
 
     # Get the maximum value of tangent theta
     tan_theta = -Optim.minimum(res)
