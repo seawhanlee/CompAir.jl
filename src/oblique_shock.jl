@@ -153,7 +153,7 @@ function oblique_mach2(M, theta, gamma=1.4)
     beta_r = _beta_weak(M, theta, gamma)
 
     # Normal component of M1
-    Mn1 = _Mn1(M, beta_r)
+    Mn1 = _Mn1(M, beta_r, gamma)
 
     # Normal shock relation
     Mn2 = normal_mach2(Mn1, gamma)
@@ -182,7 +182,7 @@ end
 - `beta::Float64`: 경사 충격파 각도 (degree)
 """
 function solve_oblique(M, theta, gamma=1.4)
-    if theta < theta_max(M)
+    if theta < theta_max(M, gamma)
         beta_r = _beta_weak(M, theta, gamma)
     else
         println("Bow shock occured at M=$(round(M, digits=3)), theta=$(round(theta, digits=3))")
@@ -192,7 +192,7 @@ function solve_oblique(M, theta, gamma=1.4)
     beta = rad2deg(beta_r)
 
     # Normal component of M1
-    Mn1 = _Mn1(M, beta_r)
+    Mn1 = _Mn1(M, beta_r, gamma)
 
     # Normal shock relation
     Mn2, rho2, p2, p0ratio = solve_normal(Mn1, gamma)
