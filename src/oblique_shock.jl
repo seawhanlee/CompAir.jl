@@ -1,5 +1,6 @@
 import Roots
 import Optim
+import Optim: Brent
 
 """
     _tangent_theta(beta_r, M, gamma=1.4)
@@ -62,7 +63,7 @@ function _beta_weak(M, theta, gamma=1.4)
     f(x) = _tangent_theta(x, M, gamma) - tan(theta_r)
 
     # Solve theta-beta-M using Newton-Raphson method
-    return Roots.find_zero(f, 1e-3, newton())
+    return Roots.find_zero(f, 1e-3)
 end
 
 """
@@ -101,7 +102,8 @@ function theta_max(M, gamma=1.4)
     f(x) = -_tangent_theta(x, M, gamma)
 
     # Optimization using Optim package
-    res = Optim.optimize(f, 1e-3)
+    # Use Brent's method for 1D optimization
+    res = Optim.optimize(f, 0.0, pi/2, Brent())
 
     # Get the maximum value of tangent theta
     tan_theta = -Optim.minimum(res)
