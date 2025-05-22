@@ -10,7 +10,6 @@ https://gitlab.com/aadl_inha/CompAir
 
 ## Features
 
-- US Standard Atmosphere 1976 model
 - Cone shock calculations
 - Isentropic flow analysis
 - Normal shock wave calculations
@@ -34,9 +33,6 @@ using CompAir
 M1 = 2.0  # Upstream Mach number
 properties = normal_shock(M1)
 
-# Example: Calculate atmospheric properties
-altitude = 10000  # meters
-atmos = atmos1976(altitude)
 ```
 
 ## Dependencies
