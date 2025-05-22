@@ -170,18 +170,18 @@ end
 """
     solve_shock(M, angle, gamma=1.4)
 
-마하수 `M`, Cone 반각 `θ` 일때 발생한 경사충격파를 지난 후 물성치 계산
+마하수 `M`, Cone 반각 `angle` 일때 발생한 경사충격파를 지난 후 물성치 계산
 
 # Arguments
 - `M::Float64`: 충격파 전 마하수
-- `angle::Float64`: 쇄기 각도 (degree)
+- `angle::Float64`: Cone 반각 (degree)
 - `gamma::Float64=1.4`: 비열비
 
 # Returns
-- `M2::Float64`: 수직충격파 후 마하수
-- `rho2::Float64`: 수직충격파 전/후 밀도비
-- `p2::Float64`: 수직충격파 전/후 압력비
-- `p0ratio::Float64`: 수직충격파 전/후 전압력비
+- `M2::Float64`: 경사충격파 후 마하수
+- `rho2::Float64`: 경사충격파 전/후 밀도비
+- `p2::Float64`: 경사충격파 전/후 압력비
+- `p0ratio::Float64`: 경사충격파 전/후 전압력비
 - `beta::Float64`: 경사 충격파 각도 (degree)
 """
 function solve_shock(M, angle, gamma=1.4)
@@ -190,60 +190,65 @@ function solve_shock(M, angle, gamma=1.4)
 end
 
 """
-    solve_cone(M, angle; gamma=1.4)
+    solve_cone_properties(M, angle; psi::Union{Float64, Nothing}=nothing, gamma=1.4)
 
-마하수 `M`, Cone 반각 `θ` 일때 발생한 Cone 표면에서 물성치
-
-# Arguments
-- `M::Float64`: 충격파 전 마하수
-- `angle::Float64`: 쇄기 각도 (degree)
-- `gamma::Float64=1.4`: 비열비
-
-# Returns
-- `mcone::Float64`: 콘 표면 마하수
-- `rho2::Float64`: 콘 표면 밀도비
-- `p2::Float64`: 콘 표면 압력비
-- `p0ratio::Float64`: 콘 표면 전압력비
-- `beta::Float64`: 경사 충격파 각도 (degree)
-"""
-function solve_cone_theta(M, angle; gamma=1.4)
-    mc, rhoc, pc, p0ratio, beta, _ = solve_cone_theta_phi(M, angle, angle, gamma=gamma)
-    return mc, rhoc, pc, p0ratio, beta
-end
-
-"""
-    solve(M, angle, psi; gamma=1.4)
-
-마하수 `M`, Cone 반각 `θ` 일때 ray 각도 `ψ` 발생한 Cone 표면에서 물성치
+마하수 `M`, Cone 반각 `angle`일 때 콘 표면 또는 특정 ray 각도 `psi`에서의 물성치를 계산합니다.
 
 # Arguments
 - `M::Float64`: 충격파 전 마하수
-- `angle::Float64`: 쇄기 각도 (degree)
-- `psi::Float64`: Ray 각도 (degree)
+- `angle::Float64`: Cone 반각 (degree)
+- `psi::Union{Float64, Nothing}=nothing`: Ray 각도 (degree). 제공되지 않거나 `nothing`이면 `angle`과 동일하게 간주되어 콘 표면에서의 물성치를 계산합니다.
 - `gamma::Float64=1.4`: 비열비
 
 # Returns
-- `Mc::Float64`: 콘 표면 마하수
-- `rhoc::Float64`: 콘 표면 밀도비
-- `pc::Float64`: 콘 표면 압력비
-- `p0ratio::Float64`: 콘 표면 전압력비
-- `beta::Float64`: 경사 충격파 각도 (degree)
-- `phi::Float64`: 유동 방향 (degree)
+- If `psi` is `nothing` (콘 표면 물성치):
+    - `mc::Float64`: 콘 표면 마하수
+    - `rhoc::Float64`: 콘 표면 밀도비 (자유흐름 밀도 대비)
+    - `pc::Float64`: 콘 표면 압력비 (자유흐름 압력 대비)
+    - `p0ratio::Float64`: 전압력비 (충격파 통과 후 / 전)
+    - `beta::Float64`: 경사 충격파 각도 (degree)
+- If `psi` is provided (특정 ray 각도 `psi`에서의 물성치):
+    - `Mc::Float64`: `psi`에서의 마하수
+    - `rhoc::Float64`: `psi`에서의 밀도비 (자유흐름 밀도 대비)
+    - `pc::Float64`: `psi`에서의 압력비 (자유흐름 압력 대비)
+    - `p0ratio::Float64`: 전압력비 (충격파 통과 후 / 전)
+    - `beta::Float64`: 경사 충격파 각도 (degree)
+    - `phi::Float64`: `psi`에서의 유동 방향 (degree)
 """
-function solve_cone_theta_phi(M, angle, psi; gamma=1.4)
-    theta = theta_eff(M, angle, gamma)
+function solve_cone_properties(M, angle; psi::Union{Float64, Nothing}=nothing, gamma=1.4)
+    theta_eff_val = theta_eff(M, angle, gamma)
+
+    # 충격파 직후 물성치 계산 (M은 자유흐름 마하수)
+    # M_after_shock는 충격파 직후 마하수
+    # rho_ratio_across_shock는 rho_after_shock / rho_freestream
+    # p_ratio_across_shock는 p_after_shock / p_freestream
+    # p0_ratio_across_shock는 p0_after_shock / p0_freestream
+    # beta_shock_angle은 충격파 각도
+    M_after_shock, rho_ratio_across_shock, p_ratio_across_shock, p0_ratio_across_shock, beta_shock_angle = solve_oblique(M, theta_eff_val, gamma)
+
+    # _cone_mach 계산을 위한 psi 값 결정
+    # psi가 제공되지 않으면 콘 표면(angle)에서의 값을 계산
+    psi_calc = (psi === nothing) ? angle : psi
+
+    # Cone 표면 또는 특정 psi에서의 마하수(Mc_at_psi) 및 유동방향(phi_at_psi) 계산
+    # _cone_mach 함수는 자유흐름 마하수 M, 계산하려는 각도 psi_calc, 유효 쐐기각 theta_eff_val을 사용합니다.
+    Mc_at_psi, phi_at_psi = _cone_mach(M, psi_calc, theta_eff_val, gamma)
     
-    # 충격파 전/후 물성치 계산
-    M2, rho2, p2, p0ratio, beta = solve_oblique(M, theta, gamma)
+    # 밀도비 계산 (psi_calc 지점의 밀도 / 자유흐름 밀도)
+    # rho_psi / rho_freestream = (rho_psi / rho_after_shock) * (rho_after_shock / rho_freestream)
+    # 여기서 rho_psi / rho_after_shock = rho0_over_rho(M_after_shock) / rho0_over_rho(Mc_at_psi) (등엔트로피 과정)
+    rhoc_ratio_freestream = rho_ratio_across_shock * rho0_over_rho(M_after_shock, gamma) / rho0_over_rho(Mc_at_psi, gamma)
     
-    # Cone 마하수, 속도 방향
-    Mc, phi = _cone_mach(M, psi, theta, gamma)
+    # 압력비 계산 (psi_calc 지점의 압력 / 자유흐름 압력)
+    # p_psi / p_freestream = (p_psi / p_after_shock) * (p_after_shock / p_freestream)
+    # 여기서 p_psi / p_after_shock = p0_over_p(M_after_shock) / p0_over_p(Mc_at_psi) (등엔트로피 과정)
+    pc_ratio_freestream = p_ratio_across_shock * p0_over_p(M_after_shock, gamma) / p0_over_p(Mc_at_psi, gamma)
     
-    # 밀도
-    rhoc = rho2*rho0_over_rho(M2, gamma)/rho0_over_rho(Mc, gamma)
-    
-    # 압력
-    pc = p2*p0_over_p(M2, gamma) / p0_over_p(Mc, gamma)
-    
-    return Mc, rhoc, pc, p0ratio, beta, phi
+    if psi === nothing
+        # 기존 solve_cone_theta와 동일한 반환 (phi 제외)
+        return Mc_at_psi, rhoc_ratio_freestream, pc_ratio_freestream, p0_ratio_across_shock, beta_shock_angle
+    else
+        # 기존 solve_cone_theta_phi와 동일한 반환
+        return Mc_at_psi, rhoc_ratio_freestream, pc_ratio_freestream, p0_ratio_across_shock, beta_shock_angle, phi_at_psi
+    end
 end

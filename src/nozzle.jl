@@ -16,7 +16,7 @@ import Roots
 # Returns
 - `Float64`: 질량 유량
 """
-function mdot(M, area, p0, t0, R, gamma=1.4)
+function mdot(M, area=1, p0=1, t0=1, gamma=1.4, R=1)
     mdot_a = sqrt(gamma/R/t0)*p0*M/(1+(gamma-1)/2*M^2)^((gamma+1)/2/(gamma-1))
     return mdot_a*area
 end
