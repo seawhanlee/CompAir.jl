@@ -33,6 +33,14 @@ end
 - `theta::Float64`: 쇄기 각도 (degree)
 """
 function theta_beta(beta, M, gamma=1.4)
+    # Input validation
+    if beta == 0.0 || beta == 90.0
+        throw(DomainError(beta, "beta must be between 0 and 90 degrees, exclusive."))
+    end
+    if M <= 0.0
+        throw(DomainError(M, "Mach number M must be positive."))
+    end
+
     # Convert deg to rad
     beta_r = deg2rad(beta)
 

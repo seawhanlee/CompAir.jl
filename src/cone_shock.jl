@@ -3,14 +3,14 @@ import DifferentialEquations
 import LinearAlgebra
 
 """
-    _taylor_maccoll(theta, y, gamma=1.4)
+    _taylor_maccoll(y, p, t)
 
 Taylor-Maccoll 방정식의 미분 방정식을 계산하는 내부 함수
 
 # Arguments
-- `theta::Float64`: 각도 (radian)
 - `y::Vector{Float64}`: [v_r, v_theta] 속도 벡터 
-- `gamma::Float64=1.4`: 비열비
+- `p::Float64`: 비열비
+- `t::Float64`: 각도 (radian)
 
 # Returns
 - `dydt::Vector{Float64}`: 미분 방정식의 우변 벡터
@@ -21,8 +21,7 @@ function _taylor_maccoll(theta, y, gamma=1.4)
     v_r, v_theta = y
     dydt = [
         v_theta;
-        (v_theta^2 * v_r - (gamma - 1) / 2 * (1 - v_r^2 - v_theta^2) * (2 * v_r + v_theta / tan(theta)))
-        / ((gamma - 1) / 2 * (1 - v_r^2 - v_theta^2) - v_theta^2)
+        (v_theta^2 * v_r - (gamma - 1) / 2 * (1 - v_r^2 - v_theta^2) * (2 * v_r + v_theta / tan(theta)))/ ((gamma - 1) / 2 * (1 - v_r^2 - v_theta^2) - v_theta^2)
     ]
 
     return dydt
@@ -54,14 +53,20 @@ function _integrate_tm(M, angle, theta, gamma=1.4)
     end
 
     v = sqrt(((gamma - 1) / 2 * M2^2) / (1 + (gamma - 1) / 2 * M2^2))
-    v_theta = -v * sin(deg2rad(beta - theta))
-    v_r = v * cos(deg2rad(beta - theta))
+    v_theta = -v * sind(beta - theta)
+    v_r = v * cosd(beta - theta)
 
     # Integrate over [beta, angle]
     tspan = (deg2rad(beta), deg2rad(angle))
-    prob = DifferentialEquations.ODEProblem(_taylor_maccoll, [v_r, v_theta], tspan, gamma)
-    sol = DifferentialEquations.solve(prob)
 
+    # Integrate over [beta, angle]
+    ode_function_wrapper = (u_state, param_gamma, time_angle) -> _taylor_maccoll(time_angle, u_state, param_gamma)
+    
+    # 초기값 u0 설정
+    u0 = [v_r, v_theta]
+    
+    prob = DifferentialEquations.ODEProblem(ode_function_wrapper, u0, tspan, gamma)
+    sol = DifferentialEquations.solve(prob)
     # Return solution
     return sol
 end
@@ -80,8 +85,8 @@ Cone 형상 각도 계산
 - `theta_eff::Float64`: 형상 각도 (degree)
 """
 function theta_eff(M, angle, gamma=1.4)
-    f(x) = _integrate_tm(M, angle, x, gamma).y[end, end]
-    return Roots.find_zero(f, 1e-3, Roots.Newton())
+    f(x) = _integrate_tm(M, angle, x, gamma).u[end][2] # Use v_theta (tangential velocity component)
+    return Roots.find_zero(f, 1e-3)
 end
 
 """
@@ -136,7 +141,7 @@ end
 - `phi::Float64`: 유동 방향 각도 (degree)
 """
 function _cone_mach(M, angle, theta, gamma)
-    vec = _integrate_tm(M, angle, theta, gamma).y[:, end]
+    vec = _integrate_tm(M, angle, theta, gamma).u[end]
 
     v = LinearAlgebra.norm(vec)
     phi = angle + rad2deg(atan(vec[2] / vec[1]))
@@ -157,7 +162,7 @@ end
 # Returns
 - `M2::Float64`: 경사 충격파후 마하수
 """
-function cone_mach(M, angle, gamma=1.4)
+function cone_mach_surface(M, angle, gamma=1.4)
     theta = theta_eff(M, angle, gamma)
     return _cone_mach(M, angle, theta, gamma)
 end
@@ -173,7 +178,7 @@ end
 - `gamma::Float64=1.4`: 비열비
 
 # Returns
-- `m2::Float64`: 수직충격파 후 마하수
+- `M2::Float64`: 수직충격파 후 마하수
 - `rho2::Float64`: 수직충격파 전/후 밀도비
 - `p2::Float64`: 수직충격파 전/후 압력비
 - `p0ratio::Float64`: 수직충격파 전/후 전압력비
