@@ -5,6 +5,8 @@
 # CompAir.jl
 
 A Julia package for computational aerodynamics and compressible flow calculations.
+Original code is written by Inha AADL.
+https://gitlab.com/aadl_inha/CompAir
 
 ## Features
 
