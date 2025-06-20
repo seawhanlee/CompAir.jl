@@ -3,10 +3,10 @@ using Documenter, CompAir
 makedocs(
     sitename="CompAir.jl",
     format=Documenter.HTML(
-        prettyurls=get(ENV, "CI", "false") == "true",
+        prettyurls=get(ENV, "CI", nothing) == "true",
         canonical="https://seawhanlee.github.io/CompAir.jl",
         assets=String[],
-        sidebar_sitename=false
+        sidebar_sitename=true
     ),
     modules=[CompAir],
     authors="Seawhan Lee",
