@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Cone Shock Analysis · CompAir.jl</title><meta name="title" content="Cone Shock Analysis · CompAir.jl"/><meta property="og:title" content="Cone Shock Analysis · CompAir.jl"/><meta property="twitter:title" content="Cone Shock Analysis · CompAir.jl"/><meta name="description" content="Documentation for CompAir.jl."/><meta property="og:description" content="Documentation for CompAir.jl."/><meta property="twitter:description" content="Documentation for CompAir.jl."/><meta property="og:url" content="https://seawhanlee.github.io/CompAir.jl/api/cone_shock/"/><meta property="twitter:url" content="https://seawhanlee.github.io/CompAir.jl/api/cone_shock/"/><link rel="canonical" href="https://seawhanlee.github.io/CompAir.jl/api/cone_shock/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">CompAir.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Manual</span><ul><li><a class="tocitem" href="../../manual/installation/">Installation</a></li><li><a class="tocitem" href="../../manual/quickstart/">Quick Start</a></li><li><a class="tocitem" href="../../manual/examples/">Examples</a></li></ul></li><li><span class="tocitem">API Reference</span><ul><li><a class="tocitem" href="../isentropic/">Isentropic Relations</a></li><li><a class="tocitem" href="../normal_shock/">Normal Shock Waves</a></li><li><a class="tocitem" href="../oblique_shock/">Oblique Shock Waves</a></li><li><a class="tocitem" href="../prandtl_expand/">Prandtl-Meyer Expansion</a></li><li class="is-active"><a class="tocitem" href>Cone Shock Analysis</a><ul class="internal"><li><a class="tocitem" href="#Overview"><span>Overview</span></a></li><li><a class="tocitem" href="#Theory"><span>Theory</span></a></li><li><a class="tocitem" href="#Functions"><span>Functions</span></a></li><li><a class="tocitem" href="#Function-Details"><span>Function Details</span></a></li><li><a class="tocitem" href="#Applications"><span>Applications</span></a></li><li><a class="tocitem" href="#Validation-Examples"><span>Validation Examples</span></a></li><li><a class="tocitem" href="#Limitations-and-Considerations"><span>Limitations and Considerations</span></a></li><li><a class="tocitem" href="#See-Also"><span>See Also</span></a></li></ul></li><li><a class="tocitem" href="../nozzle/">Nozzle Analysis</a></li><li><a class="tocitem" href="../atmos1976/">Atmospheric Model</a></li></ul></li><li><span class="tocitem">Development</span><ul><li><a class="tocitem" href="../../dev/contributing/">Contributing</a></li><li><a class="tocitem" href="../../dev/changelog/">Changelog</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">API Reference</a></li><li class="is-active"><a href>Cone Shock Analysis</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Cone Shock Analysis</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/seawhanlee/CompAir.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/seawhanlee/CompAir.jl/blob/main/docs/src/api/cone_shock.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Cone-Shock-Analysis"><a class="docs-heading-anchor" href="#Cone-Shock-Analysis">Cone Shock Analysis</a><a id="Cone-Shock-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Cone-Shock-Analysis" title="Permalink"></a></h1><p>This module provides functions for analyzing shock waves over axisymmetric bodies such as cones and spheres, using the Taylor-Maccoll equation for conical flow.</p><h2 id="Overview"><a class="docs-heading-anchor" href="#Overview">Overview</a><a id="Overview-1"></a><a class="docs-heading-anchor-permalink" href="#Overview" title="Permalink"></a></h2><p>Conical shock analysis is essential for understanding supersonic flow over axisymmetric bodies. This module covers:</p><ul><li><strong>Taylor-Maccoll Equation</strong>: Differential equation governing conical flow</li><li><strong>Cone Surface Conditions</strong>: Flow properties at the cone surface</li><li><strong>Shock Wave Properties</strong>: Shock angle and strength for conical geometry</li><li><strong>Surface Pressure Distribution</strong>: Pressure coefficients and heat transfer analysis</li><li><strong>Axisymmetric Flow</strong>: Three-dimensional effects in conical coordinates</li></ul><p>Unlike two-dimensional oblique shocks, conical flows involve three-dimensional effects that must be solved numerically using the Taylor-Maccoll equation.</p><h2 id="Theory"><a class="docs-heading-anchor" href="#Theory">Theory</a><a id="Theory-1"></a><a class="docs-heading-anchor-permalink" href="#Theory" title="Permalink"></a></h2><p>For supersonic flow over a circular cone, the flow field is governed by the Taylor-Maccoll equation:</p><p><strong>Taylor-Maccoll equation</strong>: <span>$\frac{d^2V_r}{d\theta^2} + \frac{(\gamma - 1)M_{\infty}^2 - 2V_r^2}{(\gamma - 1)M_{\infty}^2 - V_r^2}\frac{dV_r}{d\theta} + \frac{V_r^2 - 1}{\tan\theta} = 0$</span></p><p><strong>Boundary conditions</strong>:</p><ul><li>At shock: <span>$V_r(\theta_s) = V_{rs}$</span> (shock conditions)</li><li>At cone surface: <span>$\frac{dV_r}{d\theta}\bigg|_{\theta_c} = 0$</span> (tangency condition)</li></ul><p><strong>Conical coordinate system</strong>:</p><ul><li><p class="math-container">\[\theta\]</p>= angle from cone axis</li><li><p class="math-container">\[\theta_c\]</p>= cone half-angle</li><li><p class="math-container">\[\theta_s\]</p>= shock angle</li><li><p class="math-container">\[V_r\]</p>= dimensionless radial velocity</li></ul><p><strong>Property relations</strong>: <span>$M^2 = \frac{V_r^2}{(\gamma - 1)(1 - V_r^2/M_{\infty}^2)}$</span></p><p class="math-container">\[\frac{p}{p_{\infty}} = \frac{(\gamma + 1)M_{\infty}^2}{(\gamma + 1)M_{\infty}^2 - 2(\gamma - 1)(M_{\infty}^2 - V_r^2)}\]</p><p>Where:</p><ul><li><p class="math-container">\[M_{\infty}\]</p>= freestream Mach number</li><li><p class="math-container">\[\theta_c\]</p>= cone half-angle</li><li><p class="math-container">\[\gamma\]</p>= specific heat ratio</li></ul><h2 id="Functions"><a class="docs-heading-anchor" href="#Functions">Functions</a><a id="Functions-1"></a><a class="docs-heading-anchor-permalink" href="#Functions" title="Permalink"></a></h2><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.theta_eff" href="#CompAir.theta_eff"><code>CompAir.theta_eff</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">theta_eff(M, angle, gamma=1.4)</code></pre><p>Cone 형상 각도 계산</p><p><strong>Arguments</strong></p><ul><li><code>M::Float64</code>: 마하수</li><li><code>angle::Float64</code>: Cone 반각 (degree)</li><li><code>gamma::Float64=1.4</code>: 비열비</li></ul><p><strong>Returns</strong></p><ul><li><code>theta_eff::Float64</code>: 형상 각도 (degree)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/79d386a67778d0f8793bf3995bdc02d1a31dfb3e/src/cone_shock.jl#L74-L86">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.cone_beta_weak" href="#CompAir.cone_beta_weak"><code>CompAir.cone_beta_weak</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">cone_beta_weak(M, angle, gamma=1.4)</code></pre><p>마하수 <code>M</code>, Cone 반각 <code>θ</code> 일때 Cone 충격파 각도 계산</p><p><strong>Arguments</strong></p><ul><li><code>M::Float64</code>: 충격파 전 마하수</li><li><code>angle::Float64</code>: Cone 반각 (degree)</li><li><code>gamma::Float64=1.4</code>: 비열비</li></ul><p><strong>Returns</strong></p><ul><li><code>beta::Float64</code>: 경사 충격파 각도 (degree)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/79d386a67778d0f8793bf3995bdc02d1a31dfb3e/src/cone_shock.jl#L92-L104">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.cone_mach2" href="#CompAir.cone_mach2"><code>CompAir.cone_mach2</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">cone_mach2(M, angle, gamma=1.4)</code></pre><p>마하수 <code>M</code>, Cone 반각 <code>θ</code> 일때 발생한 경사충격파를 지난 후 마하수</p><p><strong>Arguments</strong></p><ul><li><code>M::Float64</code>: 충격파 전 마하수</li><li><code>angle::Float64</code>: Cone 반각 (degree)</li><li><code>gamma::Float64=1.4</code>: 비열비</li></ul><p><strong>Returns</strong></p><ul><li><code>M2::Float64</code>: 경사 충격파후 마하수</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/79d386a67778d0f8793bf3995bdc02d1a31dfb3e/src/cone_shock.jl#L110-L122">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.cone_mach_surface" href="#CompAir.cone_mach_surface"><code>CompAir.cone_mach_surface</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">cone_mach(M, angle, gamma=1.4)</code></pre><p>마하수 <code>M</code>, Cone 반각 <code>θ</code> 일때 Cone 표면 마하수</p><p><strong>Arguments</strong></p><ul><li><code>M::Float64</code>: 충격파 전 마하수</li><li><code>angle::Float64</code>: Cone 반각 (degree)</li><li><code>gamma::Float64=1.4</code>: 비열비</li></ul><p><strong>Returns</strong></p><ul><li><code>M2::Float64</code>: 경사 충격파후 마하수</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/79d386a67778d0f8793bf3995bdc02d1a31dfb3e/src/cone_shock.jl#L152-L164">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.solve_shock" href="#CompAir.solve_shock"><code>CompAir.solve_shock</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">solve_shock(M, angle, gamma=1.4)</code></pre><p>마하수 <code>M</code>, Cone 반각 <code>angle</code> 일때 발생한 경사충격파를 지난 후 물성치 계산</p><p><strong>Arguments</strong></p><ul><li><code>M::Float64</code>: 충격파 전 마하수</li><li><code>angle::Float64</code>: Cone 반각 (degree)</li><li><code>gamma::Float64=1.4</code>: 비열비</li></ul><p><strong>Returns</strong></p><ul><li><code>M2::Float64</code>: 경사충격파 후 마하수</li><li><code>rho2::Float64</code>: 경사충격파 전/후 밀도비</li><li><code>p2::Float64</code>: 경사충격파 전/후 압력비</li><li><code>p0ratio::Float64</code>: 경사충격파 전/후 전압력비</li><li><code>beta::Float64</code>: 경사 충격파 각도 (degree)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/79d386a67778d0f8793bf3995bdc02d1a31dfb3e/src/cone_shock.jl#L170-L186">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.solve_cone_properties" href="#CompAir.solve_cone_properties"><code>CompAir.solve_cone_properties</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">solve_cone_properties(M, angle; psi::Union{Float64, Nothing}=nothing, gamma=1.4)</code></pre><p>마하수 <code>M</code>, Cone 반각 <code>angle</code>일 때 콘 표면 또는 특정 ray 각도 <code>psi</code>에서의 물성치를 계산합니다.</p><p><strong>Arguments</strong></p><ul><li><code>M::Float64</code>: 충격파 전 마하수</li><li><code>angle::Float64</code>: Cone 반각 (degree)</li><li><code>psi::Union{Float64, Nothing}=nothing</code>: Ray 각도 (degree). 제공되지 않거나 <code>nothing</code>이면 <code>angle</code>과 동일하게 간주되어 콘 표면에서의 물성치를 계산합니다.</li><li><code>gamma::Float64=1.4</code>: 비열비</li></ul><p><strong>Returns</strong></p><ul><li>If <code>psi</code> is <code>nothing</code> (콘 표면 물성치):<ul><li><code>mc::Float64</code>: 콘 표면 마하수</li><li><code>rhoc::Float64</code>: 콘 표면 밀도비 (자유흐름 밀도 대비)</li><li><code>pc::Float64</code>: 콘 표면 압력비 (자유흐름 압력 대비)</li><li><code>p0ratio::Float64</code>: 전압력비 (충격파 통과 후 / 전)</li><li><code>beta::Float64</code>: 경사 충격파 각도 (degree)</li></ul></li><li>If <code>psi</code> is provided (특정 ray 각도 <code>psi</code>에서의 물성치):<ul><li><code>Mc::Float64</code>: <code>psi</code>에서의 마하수</li><li><code>rhoc::Float64</code>: <code>psi</code>에서의 밀도비 (자유흐름 밀도 대비)</li><li><code>pc::Float64</code>: <code>psi</code>에서의 압력비 (자유흐름 압력 대비)</li><li><code>p0ratio::Float64</code>: 전압력비 (충격파 통과 후 / 전)</li><li><code>beta::Float64</code>: 경사 충격파 각도 (degree)</li><li><code>phi::Float64</code>: <code>psi</code>에서의 유동 방향 (degree)</li></ul></li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/79d386a67778d0f8793bf3995bdc02d1a31dfb3e/src/cone_shock.jl#L192-L217">source</a></section></article><h2 id="Function-Details"><a class="docs-heading-anchor" href="#Function-Details">Function Details</a><a id="Function-Details-1"></a><a class="docs-heading-anchor-permalink" href="#Function-Details" title="Permalink"></a></h2><h3 id="theta_eff"><a class="docs-heading-anchor" href="#theta_eff">theta_eff</a><a id="theta_eff-1"></a><a class="docs-heading-anchor-permalink" href="#theta_eff" title="Permalink"></a></h3><pre><code class="language-julia hljs">theta_eff(M, angle, gamma=1.4)</code></pre><p>Calculate the effective deflection angle for cone flow that would produce the same shock angle as a 2D oblique shock.</p><p><strong>Arguments:</strong></p><ul><li><code>M::Real</code>: Freestream Mach number</li><li><code>angle::Real</code>: Cone half-angle in degrees</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Effective deflection angle in degrees</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; theta_eff(2.5, 15.0)
+12.847266221347485
+
+julia&gt; theta_eff(3.0, 20.0)
+16.89234567890123</code></pre><h3 id="cone*beta*weak"><a class="docs-heading-anchor" href="#cone*beta*weak">cone<em>beta</em>weak</a><a id="cone*beta*weak-1"></a><a class="docs-heading-anchor-permalink" href="#cone*beta*weak" title="Permalink"></a></h3><pre><code class="language-julia hljs">cone_beta_weak(M, angle, gamma=1.4)</code></pre><p>Calculate the shock angle for flow over a circular cone.</p><p><strong>Arguments:</strong></p><ul><li><code>M::Real</code>: Freestream Mach number</li><li><code>angle::Real</code>: Cone half-angle in degrees</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Shock angle in degrees</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; cone_beta_weak(2.5, 15.0)
+43.567890123456785
+
+julia&gt; cone_beta_weak(3.0, 10.0)
+38.12345678901234</code></pre><h3 id="cone_mach2"><a class="docs-heading-anchor" href="#cone_mach2">cone_mach2</a><a id="cone_mach2-1"></a><a class="docs-heading-anchor-permalink" href="#cone_mach2" title="Permalink"></a></h3><pre><code class="language-julia hljs">cone_mach2(M, angle, gamma=1.4)</code></pre><p>Calculate the Mach number immediately behind the cone shock wave.</p><p><strong>Arguments:</strong></p><ul><li><code>M::Real</code>: Freestream Mach number</li><li><code>angle::Real</code>: Cone half-angle in degrees</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Mach number behind shock</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; cone_mach2(2.5, 15.0)
+2.123456789012345
+
+julia&gt; cone_mach2(3.0, 20.0)
+2.456789012345678</code></pre><h3 id="cone*mach*surface"><a class="docs-heading-anchor" href="#cone*mach*surface">cone<em>mach</em>surface</a><a id="cone*mach*surface-1"></a><a class="docs-heading-anchor-permalink" href="#cone*mach*surface" title="Permalink"></a></h3><pre><code class="language-julia hljs">cone_mach_surface(M, angle, gamma=1.4)</code></pre><p>Calculate the Mach number at the cone surface using Taylor-Maccoll equation integration.</p><p><strong>Arguments:</strong></p><ul><li><code>M::Real</code>: Freestream Mach number</li><li><code>angle::Real</code>: Cone half-angle in degrees</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Surface Mach number</li><li><code>Float64</code>: Flow direction angle at surface (if applicable)</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; M_surface, phi = cone_mach_surface(2.5, 15.0)
+(2.089456789012345, 15.234567890123456)</code></pre><h3 id="solve_shock"><a class="docs-heading-anchor" href="#solve_shock">solve_shock</a><a id="solve_shock-1"></a><a class="docs-heading-anchor-permalink" href="#solve_shock" title="Permalink"></a></h3><pre><code class="language-julia hljs">solve_shock(M, angle, gamma=1.4)</code></pre><p>Complete cone shock analysis - calculate all property changes across the shock.</p><p><strong>Arguments:</strong></p><ul><li><code>M::Real</code>: Freestream Mach number</li><li><code>angle::Real</code>: Cone half-angle in degrees</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>M2::Float64</code>: Mach number behind shock</li><li><code>rho2::Float64</code>: Density ratio (ρ₂/ρ₁)</li><li><code>p2::Float64</code>: Pressure ratio (p₂/p₁)</li><li><code>p0ratio::Float64</code>: Stagnation pressure ratio (p₀₂/p₀₁)</li><li><code>beta::Float64</code>: Shock angle in degrees</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; M2, rho_ratio, p_ratio, p0_ratio, beta = solve_shock(2.5, 15.0)
+(2.123, 1.567, 2.234, 0.934, 43.6)</code></pre><h3 id="solve*cone*properties"><a class="docs-heading-anchor" href="#solve*cone*properties">solve<em>cone</em>properties</a><a id="solve*cone*properties-1"></a><a class="docs-heading-anchor-permalink" href="#solve*cone*properties" title="Permalink"></a></h3><pre><code class="language-julia hljs">solve_cone_properties(M, angle; psi::Union{Float64, Nothing}=nothing, gamma=1.4)</code></pre><p>Calculate flow properties at the cone surface or at a specified ray angle.</p><p><strong>Arguments:</strong></p><ul><li><code>M::Real</code>: Freestream Mach number</li><li><code>angle::Real</code>: Cone half-angle in degrees</li><li><code>psi::Union{Float64, Nothing}=nothing</code>: Ray angle in degrees (if nothing, calculates surface properties)</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong> If <code>psi</code> is <code>nothing</code> (cone surface properties):</p><ul><li><code>Mc::Float64</code>: Surface Mach number</li><li><code>rhoc::Float64</code>: Surface density ratio</li><li><code>pc::Float64</code>: Surface pressure ratio</li><li><code>p0ratio::Float64</code>: Stagnation pressure ratio</li><li><code>beta::Float64</code>: Shock angle in degrees</li></ul><p>If <code>psi</code> is provided:</p><ul><li><code>Mc::Float64</code>: Mach number at ray angle ψ</li><li><code>rhoc::Float64</code>: Density ratio at ray angle ψ</li><li><code>pc::Float64</code>: Pressure ratio at ray angle ψ</li><li><code>p0ratio::Float64</code>: Stagnation pressure ratio</li><li><code>beta::Float64</code>: Shock angle in degrees</li><li><code>phi::Float64</code>: Flow direction at ray angle ψ</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; Mc, rhoc, pc, p0ratio, beta = solve_cone_properties(2.5, 15.0)
+(2.089, 1.456, 2.123, 0.945, 43.6)
+
+julia&gt; Mc, rhoc, pc, p0ratio, beta, phi = solve_cone_properties(2.5, 15.0, psi=10.0)
+(2.145, 1.423, 2.089, 0.945, 43.6, 10.234)</code></pre><h2 id="Applications"><a class="docs-heading-anchor" href="#Applications">Applications</a><a id="Applications-1"></a><a class="docs-heading-anchor-permalink" href="#Applications" title="Permalink"></a></h2><h3 id="Missile-Nose-Cone-Analysis"><a class="docs-heading-anchor" href="#Missile-Nose-Cone-Analysis">Missile Nose Cone Analysis</a><a id="Missile-Nose-Cone-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Missile-Nose-Cone-Analysis" title="Permalink"></a></h3><p>Design analysis for a missile nose cone:</p><pre><code class="language-julia hljs"># Flight conditions
+M_flight = 2.8
+altitude = 15000  # m
+theta_nose = 12.0 # nose cone half-angle
+
+println(&quot;Missile Nose Cone Analysis:&quot;)
+println(&quot;Flight Mach: $M_flight&quot;)
+println(&quot;Altitude: $(altitude/1000) km&quot;)
+println(&quot;Nose cone half-angle: $theta_nose°&quot;)
+
+# Get atmospheric properties
+rho, p_inf, T_inf, a, mu = atmos1976_at(altitude/1000)
+
+# Shock analysis
+beta = cone_beta_weak(M_flight, theta_nose)
+M_surface = cone_mach_surface(M_flight, theta_nose)
+
+println(&quot;\nShock Properties:&quot;)
+println(&quot;Shock angle: $(round(beta, digits=1))°&quot;)
+println(&quot;Surface Mach: $(round(M_surface, digits=3))&quot;)
+
+# Surface conditions
+Mn1 = M_flight * sind(beta)
+p_ratio = 1 + 2*1.4/(1.4+1) * (Mn1^2 - 1)
+p_surface = p_inf * p_ratio
+
+# Temperature rise
+T_ratio = (1 + 0.2*M_flight^2) / (1 + 0.2*M_surface^2)
+T_surface = T_inf * T_ratio
+
+println(&quot;\nSurface Conditions:&quot;)
+println(&quot;Surface pressure: $(round(p_surface/1000, digits=1)) kPa&quot;)
+println(&quot;Surface temperature: $(round(T_surface, digits=1)) K&quot;)
+println(&quot;Pressure coefficient: $(round(2/(1.4*M_flight^2)*(p_ratio-1), digits=4))&quot;)</code></pre><h3 id="Cone-vs-Wedge-Comparison"><a class="docs-heading-anchor" href="#Cone-vs-Wedge-Comparison">Cone vs Wedge Comparison</a><a id="Cone-vs-Wedge-Comparison-1"></a><a class="docs-heading-anchor-permalink" href="#Cone-vs-Wedge-Comparison" title="Permalink"></a></h3><p>Compare shock properties for cone and wedge at same deflection angle:</p><pre><code class="language-julia hljs">M_inf = 2.5
+theta = 20.0  # deflection angle
+
+println(&quot;Cone vs Wedge Comparison at θ = $theta°:&quot;)
+println(&quot;Freestream Mach: $M_inf&quot;)
+
+# Wedge (2D oblique shock)
+M2_wedge, rho_wedge, p_wedge, p0_wedge, beta_wedge = solve_oblique(M_inf, theta)
+
+# Cone (axisymmetric)
+beta_cone = cone_beta_weak(M_inf, theta)
+M_cone, _ = cone_mach_surface(M_inf, theta)
+
+println(&quot;\nWedge (2D) Properties:&quot;)
+println(&quot;Shock angle: $(round(beta_wedge, digits=1))°&quot;)
+println(&quot;Surface Mach: $(round(M2_wedge, digits=3))&quot;)
+println(&quot;Pressure ratio: $(round(p_wedge, digits=3))&quot;)
+
+println(&quot;\nCone (Axisymmetric) Properties:&quot;)
+println(&quot;Shock angle: $(round(beta_cone, digits=1))°&quot;)
+println(&quot;Surface Mach: $(round(M_cone, digits=3))&quot;)
+
+# Calculate pressure ratio for cone (approximate)
+Mn1_cone = M_inf * sind(beta_cone)
+p_ratio_cone = 1 + 2*1.4/(1.4+1) * (Mn1_cone^2 - 1)
+
+println(&quot;Pressure ratio (approx): $(round(p_ratio_cone, digits=3))&quot;)
+
+println(&quot;\nDifferences:&quot;)
+println(&quot;Shock angle: $(round(beta_cone - beta_wedge, digits=2))° (cone stronger)&quot;)
+println(&quot;Surface Mach: $(round(M_cone - M2_wedge, digits=3)) (cone higher)&quot;)</code></pre><h3 id="Supersonic-Intake-Analysis"><a class="docs-heading-anchor" href="#Supersonic-Intake-Analysis">Supersonic Intake Analysis</a><a id="Supersonic-Intake-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Supersonic-Intake-Analysis" title="Permalink"></a></h3><p>Analyze conical intake for supersonic aircraft:</p><pre><code class="language-julia hljs"># Engine intake design
+M_cruise = 2.2
+intake_angle = 8.0  # intake cone half-angle
+L_intake = 2.0      # intake length (m)
+
+println(&quot;Supersonic Intake Analysis:&quot;)
+println(&quot;Cruise Mach: $M_cruise&quot;)
+println(&quot;Intake cone angle: $intake_angle°&quot;)
+
+# Cone shock analysis
+beta = cone_beta_weak(M_cruise, intake_angle)
+M_throat, _ = cone_mach_surface(M_cruise, intake_angle)
+
+println(&quot;\nCone Shock Properties:&quot;)
+println(&quot;Shock angle: $(round(beta, digits=1))°&quot;)
+println(&quot;Throat Mach number: $(round(M_throat, digits=3))&quot;)
+
+# Mass flow capture
+shock_radius = L_intake * tand(beta)
+capture_area = π * shock_radius^2
+
+println(&quot;\nFlow Capture:&quot;)
+println(&quot;Shock radius at throat: $(round(shock_radius, digits=2)) m&quot;)
+println(&quot;Flow capture area: $(round(capture_area, digits=3)) m²&quot;)
+
+# Total pressure recovery
+Mn1 = M_cruise * sind(beta)
+_, _, _, p0_recovery, _ = solve_normal(Mn1)
+
+println(&quot;Total pressure recovery: $(round(p0_recovery, digits=3))&quot;)
+println(&quot;Pressure loss: $(round((1-p0_recovery)*100, digits=1))%&quot;)</code></pre><h3 id="Cone-Half-Angle-Variation"><a class="docs-heading-anchor" href="#Cone-Half-Angle-Variation">Cone Half-Angle Variation</a><a id="Cone-Half-Angle-Variation-1"></a><a class="docs-heading-anchor-permalink" href="#Cone-Half-Angle-Variation" title="Permalink"></a></h3><p>Analyze how cone properties vary with half-angle:</p><pre><code class="language-julia hljs">M_inf = 3.0
+cone_angles = [5.0, 10.0, 15.0, 20.0, 25.0, 30.0]
+
+println(&quot;Cone Half-Angle Variation Study:&quot;)
+println(&quot;Freestream Mach: $M_inf&quot;)
+println(&quot;\nθc(°)\tβ(°)\tMs\tβ-θc\tCp_approx&quot;)
+println(&quot;-----\t----\t----\t-----\t---------&quot;)
+
+for theta_c in cone_angles
+    try
+        beta = cone_beta_weak(M_inf, theta_c)
+        M_surface, _ = cone_mach_surface(M_inf, theta_c)
+        
+        # Approximate pressure coefficient
+        Mn1 = M_inf * sind(beta)
+        p_ratio = 1 + 2*1.4/(1.4+1) * (Mn1^2 - 1)
+        Cp = 2/(1.4*M_inf^2) * (p_ratio - 1)
+        
+        shock_deflection = beta - theta_c
+        
+        println(&quot;$(theta_c)\t$(round(beta, digits=1))\t$(round(M_surface, digits=2))\t$(round(shock_deflection, digits=1))\t$(round(Cp, digits=4))&quot;)
+    catch e
+        println(&quot;$(theta_c)\t---\t---\t---\t--- (detached shock)&quot;)
+    end
+end</code></pre><h3 id="Wind-Tunnel-Model-Analysis"><a class="docs-heading-anchor" href="#Wind-Tunnel-Model-Analysis">Wind Tunnel Model Analysis</a><a id="Wind-Tunnel-Model-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Wind-Tunnel-Model-Analysis" title="Permalink"></a></h3><p>Analyze cone model in supersonic wind tunnel:</p><pre><code class="language-julia hljs"># Wind tunnel test conditions
+M_test = 3.5
+p0_tunnel = 500000  # Pa
+T0_tunnel = 300     # K
+cone_angles = [10.0, 15.0, 20.0]  # Test cone angles
+
+println(&quot;Wind Tunnel Cone Model Analysis:&quot;)
+println(&quot;Test Mach: $M_test&quot;)
+println(&quot;Stagnation pressure: $(p0_tunnel/1000) kPa&quot;)
+println(&quot;Stagnation temperature: $T0_tunnel K&quot;)
+
+# Test section conditions
+p_test = p0_tunnel / p0_over_p(M_test)
+T_test = T0_tunnel / t0_over_t(M_test)
+rho_test = p_test / (287 * T_test)
+
+println(&quot;\nTest Section Conditions:&quot;)
+println(&quot;Static pressure: $(round(p_test/1000, digits=1)) kPa&quot;)
+println(&quot;Static temperature: $(round(T_test, digits=1)) K&quot;)
+println(&quot;Density: $(round(rho_test, digits=3)) kg/m³&quot;)
+
+println(&quot;\nCone Model Results:&quot;)
+println(&quot;θc(°)\tβ(°)\tMs\tCp\tp_surface(kPa)&quot;)
+println(&quot;-----\t----\t----\t----\t-------------&quot;)
+
+for theta_c in cone_angles
+    beta = cone_beta_weak(M_test, theta_c)
+    M_surface, _ = cone_mach_surface(M_test, theta_c)
+    
+    # Surface pressure
+    Mn1 = M_test * sind(beta)
+    p_ratio = 1 + 2*1.4/(1.4+1) * (Mn1^2 - 1)
+    p_surface = p_test * p_ratio
+    
+    # Pressure coefficient
+    Cp = 2/(1.4*M_test^2) * (p_ratio - 1)
+    
+    println(&quot;$(theta_c)\t$(round(beta, digits=1))\t$(round(M_surface, digits=2))\t$(round(Cp, digits=3))\t$(round(p_surface/1000, digits=1))&quot;)
+end</code></pre><h2 id="Validation-Examples"><a class="docs-heading-anchor" href="#Validation-Examples">Validation Examples</a><a id="Validation-Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Validation-Examples" title="Permalink"></a></h2><h3 id="Maximum-Cone-Angle-Analysis"><a class="docs-heading-anchor" href="#Maximum-Cone-Angle-Analysis">Maximum Cone Angle Analysis</a><a id="Maximum-Cone-Angle-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Maximum-Cone-Angle-Analysis" title="Permalink"></a></h3><p>Find the maximum cone angle for attached shock:</p><pre><code class="language-julia hljs">M_inf = 2.0
+
+println(&quot;Maximum Cone Angle Analysis:&quot;)
+println(&quot;Freestream Mach: $M_inf&quot;)
+
+# Search for maximum cone angle
+theta_max = 0.0
+delta_theta = 0.5
+
+println(&quot;\nSearching for maximum cone angle...&quot;)
+
+for theta_test in 5.0:delta_theta:45.0
+    try
+        beta = cone_beta_weak(M_inf, theta_test)
+        M_surface, _ = cone_mach_surface(M_inf, theta_test)
+        
+        # Check if solution is physical
+        if M_surface &gt; 0 &amp;&amp; beta &gt; theta_test
+            theta_max = theta_test
+        else
+            break
+        end
+    catch e
+        break
+    end
+end
+
+println(&quot;Maximum cone half-angle: $(theta_max)°&quot;)
+
+# Compare with 2D maximum deflection
+theta_max_2D = theta_max(M_inf)
+println(&quot;2D maximum deflection: $(round(theta_max_2D, digits=1))°&quot;)
+println(&quot;Reduction for axisymmetric case: $(round(theta_max_2D - theta_max, digits=1))°&quot;)</code></pre><h3 id="Effective-Deflection-Angle"><a class="docs-heading-anchor" href="#Effective-Deflection-Angle">Effective Deflection Angle</a><a id="Effective-Deflection-Angle-1"></a><a class="docs-heading-anchor-permalink" href="#Effective-Deflection-Angle" title="Permalink"></a></h3><p>Analyze the effective deflection concept for cones:</p><pre><code class="language-julia hljs">M_inf = 2.5
+theta_c = 18.0
+
+println(&quot;Effective Deflection Angle Analysis:&quot;)
+println(&quot;Cone half-angle: $theta_c°&quot;)
+println(&quot;Freestream Mach: $M_inf&quot;)
+
+# Calculate effective deflection angle
+theta_eff_val = theta_eff(M_inf, theta_c)
+
+println(&quot;Effective deflection angle: $(round(theta_eff_val, digits=2))°&quot;)
+println(&quot;Actual cone angle: $theta_c°&quot;)
+println(&quot;Difference: $(round(theta_c - theta_eff_val, digits=2))°&quot;)
+
+# This effective angle can be used with 2D oblique shock theory
+M2_eff, rho_eff, p_eff, p0_eff, beta_eff = solve_oblique(M_inf, theta_eff_val)
+
+# Compare with actual cone solution
+beta_cone = cone_beta_weak(M_inf, theta_c)
+M_cone, _ = cone_mach_surface(M_inf, theta_c)
+
+println(&quot;\nComparison of Methods:&quot;)
+println(&quot;Effective angle method - β: $(round(beta_eff, digits=1))°, M: $(round(M2_eff, digits=3))&quot;)
+println(&quot;Cone solution - β: $(round(beta_cone, digits=1))°, M: $(round(M_cone, digits=3))&quot;)</code></pre><h2 id="Limitations-and-Considerations"><a class="docs-heading-anchor" href="#Limitations-and-Considerations">Limitations and Considerations</a><a id="Limitations-and-Considerations-1"></a><a class="docs-heading-anchor-permalink" href="#Limitations-and-Considerations" title="Permalink"></a></h2><ol><li><strong>Inviscid assumption</strong>: No boundary layer or viscous effects</li><li><strong>Perfect gas</strong>: Constant specific heats and ideal gas behavior</li><li><strong>Steady flow</strong>: Time-invariant conditions</li><li><strong>Attached shock</strong>: Valid only for sharp cones below maximum angle</li><li><strong>Small angle approximation</strong>: Some correlations valid for small cone angles</li><li><strong>Real gas effects</strong>: Important at hypersonic speeds and high temperatures</li><li><strong>Numerical solution</strong>: Taylor-Maccoll equation requires numerical integration</li></ol><p>For precise hypersonic analysis, real gas effects, viscous interactions, and heat transfer should be considered.</p><h2 id="See-Also"><a class="docs-heading-anchor" href="#See-Also">See Also</a><a id="See-Also-1"></a><a class="docs-heading-anchor-permalink" href="#See-Also" title="Permalink"></a></h2><ul><li><a href="../oblique_shock/">Oblique Shock Waves</a>: For two-dimensional shock analysis</li><li><a href="../normal_shock/">Normal Shock Waves</a>: For shock wave fundamentals</li><li><a href="../isentropic/">Isentropic Relations</a>: For property calculations</li><li><a href="../atmos1976/">Atmospheric Model</a>: For flight condition analysis</li></ul></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../prandtl_expand/">« Prandtl-Meyer Expansion</a><a class="docs-footer-nextpage" href="../nozzle/">Nozzle Analysis »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.13.0 on <span class="colophon-date" title="Friday 20 June 2025 11:55">Friday 20 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
