@@ -16,6 +16,6 @@ export theta_beta, oblique_beta_weak, theta_max, Mn1, oblique_mach2, solve_obliq
 export prandtl_meyer, expand_mach2, expand_p2, theta_p
 export theta_eff, cone_beta_weak, cone_mach2, cone_mach_surface, solve_shock, solve_cone_properties
 export mdot, area_ratio_at, mach_by_area_ratio, me6, pe6, me5, pe5
-export atmos1976_at
+export atmos1976_at, geopot_alt, geometric_alt, sutherland_mu
 
 end

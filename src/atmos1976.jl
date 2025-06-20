@@ -10,7 +10,7 @@
 - `density::Float64`: 밀도 (kg/m^3)
 - `pressure::Float64`: 압력 (Pa)
 - `temperature::Float64`: 온도 (K)
-- `asound::Float64`: 음속 (m/s^2)
+- `asound::Float64`: 음속 (m/s)
 - `viscosity::Float64`: Dynamics 점도 (Pa s)
 """
 function atmos1976_at(alt)
@@ -50,7 +50,7 @@ function geopot_alt(alt, rearth=6369.0)
 end
 
 """
-    geometrric_alt(alt, rearth=6369.0)
+    geometric_alt(alt, rearth=6369.0)
 
 Geopotential 고도 (H)를 Geometric 고도 (Z)로 변환
 
@@ -61,7 +61,7 @@ Geopotential 고도 (H)를 Geometric 고도 (Z)로 변환
 # Returns
 - `Z::Float64`: Geometric 고도 (km)
 """
-function geometrric_alt(alt, rearth=6369.0)
+function geometric_alt(alt, rearth=6369.0)
     return alt * rearth / (rearth - alt)
 end
 
@@ -79,24 +79,32 @@ function _air1976(alt, gmr=34.163195)
     # Compute geopotential altitude
     h = geopot_alt(alt)
 
-    # Find index
-    if h > 0.0
-        idx = searchsortedfirst(view(air_layers, 1, :), h)
+    # Find index - determine which atmospheric layer the altitude belongs to
+    if h >= air_layers[1, end]
+        # Altitude exceeds maximum, use last layer
+        idx = size(air_layers, 2)
     else
+        # Find the layer that contains this altitude
         idx = 1
+        for i in 2:size(air_layers, 2)
+            if h < air_layers[1, i]
+                break
+            end
+            idx = i
+        end
     end
 
     # Get values
     hbase, tbase, pbase, tgrad = air_layers[:, idx]
 
-    # Computet temperature and ratio
+    # Compute temperature and ratio
     dh = h - hbase
     tlocal = tbase + tgrad * dh
     theta = tlocal / tbase0
 
     # Compute pressure ratio
     if abs(tgrad) < 1e-6
-        delta = pbase * exp(-gmr * dg / tbase)
+        delta = pbase * exp(-gmr * dh / tbase)
     else
         delta = pbase * (tbase / tlocal)^(gmr / tgrad)
     end
@@ -121,8 +129,7 @@ Sutherland law for viscosity - 온도에 따른 Dynamics 점도 계산
 # Returns
 - `mu::Float64`: 온도에 따른 Dynamic 점도(Pa s)
 """
-function sutherland_mu(theta, t0=288.15, mu0=1.458e-6, suth=110.4)
-
+function sutherland_mu(theta, t0=288.15, mu0=1.716e-5, suth=110.4)
     t = t0 * theta
-    return mu0 * t * sqrt(t) / (t + suth)
+    return mu0 * t^1.5 / (t + suth)
 end

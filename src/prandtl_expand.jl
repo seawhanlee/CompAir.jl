@@ -13,9 +13,9 @@ Prandtl Meyer 함수 nu 계산
 - `nu::Float64`: Prandtl-Meyer 함수 (단위: 도)
 """
 function prandtl_meyer(M, gamma=1.4)
-    gratio = sqrt((gamma+1)/(gamma-1))
+    gratio = sqrt((gamma + 1) / (gamma - 1))
     fm = sqrt(M^2 - 1)
-    rad = gratio*atan(fm/gratio) - atan(fm)
+    rad = gratio * atan(fm / gratio) - atan(fm)
     return rad2deg(rad)
 end
 
@@ -54,8 +54,8 @@ end
 - `p::Float64`: 팽창파를 지난 후 압력비 (p1/p2)
 """
 function expand_p2(M1, theta, gamma=1.4)
-    M2 = expand_mach2(M1, theta)
-    return p0_over_p(M1, gamma)/p0_over_p(M2, gamma)
+    M2 = expand_mach2(M1, theta, gamma)
+    return p0_over_p(M1, gamma) / p0_over_p(M2, gamma)
 end
 
 """
