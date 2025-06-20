@@ -1,7 +1,7 @@
 name = "CompAir"
 uuid = "4888ff1c-74b1-49c5-b7ba-2d54c6dc65c5"
 authors = ["Seawhan Lee"]
-version = "1.0.0-DEV"
+version = "1.0.0"
 
 [deps]
 DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
