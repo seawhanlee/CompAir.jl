@@ -32,16 +32,16 @@ theta = 15.0  # wedge angle in degrees
 M2, rho_ratio, p_ratio, p0_ratio, beta = solve_oblique(M1, theta)
 
 println(&quot;Oblique Shock Analysis:&quot;)
-println(&quot;M₁ = $M1, θ = $theta°&quot;)
+println(&quot;M₁ = $M1, θ = $(theta)°&quot;)
 println(&quot;Shock angle β = $(round(beta, digits=1))°&quot;)
 println(&quot;M₂ = $(round(M2, digits=3))&quot;)
 println(&quot;ρ₂/ρ₁ = $(round(rho_ratio, digits=3))&quot;)
 println(&quot;p₂/p₁ = $(round(p_ratio, digits=3))&quot;)</code></pre><p>Output:</p><pre><code class="nohighlight hljs">Oblique Shock Analysis:
 M₁ = 2.5, θ = 15.0°
-Shock angle β = 41.8°
-M₂ = 2.065
-ρ₂/ρ₁ = 1.686
-p₂/p₁ = 2.406</code></pre><h2 id="Prandtl-Meyer-Expansion"><a class="docs-heading-anchor" href="#Prandtl-Meyer-Expansion">Prandtl-Meyer Expansion</a><a id="Prandtl-Meyer-Expansion-1"></a><a class="docs-heading-anchor-permalink" href="#Prandtl-Meyer-Expansion" title="Permalink"></a></h2><p>Calculate expansion wave properties for Mach 2.0 flow turning through 20°:</p><pre><code class="language-julia hljs">M1 = 2.0
+Shock angle β = 36.9°
+M₂ = 1.874
+ρ₂/ρ₁ = 1.867
+p₂/p₁ = 2.468</code></pre><h2 id="Prandtl-Meyer-Expansion"><a class="docs-heading-anchor" href="#Prandtl-Meyer-Expansion">Prandtl-Meyer Expansion</a><a id="Prandtl-Meyer-Expansion-1"></a><a class="docs-heading-anchor-permalink" href="#Prandtl-Meyer-Expansion" title="Permalink"></a></h2><p>Calculate expansion wave properties for Mach 2.0 flow turning through 20°:</p><pre><code class="language-julia hljs">M1 = 2.0
 theta = 20.0  # turning angle in degrees
 
 # Calculate downstream Mach number and pressure ratio
@@ -51,8 +51,8 @@ p_ratio = expand_p2(M1, theta)
 println(&quot;Prandtl-Meyer Expansion:&quot;)
 println(&quot;M₁ = $M1 → M₂ = $(round(M2, digits=3))&quot;)
 println(&quot;p₁/p₂ = $(round(p_ratio, digits=3))&quot;)</code></pre><p>Output:</p><pre><code class="nohighlight hljs">Prandtl-Meyer Expansion:
-M₁ = 2.0 → M₂ = 2.385
-p₁/p₂ = 1.687</code></pre><h2 id="Atmospheric-Properties"><a class="docs-heading-anchor" href="#Atmospheric-Properties">Atmospheric Properties</a><a id="Atmospheric-Properties-1"></a><a class="docs-heading-anchor-permalink" href="#Atmospheric-Properties" title="Permalink"></a></h2><p>Calculate atmospheric conditions at different altitudes using the US Standard Atmosphere 1976:</p><pre><code class="language-julia hljs"># Calculate properties at sea level and 11 km altitude
+M₁ = 2.0 → M₂ = 2.831
+p₁/p₂ = 0.275</code></pre><h2 id="Atmospheric-Properties"><a class="docs-heading-anchor" href="#Atmospheric-Properties">Atmospheric Properties</a><a id="Atmospheric-Properties-1"></a><a class="docs-heading-anchor-permalink" href="#Atmospheric-Properties" title="Permalink"></a></h2><p>Calculate atmospheric conditions at different altitudes using the US Standard Atmosphere 1976:</p><pre><code class="language-julia hljs"># Calculate properties at sea level and 11 km altitude
 altitudes = [0.0, 11.0]  # km
 
 for alt in altitudes
@@ -84,8 +84,8 @@ println(&quot;Area ratio A/A*: $(round(area_ratio, digits=2))&quot;)
 
 # Find Mach numbers for given area ratio
 A_ratio = 5.0
-M_subsonic = mach_by_area_ratio(A_ratio, x0=0.1)    # subsonic solution
-M_supersonic = mach_by_area_ratio(A_ratio, x0=2.0)  # supersonic solution
+M_subsonic = mach_by_area_ratio(A_ratio, 1.4, 0.1)    # subsonic solution
+M_supersonic = mach_by_area_ratio(A_ratio, 1.4, 2.0)  # supersonic solution
 
 println(&quot;\nFor A/A* = $A_ratio:&quot;)
 println(&quot;Subsonic M = $(round(M_subsonic, digits=3))&quot;)
@@ -94,8 +94,8 @@ Exit Mach number: 3.0
 Area ratio A/A*: 4.23
 
 For A/A* = 5.0:
-Subsonic M = 0.234
-Supersonic M = 3.333</code></pre><h2 id="Working-with-Different-Gases"><a class="docs-heading-anchor" href="#Working-with-Different-Gases">Working with Different Gases</a><a id="Working-with-Different-Gases-1"></a><a class="docs-heading-anchor-permalink" href="#Working-with-Different-Gases" title="Permalink"></a></h2><p>Most functions accept a <code>gamma</code> parameter for different gases:</p><pre><code class="language-julia hljs">M = 2.0
+Subsonic M = 0.117
+Supersonic M = 3.175</code></pre><h2 id="Working-with-Different-Gases"><a class="docs-heading-anchor" href="#Working-with-Different-Gases">Working with Different Gases</a><a id="Working-with-Different-Gases-1"></a><a class="docs-heading-anchor-permalink" href="#Working-with-Different-Gases" title="Permalink"></a></h2><p>Most functions accept a <code>gamma</code> parameter for different gases:</p><pre><code class="language-julia hljs">M = 2.0
 
 # Air (γ = 1.4, default)
 T0_T_air = t0_over_t(M)
@@ -107,7 +107,7 @@ println(&quot;Temperature ratios at M = $M:&quot;)
 println(&quot;Air (γ=1.4): $(round(T0_T_air, digits=3))&quot;)
 println(&quot;Helium (γ=1.67): $(round(T0_T_helium, digits=3))&quot;)</code></pre><p>Output:</p><pre><code class="nohighlight hljs">Temperature ratios at M = 2.0:
 Air (γ=1.4): 1.8
-Helium (γ=1.67): 2.005</code></pre><h2 id="Common-Patterns"><a class="docs-heading-anchor" href="#Common-Patterns">Common Patterns</a><a id="Common-Patterns-1"></a><a class="docs-heading-anchor-permalink" href="#Common-Patterns" title="Permalink"></a></h2><h3 id="Error-Handling"><a class="docs-heading-anchor" href="#Error-Handling">Error Handling</a><a id="Error-Handling-1"></a><a class="docs-heading-anchor-permalink" href="#Error-Handling" title="Permalink"></a></h3><p>Functions will throw errors for invalid inputs:</p><pre><code class="language-julia hljs">try
+Helium (γ=1.67): 2.34</code></pre><h2 id="Common-Patterns"><a class="docs-heading-anchor" href="#Common-Patterns">Common Patterns</a><a id="Common-Patterns-1"></a><a class="docs-heading-anchor-permalink" href="#Common-Patterns" title="Permalink"></a></h2><h3 id="Error-Handling"><a class="docs-heading-anchor" href="#Error-Handling">Error Handling</a><a id="Error-Handling-1"></a><a class="docs-heading-anchor-permalink" href="#Error-Handling" title="Permalink"></a></h3><p>Functions will throw errors for invalid inputs:</p><pre><code class="language-julia hljs">try
     # This will fail - can&#39;t have oblique shock with impossible deflection
     solve_oblique(1.5, 45.0)  # θ too large for this Mach number
 catch e
@@ -116,4 +116,4 @@ end</code></pre><h3 id="Default-Parameters"><a class="docs-heading-anchor" href=
 p0_p_1 = p0_over_p(2.0, 1.4)  # explicit gamma
 p0_p_2 = p0_over_p(2.0)       # default gamma=1.4
 
-println(p0_p_1 == p0_p_2)  # true</code></pre><h2 id="Next-Steps"><a class="docs-heading-anchor" href="#Next-Steps">Next Steps</a><a id="Next-Steps-1"></a><a class="docs-heading-anchor-permalink" href="#Next-Steps" title="Permalink"></a></h2><p>Now that you understand the basics:</p><ol><li>Explore the <a href="../examples/">Examples</a> for more complex scenarios</li><li>Check the source code for detailed function documentation with docstrings</li><li>Refer to the README.md for complete API reference</li><li>Look at the test files for additional usage examples</li></ol></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../installation/">« Installation</a><a class="docs-footer-nextpage" href="../examples/">Examples »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.13.0 on <span class="colophon-date" title="Monday 23 June 2025 12:20">Monday 23 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+println(p0_p_1 == p0_p_2)  # true</code></pre><h2 id="Next-Steps"><a class="docs-heading-anchor" href="#Next-Steps">Next Steps</a><a id="Next-Steps-1"></a><a class="docs-heading-anchor-permalink" href="#Next-Steps" title="Permalink"></a></h2><p>Now that you understand the basics:</p><ol><li>Explore the <a href="../examples/">Examples</a> for more complex scenarios</li><li>Check the source code for detailed function documentation with docstrings</li><li>Refer to the README.md for complete API reference</li><li>Look at the test files for additional usage examples</li></ol></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../installation/">« Installation</a><a class="docs-footer-nextpage" href="../examples/">Examples »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.13.0 on <span class="colophon-date" title="Monday 23 June 2025 12:57">Monday 23 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
