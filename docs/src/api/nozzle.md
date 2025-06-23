@@ -83,20 +83,20 @@ julia> mdot(2.0, 0.005, 300000, 400, 1.4, 287)
 0.32707563300841975
 ```
 
-### area_ratio_at
+### area\_ratio\_at
 
 ```julia
 area_ratio_at(M, gamma=1.4)
 ```
 
-Calculate the area ratio A/A* for a given Mach number in isentropic flow.
+Calculate the area ratio A/A\* for a given Mach number in isentropic flow.
 
 **Arguments:**
 - `M::Real`: Mach number
 - `gamma::Real=1.4`: Specific heat ratio
 
 **Returns:**
-- `Float64`: Area ratio A/A*
+- `Float64`: Area ratio A/A\*
 
 **Formula:**
 $$\frac{A}{A^*} = \frac{1}{M}\left[\frac{2}{\gamma+1}\left(1 + \frac{\gamma-1}{2}M^2\right)\right]^{\frac{\gamma+1}{2(\gamma-1)}}$$
@@ -113,7 +113,7 @@ julia> area_ratio_at(1.0)
 1.0
 ```
 
-### mach_by_area_ratio
+### mach\_by\_area\_ratio
 
 ```julia
 mach_by_area_ratio(area, gamma=1.4, x0=0.1)
@@ -122,7 +122,7 @@ mach_by_area_ratio(area, gamma=1.4, x0=0.1)
 Calculate the Mach number for a given area ratio using numerical root finding.
 
 **Arguments:**
-- `area::Real`: Area ratio A/A*
+- `area::Real`: Area ratio A/A\*
 - `gamma::Real=1.4`: Specific heat ratio
 - `x0::Real=0.1`: Initial guess for Mach number (< 1 for subsonic, > 1 for supersonic)
 
@@ -144,10 +144,10 @@ julia> mach_by_area_ratio(2.0, 1.4, 2.0)  # Supersonic solution
 me6(area, gamma=1.4)
 ```
 
-Calculate Mach number for given area ratio (wrapper for `mach_by_area_ratio` with default subsonic guess).
+Calculate Mach number for given area ratio (wrapper for `mach\_by\_area\_ratio` with default subsonic guess).
 
 **Arguments:**
-- `area::Real`: Area ratio A/A*
+- `area::Real`: Area ratio A/A\*
 - `gamma::Real=1.4`: Specific heat ratio
 
 **Returns:**
@@ -168,7 +168,7 @@ pe6(area, gamma=1.4, p0=1)
 Calculate static pressure at given area ratio location.
 
 **Arguments:**
-- `area::Real`: Area ratio A/A*
+- `area::Real`: Area ratio A/A\*
 - `gamma::Real=1.4`: Specific heat ratio
 - `p0::Real=1`: Stagnation pressure
 
@@ -190,7 +190,7 @@ me5(area, gamma=1.4)
 Calculate Mach number after a normal shock at the given area ratio location.
 
 **Arguments:**
-- `area::Real`: Area ratio A/A*
+- `area::Real`: Area ratio A/A\*
 - `gamma::Real=1.4`: Specific heat ratio
 
 **Returns:**
@@ -211,7 +211,7 @@ pe5(area, gamma=1.4, p0=1)
 Calculate static pressure after a normal shock at the given area ratio location.
 
 **Arguments:**
-- `area::Real`: Area ratio A/A*
+- `area::Real`: Area ratio A/A\*
 - `gamma::Real=1.4`: Specific heat ratio
 - `p0::Real=1`: Stagnation pressure
 

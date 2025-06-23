@@ -64,7 +64,7 @@ sutherland_mu
 
 ## Function Details
 
-### atmos1976_at
+### atmos1976\_at
 
 ```julia
 atmos1976_at(alt)
@@ -91,7 +91,7 @@ julia> println("At 11 km: ρ=$(round(density, digits=3)) kg/m³, p=$(round(press
 At 11 km: ρ=0.364 kg/m³, p=22.6 kPa
 ```
 
-### geopot_alt
+### geopot\_alt
 
 ```julia
 geopot_alt(alt, rearth=6369.0)
@@ -118,7 +118,7 @@ julia> geopot_alt(50.0)
 49.61139896373057
 ```
 
-### geometric_alt
+### geometric\_alt
 
 ```julia
 geometric_alt(alt, rearth=6369.0)
@@ -145,7 +145,7 @@ julia> geometric_alt(49.611)
 49.999743718592965
 ```
 
-### sutherland_mu
+### sutherland\_mu
 
 ```julia
 sutherland_mu(theta, t0=288.15, mu0=1.716e-5, suth=110.4)

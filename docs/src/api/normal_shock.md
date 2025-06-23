@@ -78,7 +78,7 @@ julia> normal_mach2(3.0)
 0.4752229748622233
 ```
 
-### rho2_over_rho1
+### rho2\_over\_rho1
 
 ```julia
 rho2_over_rho1(M, gamma=1.4)
@@ -105,7 +105,7 @@ julia> rho2_over_rho1(5.0)
 5.714285714285714
 ```
 
-### p2_over_p1
+### p2\_over\_p1
 
 ```julia
 p2_over_p1(M, gamma=1.4)
@@ -132,7 +132,7 @@ julia> p2_over_p1(3.0)
 10.333333333333334
 ```
 
-### t2_over_t1
+### t2\_over\_t1
 
 ```julia
 t2_over_t1(M, gamma=1.4)
@@ -183,7 +183,7 @@ julia> normal_p02(3.0)
 12.061224489795916
 ```
 
-### p02_over_p01
+### p02\_over\_p01
 
 ```julia
 p02_over_p01(M, gamma=1.4)

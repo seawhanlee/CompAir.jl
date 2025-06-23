@@ -80,7 +80,7 @@ julia> theta_beta(60.0, 3.0)
 28.040946798183083
 ```
 
-### oblique_beta_weak
+### oblique\_beta\_weak
 
 ```julia
 oblique_beta_weak(M, theta, gamma=1.4)

@@ -38,7 +38,7 @@ rho0_over_rho
 
 ## Function Details
 
-### t0_over_t
+### t0\_over\_t
 
 ```julia
 t0_over_t(M, gamma=1.4)
@@ -65,7 +65,7 @@ julia> t0_over_t(1.5, 1.67)  # Helium
 2.005
 ```
 
-### p0_over_p
+### p0\_over\_p
 
 ```julia
 p0_over_p(M, gamma=1.4)
@@ -92,7 +92,7 @@ julia> p0_over_p(1.0)
 1.8929441933097926
 ```
 
-### rho0_over_rho
+### rho0\_over\_rho
 
 ```julia
 rho0_over_rho(M, gamma=1.4)

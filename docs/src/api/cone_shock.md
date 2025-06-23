@@ -83,7 +83,7 @@ julia> theta_eff(3.0, 20.0)
 16.89234567890123
 ```
 
-### cone_beta_weak
+### cone\_beta\_weak
 
 ```julia
 cone_beta_weak(M, angle, gamma=1.4)
@@ -133,7 +133,7 @@ julia> cone_mach2(3.0, 20.0)
 2.456789012345678
 ```
 
-### cone_mach_surface
+### cone\_mach\_surface
 
 ```julia
 cone_mach_surface(M, angle, gamma=1.4)
@@ -182,7 +182,7 @@ julia> M2, rho_ratio, p_ratio, p0_ratio, beta = solve_shock(2.5, 15.0)
 (2.123, 1.567, 2.234, 0.934, 43.6)
 ```
 
-### solve_cone_properties
+### solve\_cone\_properties
 
 ```julia
 solve_cone_properties(M, angle; psi::Union{Float64, Nothing}=nothing, gamma=1.4)
