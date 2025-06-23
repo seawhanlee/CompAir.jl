@@ -73,8 +73,8 @@ See the [Installation Guide](manual/installation.md) for detailed instructions a
 
 To get started with CompAir.jl:
 
-1. **[Installation](@ref Installation)**: Install the package and its dependencies
-2. **[Quick Start](@ref "Quick Start")**: Basic usage patterns and simple examples
+1. **[Installation](manual/installation.md)**: Install the package and its dependencies
+2. **[Quick Start](manual/quickstart.md)**: Basic usage patterns and simple examples
 3. **[Examples](manual/examples.md)**: Comprehensive examples for different flow scenarios
 4. **Function Reference**: Detailed function documentation in source code
 
@@ -83,7 +83,7 @@ To get started with CompAir.jl:
 ```@contents
 Pages = [
     "manual/installation.md",
-    "manual/quickstart.md", 
+    "manual/quickstart.md",
     "manual/examples.md",
     "dev/contributing.md",
     "dev/changelog.md"

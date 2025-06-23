@@ -32,11 +32,13 @@ makedocs(
         ]
     ],
     checkdocs=:exports,
-    warnonly=true
+    warnonly=true,
+    version="v1.0.0",
 )
 
 deploydocs(
     repo="github.com/seawhanlee/CompAir.jl.git",
     devbranch="main",
-    push_preview=true
+    push_preview=true,
+    versions=["stable" => "v1.0.0", "dev" => "main"],
 )
