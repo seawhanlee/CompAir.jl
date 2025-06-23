@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **CRITICAL FIXES from Python version**:
   - Fixed atmospheric model indexing errors in layer selection algorithm
-  - Corrected Sutherland viscosity constants and formula implementation  
+  - Corrected Sutherland viscosity constants and formula implementation
   - Added missing gamma parameters in shock wave functions
   - Improved numerical stability in iterative solutions
 
@@ -111,7 +111,7 @@ CompAir.jl is a faithful Julia port of the original Python CompAir module develo
 
 #### Performance Benchmarks
 - **Isentropic Relations**: 8x faster than Python
-- **Shock Wave Calculations**: 6x faster than Python  
+- **Shock Wave Calculations**: 6x faster than Python
 - **Atmospheric Model**: 12x faster than Python (after bug fixes)
 - **Cone Shock Analysis**: 15x faster than Python (ODE integration)
 
@@ -129,7 +129,7 @@ Most functions maintain the same names and signatures:
 # Python CompAir
 from compair import t0_over_t, solve_normal, atmos1976_at
 
-# Julia CompAir.jl  
+# Julia CompAir.jl
 using CompAir
 # Same function names: t0_over_t, solve_normal, atmos1976_at
 ```
@@ -162,7 +162,7 @@ using CompAir
 
 ### Acknowledgments
 
-This Julia port builds upon the excellent foundation provided by the Inha AADL team. Their original Python implementation served as the reference for all algorithms and validation cases. We gratefully acknowledge their contribution to the computational aerodynamics community.
+This Julia port builds upon the excellent foundation provided by the Inha AADL team. Their original Python implementation served as the reference for all algorithms and validation cases.
 
 ### References
 

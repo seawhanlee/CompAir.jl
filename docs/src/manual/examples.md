@@ -108,7 +108,7 @@ println("=== Nozzle Back Pressure Analysis ===")
 println("Nozzle exit area ratio: $A_ratio_exit")
 
 # Find design exit Mach number
-M_design = mach_by_area_ratio(A_ratio_exit, x0=2.0)  # Supersonic solution
+M_design = mach_by_area_ratio(A_ratio_exit, 1.4, 2.0)  # Supersonic solution
 println("Design exit Mach number: $(round(M_design, digits=3))")
 
 # Design exit pressure ratio
@@ -138,7 +138,7 @@ for pb in back_pressures
         M_exit = M_design
     elseif pb_ratio > 1/p0_over_p(1.0)  # Critical pressure ratio
         condition = "Subsonic throughout"
-        M_exit = mach_by_area_ratio(A_ratio_exit, x0=0.1)  # Subsonic solution
+        M_exit = mach_by_area_ratio(A_ratio_exit, 1.4, 0.1)  # Subsonic solution
     else
         condition = "Shock in nozzle"
         M_exit = "Complex"
@@ -284,7 +284,7 @@ println("=== CD Nozzle Starting Analysis ===")
 println("Exit area ratio A_e/A*: $A_ratio_exit")
 
 # Find required pressure ratios
-M_exit_design = mach_by_area_ratio(A_ratio_exit, x0=2.0)  # Supersonic
+M_exit_design = mach_by_area_ratio(A_ratio_exit, 1.4, 2.0)  # Supersonic
 p_ratio_design = p0_over_p(M_exit_design)
 
 println("Design exit Mach: $(round(M_exit_design, digits=3))")

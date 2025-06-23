@@ -13,18 +13,25 @@ If you don't have Julia installed, download it from [julialang.org](https://juli
 
 ## Package Installation
 
-### From GitHub (Recommended)
+### From Julia General Registry (Recommended)
 
-Since CompAir.jl is not yet registered in the Julia General registry, install it directly from GitHub:
+CompAir.jl is now registered in the Julia General Registry. Install it using the standard package manager:
+
+```julia
+using Pkg
+Pkg.add("CompAir")
+```
+
+### From GitHub (Development)
+
+If you want to contribute to the package or need the latest development version:
 
 ```julia
 using Pkg
 Pkg.add(url="https://github.com/seawhanlee/CompAir.jl.git")
 ```
 
-### Development Installation
-
-If you want to contribute to the package or need the latest development version:
+For development work, use:
 
 ```julia
 using Pkg
@@ -77,7 +84,12 @@ All tests should pass. If you encounter any failures, please [report an issue](h
 ### Common Issues
 
 #### Package Not Found
-If you get an error like "package CompAir not found", ensure you're using the correct GitHub URL and have an internet connection.
+If you get an error like "package CompAir not found", ensure you have an internet connection and try updating your registry:
+
+```julia
+using Pkg
+Pkg.Registry.update()
+```
 
 #### Dependency Conflicts
 If you encounter dependency conflicts, try updating your Julia packages:

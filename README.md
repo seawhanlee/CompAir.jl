@@ -1,6 +1,8 @@
 # CompAir.jl
 
 [![Build Status](https://github.com/seawhanlee/CompAir.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/seawhanlee/CompAir.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://seawhanlee.github.io/CompAir.jl/stable/)
+[![](https://img.shields.io/badge/docs-dev-blue.svg)](https://seawhanlee.github.io/CompAir.jl/dev/)
 
 A comprehensive Julia package for computational aerodynamics and compressible flow calculations. This package provides efficient and accurate implementations of fundamental gas dynamics equations and atmospheric models.
 
@@ -8,6 +10,8 @@ A comprehensive Julia package for computational aerodynamics and compressible fl
 Original Python source: https://gitlab.com/aadl_inha/CompAir
 
 This Julia implementation maintains full compatibility with the original Python version while leveraging Julia's performance advantages for numerical computing. The port includes significant improvements in numerical stability, type safety, and computational efficiency.
+
+
 
 ## Features
 
@@ -31,9 +35,17 @@ This Julia implementation maintains full compatibility with the original Python 
 
 ## Installation
 
+CompAir.jl is registered in the Julia General Registry. Install it using the standard package manager:
+
 ```julia
 using Pkg
-Pkg.add("https://github.com/yourusername/CompAir.jl.git")
+Pkg.add("CompAir")
+```
+
+Or alternatively, in the Julia REPL package mode (press `]`):
+
+```
+pkg> add CompAir
 ```
 
 ## Quick Start
@@ -79,7 +91,7 @@ theta = 15.0  # wedge angle in degrees
 M2, rho_ratio, p_ratio, p0_ratio, beta = solve_oblique(M1, theta)
 
 println("Oblique Shock Analysis:")
-println("M₁ = $M1, θ = $theta°")
+println("M₁ = $M1, θ = $(theta)°")
 println("Shock angle β = $(round(beta, digits=1))°")
 println("M₂ = $(round(M2, digits=3))")
 ```
@@ -130,8 +142,8 @@ println("Area ratio A/A*: $(round(area_ratio, digits=2))")
 
 # Find Mach number for given area ratio
 A_ratio = 5.0
-M_subsonic = mach_by_area_ratio(A_ratio, x0=0.5)   # subsonic solution
-M_supersonic = mach_by_area_ratio(A_ratio, x0=2.0) # supersonic solution
+M_subsonic = mach_by_area_ratio(A_ratio, 1.4, 0.1)    # subsonic solution
+M_supersonic = mach_by_area_ratio(A_ratio, 1.4, 2.0)  # supersonic solution
 
 println("For A/A* = $A_ratio:")
 println("Subsonic M = $(round(M_subsonic, digits=3))")
@@ -223,7 +235,7 @@ This work builds upon the excellent foundation provided by the Inha AADL team. T
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit issues, feature requests, or pull requests.
+Contributions are welcome! Please feel free to submit issues, feature requests, or pull requests on [GitHub](https://github.com/seawhanlee/CompAir.jl).
 
 1. Fork the repository
 2. Create a feature branch
@@ -239,7 +251,7 @@ If you use CompAir.jl in your research, please cite both the original Python mod
   author = {Lee, Seawhan},
   title = {CompAir.jl: A Julia Port of CompAir for Computational Aerodynamics},
   url = {https://github.com/seawhanlee/CompAir.jl},
-  version = {0.1.0},
+  version = {1.0.0},
   year = {2024},
   note = {Julia port of the original Python CompAir module by Inha AADL}
 }

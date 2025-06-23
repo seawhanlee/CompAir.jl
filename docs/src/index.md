@@ -4,6 +4,7 @@ A comprehensive Julia package for computational aerodynamics and compressible fl
 
 
 
+
 ## Overview
 
 CompAir.jl provides efficient and accurate implementations of fundamental gas dynamics equations and atmospheric models. This package is a Julia port of the original Python CompAir module developed by Inha AADL, maintaining full compatibility while leveraging Julia's performance advantages for numerical computing.
@@ -44,6 +45,29 @@ println("T₀/T = $(round(T0_T, digits=3))")
 println("p₀/p = $(round(p0_p, digits=3))")
 println("ρ₀/ρ = $(round(rho0_rho, digits=3))")
 ```
+
+## Installation
+
+CompAir.jl is registered in the Julia General Registry. Install it using the standard package manager:
+
+```julia
+using Pkg
+Pkg.add("CompAir")
+```
+
+Or alternatively, in the Julia REPL package mode (press `]`):
+
+```
+pkg> add CompAir
+```
+
+After installation, load the package:
+
+```julia
+using CompAir
+```
+
+See the [Installation Guide](manual/installation.md) for detailed instructions and troubleshooting.
 
 ## Getting Started
 

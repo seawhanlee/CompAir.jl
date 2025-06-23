@@ -81,7 +81,7 @@ theta = 15.0  # wedge angle in degrees
 M2, rho_ratio, p_ratio, p0_ratio, beta = solve_oblique(M1, theta)
 
 println("Oblique Shock Analysis:")
-println("M₁ = $M1, θ = $theta°")
+println("M₁ = $M1, θ = $(theta)°")
 println("Shock angle β = $(round(beta, digits=1))°")
 println("M₂ = $(round(M2, digits=3))")
 println("ρ₂/ρ₁ = $(round(rho_ratio, digits=3))")
@@ -92,10 +92,10 @@ Output:
 ```
 Oblique Shock Analysis:
 M₁ = 2.5, θ = 15.0°
-Shock angle β = 41.8°
-M₂ = 2.065
-ρ₂/ρ₁ = 1.686
-p₂/p₁ = 2.406
+Shock angle β = 36.9°
+M₂ = 1.874
+ρ₂/ρ₁ = 1.867
+p₂/p₁ = 2.468
 ```
 
 ## Prandtl-Meyer Expansion
@@ -118,8 +118,8 @@ println("p₁/p₂ = $(round(p_ratio, digits=3))")
 Output:
 ```
 Prandtl-Meyer Expansion:
-M₁ = 2.0 → M₂ = 2.385
-p₁/p₂ = 1.687
+M₁ = 2.0 → M₂ = 2.831
+p₁/p₂ = 0.275
 ```
 
 ## Atmospheric Properties
@@ -172,8 +172,8 @@ println("Area ratio A/A*: $(round(area_ratio, digits=2))")
 
 # Find Mach numbers for given area ratio
 A_ratio = 5.0
-M_subsonic = mach_by_area_ratio(A_ratio, x0=0.1)    # subsonic solution
-M_supersonic = mach_by_area_ratio(A_ratio, x0=2.0)  # supersonic solution
+M_subsonic = mach_by_area_ratio(A_ratio, 1.4, 0.1)    # subsonic solution
+M_supersonic = mach_by_area_ratio(A_ratio, 1.4, 2.0)  # supersonic solution
 
 println("\nFor A/A* = $A_ratio:")
 println("Subsonic M = $(round(M_subsonic, digits=3))")
@@ -187,8 +187,8 @@ Exit Mach number: 3.0
 Area ratio A/A*: 4.23
 
 For A/A* = 5.0:
-Subsonic M = 0.234
-Supersonic M = 3.333
+Subsonic M = 0.117
+Supersonic M = 3.175
 ```
 
 ## Working with Different Gases
@@ -213,7 +213,7 @@ Output:
 ```
 Temperature ratios at M = 2.0:
 Air (γ=1.4): 1.8
-Helium (γ=1.67): 2.005
+Helium (γ=1.67): 2.34
 ```
 
 ## Common Patterns
