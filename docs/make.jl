@@ -38,7 +38,6 @@ makedocs(
 deploydocs(
     repo="github.com/seawhanlee/CompAir.jl.git",
     devbranch="main",
-    devurl="dev",
     push_preview=true,
-    versions=["stable" => "v^", "v#.#", "dev" => "main"],
+    versions=["stable" => "v^", "v#.#.", "dev" => "main"],
 )
