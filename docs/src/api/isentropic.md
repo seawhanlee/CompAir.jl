@@ -24,8 +24,8 @@ For an ideal gas undergoing isentropic flow, the relationships between stagnatio
 - **Density**: $\frac{\rho_0}{\rho} = \left(1 + \frac{\gamma-1}{2}M^2\right)^{\frac{1}{\gamma-1}}$
 
 Where:
-- $M$= Mach number
-- $\gamma$= specific heat ratio (1.4 for air at standard conditions)
+- $M$ is mach number
+- $\gamma$ is specific heat ratio (1.4 for air at standard conditions)
 - Subscript 0 denotes stagnation conditions
 
 ## Functions
