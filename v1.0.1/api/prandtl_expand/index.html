@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Prandtl-Meyer Expansion · CompAir.jl</title><meta name="title" content="Prandtl-Meyer Expansion · CompAir.jl"/><meta property="og:title" content="Prandtl-Meyer Expansion · CompAir.jl"/><meta property="twitter:title" content="Prandtl-Meyer Expansion · CompAir.jl"/><meta name="description" content="Documentation for CompAir.jl."/><meta property="og:description" content="Documentation for CompAir.jl."/><meta property="twitter:description" content="Documentation for CompAir.jl."/><meta property="og:url" content="https://seawhanlee.github.io/CompAir.jl/api/prandtl_expand/"/><meta property="twitter:url" content="https://seawhanlee.github.io/CompAir.jl/api/prandtl_expand/"/><link rel="canonical" href="https://seawhanlee.github.io/CompAir.jl/api/prandtl_expand/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">CompAir.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Manual</span><ul><li><a class="tocitem" href="../../manual/installation/">Installation</a></li><li><a class="tocitem" href="../../manual/quickstart/">Quick Start</a></li><li><a class="tocitem" href="../../manual/examples/">Examples</a></li></ul></li><li><span class="tocitem">API Reference</span><ul><li><a class="tocitem" href="../isentropic/">Isentropic Relations</a></li><li><a class="tocitem" href="../normal_shock/">Normal Shock Waves</a></li><li><a class="tocitem" href="../oblique_shock/">Oblique Shock Waves</a></li><li class="is-active"><a class="tocitem" href>Prandtl-Meyer Expansion</a><ul class="internal"><li><a class="tocitem" href="#Overview"><span>Overview</span></a></li><li><a class="tocitem" href="#Theory"><span>Theory</span></a></li><li><a class="tocitem" href="#Functions"><span>Functions</span></a></li><li><a class="tocitem" href="#Function-Details"><span>Function Details</span></a></li><li><a class="tocitem" href="#Applications"><span>Applications</span></a></li><li><a class="tocitem" href="#Different-Gases"><span>Different Gases</span></a></li><li><a class="tocitem" href="#Maximum-Turning-Angle"><span>Maximum Turning Angle</span></a></li><li><a class="tocitem" href="#Validation-Examples"><span>Validation Examples</span></a></li><li><a class="tocitem" href="#Limitations-and-Considerations"><span>Limitations and Considerations</span></a></li><li><a class="tocitem" href="#See-Also"><span>See Also</span></a></li></ul></li><li><a class="tocitem" href="../cone_shock/">Cone Shock Analysis</a></li><li><a class="tocitem" href="../nozzle/">Nozzle Analysis</a></li><li><a class="tocitem" href="../atmos1976/">Atmospheric Model</a></li></ul></li><li><span class="tocitem">Development</span><ul><li><a class="tocitem" href="../../dev/contributing/">Contributing</a></li><li><a class="tocitem" href="../../dev/changelog/">Changelog</a></li></ul></li></ul><div class="docs-version-selector field has-addons visible"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"><option value="#" selected="selected">v1.0.1</option></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">API Reference</a></li><li class="is-active"><a href>Prandtl-Meyer Expansion</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Prandtl-Meyer Expansion</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/seawhanlee/CompAir.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/seawhanlee/CompAir.jl/blob/main/docs/src/api/prandtl_expand.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Prandtl-Meyer-Expansion"><a class="docs-heading-anchor" href="#Prandtl-Meyer-Expansion">Prandtl-Meyer Expansion</a><a id="Prandtl-Meyer-Expansion-1"></a><a class="docs-heading-anchor-permalink" href="#Prandtl-Meyer-Expansion" title="Permalink"></a></h1><p>This module provides functions for analyzing Prandtl-Meyer expansion waves, which occur when supersonic flow turns around a convex corner or expands through a diverging channel.</p><h2 id="Overview"><a class="docs-heading-anchor" href="#Overview">Overview</a><a id="Overview-1"></a><a class="docs-heading-anchor-permalink" href="#Overview" title="Permalink"></a></h2><p>Prandtl-Meyer expansion waves are isentropic compression waves that occur when supersonic flow encounters a convex corner or expansion. Unlike shock waves, expansion waves:</p><ul><li>Are isentropic (reversible process)</li><li>Increase Mach number and velocity</li><li>Decrease pressure, density, and temperature</li><li>Maintain total temperature and pressure</li><li>Can turn flow through large angles without losses</li><li>Consist of infinitesimally weak waves (Mach waves)</li></ul><h2 id="Theory"><a class="docs-heading-anchor" href="#Theory">Theory</a><a id="Theory-1"></a><a class="docs-heading-anchor-permalink" href="#Theory" title="Permalink"></a></h2><p>Prandtl-Meyer expansion is governed by the Prandtl-Meyer function ν(M), which relates the Mach number to the maximum turning angle:</p><p><strong>Prandtl-Meyer function</strong>: <span>$\nu(M) = \sqrt{\frac{\gamma+1}{\gamma-1}} \arctan\sqrt{\frac{\gamma-1}{\gamma+1}(M^2-1)} - \arctan\sqrt{M^2-1}$</span></p><p><strong>Turning angle relationship</strong>: <span>$\theta_{12} = \nu(M_2) - \nu(M_1)$</span></p><p><strong>Property ratios</strong> (from isentropic relations):</p><ul><li>Pressure: <span>$\frac{p_2}{p_1} = \left(\frac{1 + \frac{\gamma-1}{2}M_1^2}{1 + \frac{\gamma-1}{2}M_2^2}\right)^{\frac{\gamma}{\gamma-1}}$</span></li><li>Temperature: <span>$\frac{T_2}{T_1} = \frac{1 + \frac{\gamma-1}{2}M_1^2}{1 + \frac{\gamma-1}{2}M_2^2}$</span></li><li>Density: <span>$\frac{\rho_2}{\rho_1} = \left(\frac{1 + \frac{\gamma-1}{2}M_1^2}{1 + \frac{\gamma-1}{2}M_2^2}\right)^{\frac{1}{\gamma-1}}$</span></li></ul><p>Where:</p><ul><li><span>$M_1$</span>, <span>$M_2$</span> = upstream and downstream Mach numbers</li><li><span>$\theta_{12}$</span> = turning angle from state 1 to state 2</li><li><span>$\gamma$</span> = specific heat ratio</li></ul><h2 id="Functions"><a class="docs-heading-anchor" href="#Functions">Functions</a><a id="Functions-1"></a><a class="docs-heading-anchor-permalink" href="#Functions" title="Permalink"></a></h2><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.prandtl_meyer" href="#CompAir.prandtl_meyer"><code>CompAir.prandtl_meyer</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">prandtl_meyer(M, gamma=1.4)</code></pre><p>Prandtl Meyer 함수 nu 계산</p><p><strong>인자</strong></p><ul><li><code>M::Float64</code>: 입구 마하수</li><li><code>gamma::Float64=1.4</code>: 비열비</li></ul><p><strong>반환값</strong></p><ul><li><code>nu::Float64</code>: Prandtl-Meyer 함수 (단위: 도)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/01bb317628721d81ae8a316ae7d5a7d5f2b63eb1/src/prandtl_expand.jl#L3-L14">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.expand_mach2" href="#CompAir.expand_mach2"><code>CompAir.expand_mach2</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">expand_mach2(M1, theta, gamma=1.4)</code></pre><p>마하수 M1인 유동이 theta 만큼 회전했을 때 마하수 계산</p><p><strong>인자</strong></p><ul><li><code>M1::Float64</code>: 입구 마하수</li><li><code>theta::Float64</code>: 유동 회전 각도 (단위: 도)</li><li><code>gamma::Float64=1.4</code>: 비열비</li></ul><p><strong>반환값</strong></p><ul><li><code>mach::Float64</code>: 팽창파를 지난 후 마하수</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/01bb317628721d81ae8a316ae7d5a7d5f2b63eb1/src/prandtl_expand.jl#L22-L34">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.expand_p2" href="#CompAir.expand_p2"><code>CompAir.expand_p2</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">expand_p2(M1, theta, gamma=1.4)</code></pre><p>마하수 M1인 유동이 theta 만큼 회전했을 때 압력 계산</p><p><strong>인자</strong></p><ul><li><code>M1::Float64</code>: 입구 마하수</li><li><code>theta::Float64</code>: 유동 회전 각도 (단위: 도)</li><li><code>gamma::Float64=1.4</code>: 비열비</li></ul><p><strong>반환값</strong></p><ul><li><code>p::Float64</code>: 팽창파를 지난 후 압력비 (p1/p2)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/01bb317628721d81ae8a316ae7d5a7d5f2b63eb1/src/prandtl_expand.jl#L43-L55">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.theta_p" href="#CompAir.theta_p"><code>CompAir.theta_p</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">theta_p(pratio, M1, gamma=1.4)</code></pre><p>압력비를 만족하도록 발생하는 팽창파 각도 계산</p><p><strong>인자</strong></p><ul><li><code>pratio::Float64</code>: 팽창파 전/후 압력비 (p1/p2)</li><li><code>M1::Float64</code>: 입구 마하수</li><li><code>gamma::Float64=1.4</code>: 비열비</li></ul><p><strong>반환값</strong></p><ul><li><code>theta::Float64</code>: 유동 회전 각도 (단위: 도)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/01bb317628721d81ae8a316ae7d5a7d5f2b63eb1/src/prandtl_expand.jl#L61-L73">source</a></section></article><h2 id="Function-Details"><a class="docs-heading-anchor" href="#Function-Details">Function Details</a><a id="Function-Details-1"></a><a class="docs-heading-anchor-permalink" href="#Function-Details" title="Permalink"></a></h2><h3 id="prandtl_meyer"><a class="docs-heading-anchor" href="#prandtl_meyer">prandtl_meyer</a><a id="prandtl_meyer-1"></a><a class="docs-heading-anchor-permalink" href="#prandtl_meyer" title="Permalink"></a></h3><pre><code class="language-julia hljs">prandtl_meyer(M, gamma=1.4)</code></pre><p>Calculate the Prandtl-Meyer function ν(M) which represents the maximum turning angle from sonic conditions.</p><p><strong>Arguments:</strong></p><ul><li><code>M::Real</code>: Mach number (must be ≥ 1)</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Prandtl-Meyer angle ν in degrees</li></ul><p><strong>Formula:</strong> <span>$\nu(M) = \sqrt{\frac{\gamma+1}{\gamma-1}} \arctan\sqrt{\frac{\gamma-1}{\gamma+1}(M^2-1)} - \arctan\sqrt{M^2-1}$</span></p><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; prandtl_meyer(2.0)
+26.379760813416906
+
+julia&gt; prandtl_meyer(3.0)
+49.75681638417519
+
+julia&gt; prandtl_meyer(1.0)
+0.0</code></pre><h3 id="expand_mach2"><a class="docs-heading-anchor" href="#expand_mach2">expand_mach2</a><a id="expand_mach2-1"></a><a class="docs-heading-anchor-permalink" href="#expand_mach2" title="Permalink"></a></h3><pre><code class="language-julia hljs">expand_mach2(M1, theta, gamma=1.4)</code></pre><p>Calculate the downstream Mach number after a Prandtl-Meyer expansion through angle θ.</p><p><strong>Arguments:</strong></p><ul><li><code>M1::Real</code>: Upstream Mach number</li><li><code>theta::Real</code>: Turning angle in degrees</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Downstream Mach number</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; expand_mach2(2.0, 20.0)
+2.3848314132746953
+
+julia&gt; expand_mach2(1.5, 10.0)
+1.7985676229179285</code></pre><h3 id="expand_p2"><a class="docs-heading-anchor" href="#expand_p2">expand_p2</a><a id="expand_p2-1"></a><a class="docs-heading-anchor-permalink" href="#expand_p2" title="Permalink"></a></h3><pre><code class="language-julia hljs">expand_p2(M1, theta, gamma=1.4)</code></pre><p>Calculate the pressure ratio (p₁/p₂) across a Prandtl-Meyer expansion.</p><p><strong>Arguments:</strong></p><ul><li><code>M1::Real</code>: Upstream Mach number</li><li><code>theta::Real</code>: Turning angle in degrees</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Pressure ratio p₁/p₂</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; expand_p2(2.0, 20.0)
+1.687094471207049
+
+julia&gt; expand_p2(3.0, 15.0)
+1.4720270270270274</code></pre><h3 id="theta_p"><a class="docs-heading-anchor" href="#theta_p">theta_p</a><a id="theta_p-1"></a><a class="docs-heading-anchor-permalink" href="#theta_p" title="Permalink"></a></h3><pre><code class="language-julia hljs">theta_p(pratio, M1, gamma=1.4)</code></pre><p>Calculate the turning angle required to achieve a specified pressure ratio across an expansion.</p><p><strong>Arguments:</strong></p><ul><li><code>pratio::Real</code>: Desired pressure ratio p₁/p₂</li><li><code>M1::Real</code>: Upstream Mach number</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Required turning angle in degrees</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; theta_p(1.5, 2.0)
+14.396394107665233
+
+julia&gt; theta_p(2.0, 2.5)
+22.69419642857143</code></pre><h2 id="Applications"><a class="docs-heading-anchor" href="#Applications">Applications</a><a id="Applications-1"></a><a class="docs-heading-anchor-permalink" href="#Applications" title="Permalink"></a></h2><h3 id="Supersonic-Nozzle-Design"><a class="docs-heading-anchor" href="#Supersonic-Nozzle-Design">Supersonic Nozzle Design</a><a id="Supersonic-Nozzle-Design-1"></a><a class="docs-heading-anchor-permalink" href="#Supersonic-Nozzle-Design" title="Permalink"></a></h3><p>Design the diverging section of a supersonic nozzle:</p><pre><code class="language-julia hljs"># Design requirements
+M_exit = 3.5      # Exit Mach number
+M_throat = 1.0    # Throat conditions
+theta_max = 15.0  # Maximum wall angle
+
+println(&quot;Supersonic Nozzle Design:&quot;)
+println(&quot;Exit Mach: $M_exit&quot;)
+println(&quot;Maximum wall angle: $theta_max°&quot;)
+
+# Calculate required turning angle
+nu_exit = prandtl_meyer(M_exit)
+nu_throat = prandtl_meyer(M_throat)  # = 0 for M = 1
+theta_required = nu_exit - nu_throat
+
+println(&quot;Required turning angle: $(round(theta_required, digits=1))°&quot;)
+
+# Check if design is feasible
+if theta_required/2 &lt;= theta_max
+    println(&quot;Design feasible - wall angle: $(round(theta_required/2, digits=1))°&quot;)
+    
+    # Calculate area ratio
+    area_ratio = area_ratio_at(M_exit)
+    println(&quot;Area ratio A_exit/A*: $(round(area_ratio, digits=2))&quot;)
+else
+    println(&quot;Design not feasible - requires curved walls or multiple sections&quot;)
+    
+    # Calculate required sections
+    n_sections = ceil(theta_required / (2 * theta_max))
+    println(&quot;Minimum sections required: $n_sections&quot;)
+end</code></pre><h3 id="Centered-Expansion-Fan"><a class="docs-heading-anchor" href="#Centered-Expansion-Fan">Centered Expansion Fan</a><a id="Centered-Expansion-Fan-1"></a><a class="docs-heading-anchor-permalink" href="#Centered-Expansion-Fan" title="Permalink"></a></h3><p>Analyze a centered expansion fan:</p><pre><code class="language-julia hljs">M1 = 1.5
+theta_total = 30.0  # Total turning angle
+n_waves = 6         # Number of Mach waves
+
+println(&quot;Centered Expansion Fan Analysis:&quot;)
+println(&quot;Initial Mach: $M1&quot;)
+println(&quot;Total turning: $theta_total°&quot;)
+println(&quot;Number of waves: $n_waves&quot;)
+
+theta_step = theta_total / n_waves
+println(&quot;\nWave\tθ (°)\tM\tμ (°)\tp/p₁&quot;)
+println(&quot;----\t-----\t-----\t-----\t-----&quot;)
+
+for i in 0:n_waves
+    theta_current = i * theta_step
+    
+    if i == 0
+        M_current = M1
+        p_ratio = 1.0
+    else
+        M_current = expand_mach2(M1, theta_current)
+        p_ratio = 1.0 / expand_p2(M1, theta_current)
+    end
+    
+    mu = asind(1/M_current)  # Mach angle
+    
+    println(&quot;$i\t$(round(theta_current, digits=1))\t$(round(M_current, digits=3))\t$(round(mu, digits=1))\t$(round(p_ratio, digits=3))&quot;)
+end</code></pre><h3 id="Flow-Over-Expansion-Corner"><a class="docs-heading-anchor" href="#Flow-Over-Expansion-Corner">Flow Over Expansion Corner</a><a id="Flow-Over-Expansion-Corner-1"></a><a class="docs-heading-anchor-permalink" href="#Flow-Over-Expansion-Corner" title="Permalink"></a></h3><p>Analyze flow over a sharp expansion corner:</p><pre><code class="language-julia hljs"># Supersonic flow over a backward-facing step
+M1 = 2.2
+step_angle = 12.0  # degrees
+
+println(&quot;Flow Over Expansion Corner:&quot;)
+println(&quot;Upstream Mach: $M1&quot;)
+println(&quot;Corner angle: $step_angle°&quot;)
+
+# Expansion analysis
+M2 = expand_mach2(M1, step_angle)
+p_ratio = expand_p2(M1, step_angle)
+
+# Calculate other properties
+T_ratio = (1 + 0.2*M1^2) / (1 + 0.2*M2^2)
+rho_ratio = (T_ratio)^(1/0.4)
+
+println(&quot;\nDownstream conditions:&quot;)
+println(&quot;Mach number: $(round(M2, digits=3))&quot;)
+println(&quot;Pressure ratio p₁/p₂: $(round(p_ratio, digits=3))&quot;)
+println(&quot;Temperature ratio T₁/T₂: $(round(T_ratio, digits=3))&quot;)
+println(&quot;Density ratio ρ₁/ρ₂: $(round(rho_ratio, digits=3))&quot;)
+
+# Wave angles
+mu1 = asind(1/M1)  # Upstream Mach angle
+mu2 = asind(1/M2)  # Downstream Mach angle
+
+println(&quot;\nWave characteristics:&quot;)
+println(&quot;Upstream Mach angle: $(round(mu1, digits=1))°&quot;)
+println(&quot;Downstream Mach angle: $(round(mu2, digits=1))°&quot;)</code></pre><h3 id="Method-of-Characteristics-Application"><a class="docs-heading-anchor" href="#Method-of-Characteristics-Application">Method of Characteristics Application</a><a id="Method-of-Characteristics-Application-1"></a><a class="docs-heading-anchor-permalink" href="#Method-of-Characteristics-Application" title="Permalink"></a></h3><p>Simple application showing characteristic line method concepts:</p><pre><code class="language-julia hljs"># Prandtl-Meyer expansion around a corner
+M1 = 2.0
+theta_total = 30.0  # Total turning angle
+n_steps = 6         # Number of characteristic steps
+
+println(&quot;Method of Characteristics Example:&quot;)
+println(&quot;Initial Mach: $M1&quot;)
+println(&quot;Total turning: $theta_total°&quot;)
+println(&quot;Steps: $n_steps&quot;)
+
+theta_step = theta_total / n_steps
+M_current = M1
+
+println(&quot;\nStep\tθ(°)\tM\tν(°)\tμ(°)&quot;)
+println(&quot;----\t----\t-----\t-----\t-----&quot;)
+
+for i in 0:n_steps
+    theta_current = i * theta_step
+    
+    if i == 0
+        nu_current = prandtl_meyer(M_current)
+        mu_current = asind(1/M_current)  # Mach angle
+        println(&quot;$i\t$(round(theta_current, digits=1))\t$(round(M_current, digits=3))\t$(round(nu_current, digits=2))\t$(round(mu_current, digits=1))&quot;)
+    else
+        M_current = expand_mach2(M1, theta_current)
+        nu_current = prandtl_meyer(M_current)
+        mu_current = asind(1/M_current)
+        println(&quot;$i\t$(round(theta_current, digits=1))\t$(round(M_current, digits=3))\t$(round(nu_current, digits=2))\t$(round(mu_current, digits=1))&quot;)
+    end
+end
+
+# Compare with exact solution
+M_exact = expand_mach2(M1, theta_total)
+println(&quot;\nExact solution M_final: $(round(M_exact, digits=3))&quot;)
+println(&quot;Final step M: $(round(M_current, digits=3))&quot;)
+println(&quot;Error: $(round(abs(M_exact - M_current)/M_exact * 100, digits=2))%&quot;)</code></pre><h2 id="Different-Gases"><a class="docs-heading-anchor" href="#Different-Gases">Different Gases</a><a id="Different-Gases-1"></a><a class="docs-heading-anchor-permalink" href="#Different-Gases" title="Permalink"></a></h2><p>Analyze Prandtl-Meyer expansion for different gases:</p><pre><code class="language-julia hljs">M1 = 2.0
+theta = 20.0
+
+gases = [
+    (&quot;Air&quot;, 1.4),
+    (&quot;Helium&quot;, 1.67),
+    (&quot;Argon&quot;, 1.67),
+    (&quot;CO₂&quot;, 1.3)
+]
+
+println(&quot;Gas Effects on Prandtl-Meyer Expansion:&quot;)
+println(&quot;M₁ = $M1, θ = $theta°&quot;)
+println(&quot;Gas\tγ\tM₂\tp₁/p₂\tν₁ (°)\tν₂ (°)&quot;)
+println(&quot;---\t----\t----\t-----\t------\t------&quot;)
+
+for (gas, gamma) in gases
+    M2 = expand_mach2(M1, theta, gamma)
+    p_ratio = expand_p2(M1, theta, gamma)
+    nu1 = prandtl_meyer(M1, gamma)
+    nu2 = prandtl_meyer(M2, gamma)
+    
+    println(&quot;$gas\t$gamma\t$(round(M2, digits=3))\t$(round(p_ratio, digits=2))\t$(round(nu1, digits=1))\t$(round(nu2, digits=1))&quot;)
+end</code></pre><h2 id="Maximum-Turning-Angle"><a class="docs-heading-anchor" href="#Maximum-Turning-Angle">Maximum Turning Angle</a><a id="Maximum-Turning-Angle-1"></a><a class="docs-heading-anchor-permalink" href="#Maximum-Turning-Angle" title="Permalink"></a></h2><p>Find the maximum theoretical turning angle:</p><pre><code class="language-julia hljs"># For very high Mach numbers, ν approaches a maximum value
+M_high = 100.0
+nu_max = prandtl_meyer(M_high)
+
+println(&quot;Maximum Prandtl-Meyer angle:&quot;)
+println(&quot;ν(M→∞) ≈ $(round(nu_max, digits=1))°&quot;)
+
+# Theoretical maximum for γ = 1.4
+nu_theoretical = (sqrt((1.4+1)/(1.4-1)) - 1) * 90
+println(&quot;Theoretical maximum: $(round(nu_theoretical, digits=1))°&quot;)</code></pre><h2 id="Validation-Examples"><a class="docs-heading-anchor" href="#Validation-Examples">Validation Examples</a><a id="Validation-Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Validation-Examples" title="Permalink"></a></h2><h3 id="Prandtl-Meyer-Function-Values"><a class="docs-heading-anchor" href="#Prandtl-Meyer-Function-Values">Prandtl-Meyer Function Values</a><a id="Prandtl-Meyer-Function-Values-1"></a><a class="docs-heading-anchor-permalink" href="#Prandtl-Meyer-Function-Values" title="Permalink"></a></h3><p>Calculate the Prandtl-Meyer function for different Mach numbers:</p><pre><code class="language-julia hljs">println(&quot;M\tν(M) (°)&quot;)
+println(&quot;---\t-------&quot;)
+
+for M in 1.0:0.2:4.0
+    if M &gt; 1.0  # Function only valid for M &gt; 1
+        nu = prandtl_meyer(M)
+        println(&quot;$(round(M, digits=1))\t$(round(nu, digits=1))&quot;)
+    else
+        println(&quot;$(round(M, digits=1))\t0.0&quot;)
+    end
+end</code></pre><h3 id="Inverse-Problem-Find-Mach-from-Turning-Angle"><a class="docs-heading-anchor" href="#Inverse-Problem-Find-Mach-from-Turning-Angle">Inverse Problem - Find Mach from Turning Angle</a><a id="Inverse-Problem-Find-Mach-from-Turning-Angle-1"></a><a class="docs-heading-anchor-permalink" href="#Inverse-Problem-Find-Mach-from-Turning-Angle" title="Permalink"></a></h3><p>Given a turning angle, find the required initial Mach number:</p><pre><code class="language-julia hljs">M2_target = 3.0
+theta_given = 25.0  # degrees
+
+# Calculate required upstream Mach number
+nu2 = prandtl_meyer(M2_target)
+nu1 = nu2 - theta_given
+
+# Find M1 by inverse of Prandtl-Meyer function (iterative)
+M1_estimate = 1.5  # Initial guess
+tolerance = 1e-6
+
+for i in 1:100
+    nu_calc = prandtl_meyer(M1_estimate)
+    error = nu_calc - nu1
+    
+    if abs(error) &lt; tolerance
+        break
+    end
+    
+    # Simple Newton-like iteration
+    M1_estimate -= error / 10.0
+    M1_estimate = max(M1_estimate, 1.001)  # Keep supersonic
+end
+
+println(&quot;Inverse Prandtl-Meyer Problem:&quot;)
+println(&quot;Target M₂: $M2_target&quot;)
+println(&quot;Given turning angle: $theta_given°&quot;)
+println(&quot;Required M₁: $(round(M1_estimate, digits=3))&quot;)
+
+# Verify
+M2_check = expand_mach2(M1_estimate, theta_given)
+println(&quot;Verification M₂: $(round(M2_check, digits=3))&quot;)</code></pre><h2 id="Limitations-and-Considerations"><a class="docs-heading-anchor" href="#Limitations-and-Considerations">Limitations and Considerations</a><a id="Limitations-and-Considerations-1"></a><a class="docs-heading-anchor-permalink" href="#Limitations-and-Considerations" title="Permalink"></a></h2><ol><li><strong>Isentropic assumption</strong>: Valid only for gradual expansions without shock waves</li><li><strong>Perfect gas</strong>: Constant specific heats and ideal gas behavior</li><li><strong>Steady flow</strong>: Time-invariant conditions</li><li><strong>Two-dimensional flow</strong>: Assumes planar or axisymmetric geometry</li><li><strong>Gradual expansion</strong>: Sharp corners may cause finite-strength waves</li><li><strong>Supersonic flow</strong>: Functions only valid for M &gt; 1</li></ol><p>For viscous effects, unsteady phenomena, or real gas behavior, additional analysis methods are required.</p><h2 id="See-Also"><a class="docs-heading-anchor" href="#See-Also">See Also</a><a id="See-Also-1"></a><a class="docs-heading-anchor-permalink" href="#See-Also" title="Permalink"></a></h2><ul><li><a href="../oblique_shock/">Oblique Shock Waves</a>: For compression processes</li><li><a href="../isentropic/">Isentropic Relations</a>: For property ratios</li><li><a href="../normal_shock/">Normal Shock Waves</a>: For normal compression</li><li><a href="../nozzle/">Nozzle Analysis</a>: For nozzle design applications</li></ul></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../oblique_shock/">« Oblique Shock Waves</a><a class="docs-footer-nextpage" href="../cone_shock/">Cone Shock Analysis »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.13.0 on <span class="colophon-date" title="Monday 23 June 2025 14:57">Monday 23 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

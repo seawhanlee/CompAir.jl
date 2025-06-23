@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Quick Start · CompAir.jl</title><meta name="title" content="Quick Start · CompAir.jl"/><meta property="og:title" content="Quick Start · CompAir.jl"/><meta property="twitter:title" content="Quick Start · CompAir.jl"/><meta name="description" content="Documentation for CompAir.jl."/><meta property="og:description" content="Documentation for CompAir.jl."/><meta property="twitter:description" content="Documentation for CompAir.jl."/><meta property="og:url" content="https://seawhanlee.github.io/CompAir.jl/manual/quickstart/"/><meta property="twitter:url" content="https://seawhanlee.github.io/CompAir.jl/manual/quickstart/"/><link rel="canonical" href="https://seawhanlee.github.io/CompAir.jl/manual/quickstart/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">CompAir.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Manual</span><ul><li><a class="tocitem" href="../installation/">Installation</a></li><li class="is-active"><a class="tocitem" href>Quick Start</a><ul class="internal"><li><a class="tocitem" href="#Loading-the-Package"><span>Loading the Package</span></a></li><li><a class="tocitem" href="#Basic-Concepts"><span>Basic Concepts</span></a></li><li><a class="tocitem" href="#Isentropic-Flow-Relations"><span>Isentropic Flow Relations</span></a></li><li><a class="tocitem" href="#Normal-Shock-Analysis"><span>Normal Shock Analysis</span></a></li><li><a class="tocitem" href="#Oblique-Shock-Analysis"><span>Oblique Shock Analysis</span></a></li><li><a class="tocitem" href="#Prandtl-Meyer-Expansion"><span>Prandtl-Meyer Expansion</span></a></li><li><a class="tocitem" href="#Atmospheric-Properties"><span>Atmospheric Properties</span></a></li><li><a class="tocitem" href="#Nozzle-Flow-Analysis"><span>Nozzle Flow Analysis</span></a></li><li><a class="tocitem" href="#Working-with-Different-Gases"><span>Working with Different Gases</span></a></li><li><a class="tocitem" href="#Common-Patterns"><span>Common Patterns</span></a></li><li><a class="tocitem" href="#Next-Steps"><span>Next Steps</span></a></li></ul></li><li><a class="tocitem" href="../examples/">Examples</a></li></ul></li><li><span class="tocitem">API Reference</span><ul><li><a class="tocitem" href="../../api/isentropic/">Isentropic Relations</a></li><li><a class="tocitem" href="../../api/normal_shock/">Normal Shock Waves</a></li><li><a class="tocitem" href="../../api/oblique_shock/">Oblique Shock Waves</a></li><li><a class="tocitem" href="../../api/prandtl_expand/">Prandtl-Meyer Expansion</a></li><li><a class="tocitem" href="../../api/cone_shock/">Cone Shock Analysis</a></li><li><a class="tocitem" href="../../api/nozzle/">Nozzle Analysis</a></li><li><a class="tocitem" href="../../api/atmos1976/">Atmospheric Model</a></li></ul></li><li><span class="tocitem">Development</span><ul><li><a class="tocitem" href="../../dev/contributing/">Contributing</a></li><li><a class="tocitem" href="../../dev/changelog/">Changelog</a></li></ul></li></ul><div class="docs-version-selector field has-addons visible"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"><option value="#" selected="selected">v1.0.1</option></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Manual</a></li><li class="is-active"><a href>Quick Start</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Quick Start</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/seawhanlee/CompAir.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/seawhanlee/CompAir.jl/blob/main/docs/src/manual/quickstart.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Quick-Start"><a class="docs-heading-anchor" href="#Quick-Start">Quick Start</a><a id="Quick-Start-1"></a><a class="docs-heading-anchor-permalink" href="#Quick-Start" title="Permalink"></a></h1><p>This guide provides a quick introduction to CompAir.jl with basic usage patterns and simple examples.</p><h2 id="Loading-the-Package"><a class="docs-heading-anchor" href="#Loading-the-Package">Loading the Package</a><a id="Loading-the-Package-1"></a><a class="docs-heading-anchor-permalink" href="#Loading-the-Package" title="Permalink"></a></h2><pre><code class="language-julia hljs">using CompAir</code></pre><h2 id="Basic-Concepts"><a class="docs-heading-anchor" href="#Basic-Concepts">Basic Concepts</a><a id="Basic-Concepts-1"></a><a class="docs-heading-anchor-permalink" href="#Basic-Concepts" title="Permalink"></a></h2><p>CompAir.jl provides functions for analyzing compressible flow phenomena. Most functions follow consistent naming conventions and parameter patterns:</p><ul><li><strong>Mach number</strong>: Denoted as <code>M</code> or <code>M1</code>, <code>M2</code> for upstream/downstream conditions</li><li><strong>Heat capacity ratio</strong>: <code>gamma</code> (default: 1.4 for air)</li><li><strong>Angles</strong>: Specified in degrees</li><li><strong>Ratios</strong>: Property ratios like pressure, density, temperature</li></ul><h2 id="Isentropic-Flow-Relations"><a class="docs-heading-anchor" href="#Isentropic-Flow-Relations">Isentropic Flow Relations</a><a id="Isentropic-Flow-Relations-1"></a><a class="docs-heading-anchor-permalink" href="#Isentropic-Flow-Relations" title="Permalink"></a></h2><p>For a flow at Mach 2.0, calculate the stagnation property ratios:</p><pre><code class="language-julia hljs">M = 2.0
+
+# Stagnation to static ratios
+T0_T = t0_over_t(M)        # Temperature ratio
+p0_p = p0_over_p(M)        # Pressure ratio  
+rho0_rho = rho0_over_rho(M) # Density ratio
+
+println(&quot;Isentropic Relations at M = $M:&quot;)
+println(&quot;T₀/T = $(round(T0_T, digits=3))&quot;)
+println(&quot;p₀/p = $(round(p0_p, digits=3))&quot;)
+println(&quot;ρ₀/ρ = $(round(rho0_rho, digits=3))&quot;)</code></pre><p>Output:</p><pre><code class="nohighlight hljs">Isentropic Relations at M = 2.0:
+T₀/T = 1.8
+p₀/p = 7.824
+ρ₀/ρ = 4.347</code></pre><h2 id="Normal-Shock-Analysis"><a class="docs-heading-anchor" href="#Normal-Shock-Analysis">Normal Shock Analysis</a><a id="Normal-Shock-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Normal-Shock-Analysis" title="Permalink"></a></h2><p>Analyze a normal shock wave at Mach 3.0:</p><pre><code class="language-julia hljs">M1 = 3.0
+
+# Complete normal shock analysis
+M2, rho_ratio, p_ratio, p0_ratio = solve_normal(M1)
+
+println(&quot;Normal Shock at M₁ = $M1:&quot;)
+println(&quot;M₂ = $(round(M2, digits=3))&quot;)
+println(&quot;ρ₂/ρ₁ = $(round(rho_ratio, digits=3))&quot;)
+println(&quot;p₂/p₁ = $(round(p_ratio, digits=3))&quot;)
+println(&quot;p₀₂/p₀₁ = $(round(p0_ratio, digits=3))&quot;)</code></pre><p>Output:</p><pre><code class="nohighlight hljs">Normal Shock at M₁ = 3.0:
+M₂ = 0.475
+ρ₂/ρ₁ = 3.857
+p₂/p₁ = 10.333
+p₀₂/p₀₁ = 0.328</code></pre><h2 id="Oblique-Shock-Analysis"><a class="docs-heading-anchor" href="#Oblique-Shock-Analysis">Oblique Shock Analysis</a><a id="Oblique-Shock-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Oblique-Shock-Analysis" title="Permalink"></a></h2><p>Calculate oblique shock properties for Mach 2.5 flow over a 15° wedge:</p><pre><code class="language-julia hljs">M1 = 2.5
+theta = 15.0  # wedge angle in degrees
+
+# Solve oblique shock
+M2, rho_ratio, p_ratio, p0_ratio, beta = solve_oblique(M1, theta)
+
+println(&quot;Oblique Shock Analysis:&quot;)
+println(&quot;M₁ = $M1, θ = $(theta)°&quot;)
+println(&quot;Shock angle β = $(round(beta, digits=1))°&quot;)
+println(&quot;M₂ = $(round(M2, digits=3))&quot;)
+println(&quot;ρ₂/ρ₁ = $(round(rho_ratio, digits=3))&quot;)
+println(&quot;p₂/p₁ = $(round(p_ratio, digits=3))&quot;)</code></pre><p>Output:</p><pre><code class="nohighlight hljs">Oblique Shock Analysis:
+M₁ = 2.5, θ = 15.0°
+Shock angle β = 36.9°
+M₂ = 1.874
+ρ₂/ρ₁ = 1.867
+p₂/p₁ = 2.468</code></pre><h2 id="Prandtl-Meyer-Expansion"><a class="docs-heading-anchor" href="#Prandtl-Meyer-Expansion">Prandtl-Meyer Expansion</a><a id="Prandtl-Meyer-Expansion-1"></a><a class="docs-heading-anchor-permalink" href="#Prandtl-Meyer-Expansion" title="Permalink"></a></h2><p>Calculate expansion wave properties for Mach 2.0 flow turning through 20°:</p><pre><code class="language-julia hljs">M1 = 2.0
+theta = 20.0  # turning angle in degrees
+
+# Calculate downstream Mach number and pressure ratio
+M2 = expand_mach2(M1, theta)
+p_ratio = expand_p2(M1, theta)
+
+println(&quot;Prandtl-Meyer Expansion:&quot;)
+println(&quot;M₁ = $M1 → M₂ = $(round(M2, digits=3))&quot;)
+println(&quot;p₁/p₂ = $(round(p_ratio, digits=3))&quot;)</code></pre><p>Output:</p><pre><code class="nohighlight hljs">Prandtl-Meyer Expansion:
+M₁ = 2.0 → M₂ = 2.831
+p₁/p₂ = 0.275</code></pre><h2 id="Atmospheric-Properties"><a class="docs-heading-anchor" href="#Atmospheric-Properties">Atmospheric Properties</a><a id="Atmospheric-Properties-1"></a><a class="docs-heading-anchor-permalink" href="#Atmospheric-Properties" title="Permalink"></a></h2><p>Calculate atmospheric conditions at different altitudes using the US Standard Atmosphere 1976:</p><pre><code class="language-julia hljs"># Calculate properties at sea level and 11 km altitude
+altitudes = [0.0, 11.0]  # km
+
+for alt in altitudes
+    density, pressure, temperature, asound, viscosity = atmos1976_at(alt)
+    
+    println(&quot;Altitude: $(alt) km&quot;)
+    println(&quot;  Density: $(round(density, digits=3)) kg/m³&quot;)
+    println(&quot;  Pressure: $(round(pressure/1000, digits=1)) kPa&quot;)
+    println(&quot;  Temperature: $(round(temperature, digits=1)) K&quot;)
+    println(&quot;  Speed of sound: $(round(asound, digits=1)) m/s&quot;)
+    println()
+end</code></pre><p>Output:</p><pre><code class="nohighlight hljs">Altitude: 0.0 km
+  Density: 1.225 kg/m³
+  Pressure: 101.3 kPa
+  Temperature: 288.2 K
+  Speed of sound: 340.3 m/s
+
+Altitude: 11.0 km
+  Density: 0.364 kg/m³
+  Pressure: 22.6 kPa
+  Temperature: 216.7 K
+  Speed of sound: 295.1 m/s</code></pre><h2 id="Nozzle-Flow-Analysis"><a class="docs-heading-anchor" href="#Nozzle-Flow-Analysis">Nozzle Flow Analysis</a><a id="Nozzle-Flow-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Nozzle-Flow-Analysis" title="Permalink"></a></h2><p>Analyze nozzle flow for a given area ratio:</p><pre><code class="language-julia hljs"># Design exit Mach number
+M_exit = 3.0
+area_ratio = area_ratio_at(M_exit)
+
+println(&quot;Nozzle Design:&quot;)
+println(&quot;Exit Mach number: $M_exit&quot;)
+println(&quot;Area ratio A/A*: $(round(area_ratio, digits=2))&quot;)
+
+# Find Mach numbers for given area ratio
+A_ratio = 5.0
+M_subsonic = mach_by_area_ratio(A_ratio, 1.4, 0.1)    # subsonic solution
+M_supersonic = mach_by_area_ratio(A_ratio, 1.4, 2.0)  # supersonic solution
+
+println(&quot;\nFor A/A* = $A_ratio:&quot;)
+println(&quot;Subsonic M = $(round(M_subsonic, digits=3))&quot;)
+println(&quot;Supersonic M = $(round(M_supersonic, digits=3))&quot;)</code></pre><p>Output:</p><pre><code class="nohighlight hljs">Nozzle Design:
+Exit Mach number: 3.0
+Area ratio A/A*: 4.23
+
+For A/A* = 5.0:
+Subsonic M = 0.117
+Supersonic M = 3.175</code></pre><h2 id="Working-with-Different-Gases"><a class="docs-heading-anchor" href="#Working-with-Different-Gases">Working with Different Gases</a><a id="Working-with-Different-Gases-1"></a><a class="docs-heading-anchor-permalink" href="#Working-with-Different-Gases" title="Permalink"></a></h2><p>Most functions accept a <code>gamma</code> parameter for different gases:</p><pre><code class="language-julia hljs">M = 2.0
+
+# Air (γ = 1.4, default)
+T0_T_air = t0_over_t(M)
+
+# Helium (γ ≈ 1.67)
+T0_T_helium = t0_over_t(M, 1.67)
+
+println(&quot;Temperature ratios at M = $M:&quot;)
+println(&quot;Air (γ=1.4): $(round(T0_T_air, digits=3))&quot;)
+println(&quot;Helium (γ=1.67): $(round(T0_T_helium, digits=3))&quot;)</code></pre><p>Output:</p><pre><code class="nohighlight hljs">Temperature ratios at M = 2.0:
+Air (γ=1.4): 1.8
+Helium (γ=1.67): 2.34</code></pre><h2 id="Common-Patterns"><a class="docs-heading-anchor" href="#Common-Patterns">Common Patterns</a><a id="Common-Patterns-1"></a><a class="docs-heading-anchor-permalink" href="#Common-Patterns" title="Permalink"></a></h2><h3 id="Error-Handling"><a class="docs-heading-anchor" href="#Error-Handling">Error Handling</a><a id="Error-Handling-1"></a><a class="docs-heading-anchor-permalink" href="#Error-Handling" title="Permalink"></a></h3><p>Functions will throw errors for invalid inputs:</p><pre><code class="language-julia hljs">try
+    # This will fail - can&#39;t have oblique shock with impossible deflection
+    solve_oblique(1.5, 45.0)  # θ too large for this Mach number
+catch e
+    println(&quot;Error: &quot;, e)
+end</code></pre><h3 id="Default-Parameters"><a class="docs-heading-anchor" href="#Default-Parameters">Default Parameters</a><a id="Default-Parameters-1"></a><a class="docs-heading-anchor-permalink" href="#Default-Parameters" title="Permalink"></a></h3><p>Most functions use sensible defaults:</p><pre><code class="language-julia hljs"># These are equivalent
+p0_p_1 = p0_over_p(2.0, 1.4)  # explicit gamma
+p0_p_2 = p0_over_p(2.0)       # default gamma=1.4
+
+println(p0_p_1 == p0_p_2)  # true</code></pre><h2 id="Next-Steps"><a class="docs-heading-anchor" href="#Next-Steps">Next Steps</a><a id="Next-Steps-1"></a><a class="docs-heading-anchor-permalink" href="#Next-Steps" title="Permalink"></a></h2><p>Now that you understand the basics:</p><ol><li>Explore the <a href="../examples/">Examples</a> for more complex scenarios</li><li>Check the source code for detailed function documentation with docstrings</li><li>Refer to the README.md for complete API reference</li><li>Look at the test files for additional usage examples</li></ol></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../installation/">« Installation</a><a class="docs-footer-nextpage" href="../examples/">Examples »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.13.0 on <span class="colophon-date" title="Monday 23 June 2025 14:57">Monday 23 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
