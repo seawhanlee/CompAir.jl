@@ -28,15 +28,15 @@ $$\dot{m} = \rho^* A^* a^* = \frac{p_0}{\sqrt{T_0}} \sqrt{\frac{\gamma}{R}} \lef
 
 **Choked flow condition** (M = 1 at throat):
 - Maximum mass flow for given stagnation conditions
-- Critical pressure ratio: $\frac{p^*}{p_0} = \left(\frac{2}{\gamma+1}\right)^{\frac{\gamma}{\gamma-1}}$
-- Critical temperature ratio: $\frac{T^*}{T_0} = \frac{2}{\gamma+1}$
+- Critical pressure ratio: ``\frac{p^*}{p_0} = \left(\frac{2}{\gamma+1}\right)^{\frac{\gamma}{\gamma-1}}``
+- Critical temperature ratio: ``\frac{T^*}{T_0} = \frac{2}{\gamma+1}``
 
 Where:
-- $A$ = local area, $A^*$ = throat area (sonic area)
-- $M$ = local Mach number
-- $\gamma$ = specific heat ratio
-- $p_0, T_0$ = stagnation pressure and temperature
-- $R$ = specific gas constant
+- ``A`` = local area, ``A^*`` = throat area (sonic area)
+- ``M`` = local Mach number
+- ``\gamma`` = specific heat ratio
+- ``p_0, T_0`` = stagnation pressure and temperature
+- ``R`` = specific gas constant
 
 ## Functions
 
@@ -358,7 +358,7 @@ for pr in pressure_ratios
         end
     end
     
-    println("$(round(pr, digits=1))\t$condition\t\t$M_exit")
+    println("$(round(pr, digits=1))\t$(condition)\t\t$(M_exit)")
 end
 ```
 
@@ -375,7 +375,7 @@ T0 = 400     # Stagnation temperature (K)
 area_ratios = [1.5, 2.0, 3.0, 4.0, 5.0]
 
 println("Variable Area Nozzle Performance:")
-println("Stagnation conditions: $(p0/1000) kPa, $T0 K")
+println("Stagnation conditions: $(p0/1000) kPa, $(T0) K")
 println("\nA/A*\tM_exit\tp_exit(kPa)\tT_exit(K)\tV_exit(m/s)")
 println("----\t------\t----------\t--------\t----------")
 
@@ -457,7 +457,7 @@ for (gas, gamma, R) in gases
     T_exit = T0 / t0_over_t(M_exit, gamma)
     V_exit = M_exit * sqrt(gamma * R * T_exit)
     
-    println("$gas\t$gamma\t$R\t\t$(round(A_ratio, digits=2))\t$(round(mass_flow, digits=3))\t\t$(round(V_exit, digits=1))")
+    println("$(gas)\t$(gamma)\t$(R)\t\t$(round(A_ratio, digits=2))\t$(round(mass_flow, digits=3))\t\t$(round(V_exit, digits=1))")
 end
 ```
 
