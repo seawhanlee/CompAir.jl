@@ -26,18 +26,18 @@ $$\tan\theta = 2\cot\beta \frac{M_1^2\sin^2\beta - 1}{M_1^2(\gamma + \cos 2\beta
 **Downstream Mach number**:
 $$M_2 = \frac{M_1\sin(\beta - \theta)}{\sin\beta} \sqrt{\frac{1 + \frac{\gamma-1}{2}M_1^2\sin^2\beta}{\gamma M_1^2\sin^2\beta - \frac{\gamma-1}{2}}}$$
 
-**Property ratios** (same as normal shock with $M_{1n} = M_1\sin\beta$):
-- Pressure: $\frac{p_2}{p_1} = 1 + \frac{2\gamma}{\gamma+1}(M_1^2\sin^2\beta - 1)$
-- Density: $\frac{\rho_2}{\rho_1} = \frac{(\gamma+1)M_1^2\sin^2\beta}{2 + (\gamma-1)M_1^2\sin^2\beta}$
+**Property ratios** (same as normal shock with ``M_{1n} = M_1\sin\beta``):
+- Pressure: ``\frac{p_2}{p_1} = 1 + \frac{2\gamma}{\gamma+1}(M_1^2\sin^2\beta - 1)``
+- Density: ``\frac{\rho_2}{\rho_1} = \frac{(\gamma+1)M_1^2\sin^2\beta}{2 + (\gamma-1)M_1^2\sin^2\beta}``
 
 **Maximum deflection angle**:
 $$\theta_{max} = \arcsin\left(\frac{1}{M_1}\right) - \arccos\left(\frac{\gamma+1}{2\gamma M_1^2}\right) + \arccos\left(\sqrt{\frac{(\gamma+1)^2M_1^4 - 4(M_1^2-1)}{4\gamma M_1^2(\gamma M_1^2 - (\gamma-1)/2)}}\right)$$
 
 Where:
-- $\theta$ = flow deflection angle
-- $\beta$ = shock wave angle
-- $M_1$ = upstream Mach number
-- $\gamma$ = specific heat ratio
+- ``\theta`` = flow deflection angle
+- ``\beta`` = shock wave angle
+- ``M_1`` = upstream Mach number
+- ``\gamma`` = specific heat ratio
 
 ## Functions
 

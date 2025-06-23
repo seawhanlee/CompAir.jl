@@ -28,14 +28,14 @@ $$\nu(M) = \sqrt{\frac{\gamma+1}{\gamma-1}} \arctan\sqrt{\frac{\gamma-1}{\gamma+
 $$\theta_{12} = \nu(M_2) - \nu(M_1)$$
 
 **Property ratios** (from isentropic relations):
-- Pressure: $\frac{p_2}{p_1} = \left(\frac{1 + \frac{\gamma-1}{2}M_1^2}{1 + \frac{\gamma-1}{2}M_2^2}\right)^{\frac{\gamma}{\gamma-1}}$
-- Temperature: $\frac{T_2}{T_1} = \frac{1 + \frac{\gamma-1}{2}M_1^2}{1 + \frac{\gamma-1}{2}M_2^2}$
-- Density: $\frac{\rho_2}{\rho_1} = \left(\frac{1 + \frac{\gamma-1}{2}M_1^2}{1 + \frac{\gamma-1}{2}M_2^2}\right)^{\frac{1}{\gamma-1}}$
+- Pressure: ``\frac{p_2}{p_1} = \left(\frac{1 + \frac{\gamma-1}{2}M_1^2}{1 + \frac{\gamma-1}{2}M_2^2}\right)^{\frac{\gamma}{\gamma-1}}``
+- Temperature: ``\frac{T_2}{T_1} = \frac{1 + \frac{\gamma-1}{2}M_1^2}{1 + \frac{\gamma-1}{2}M_2^2}``
+- Density: ``\frac{\rho_2}{\rho_1} = \left(\frac{1 + \frac{\gamma-1}{2}M_1^2}{1 + \frac{\gamma-1}{2}M_2^2}\right)^{\frac{1}{\gamma-1}}``
 
 Where:
-- $M_1$, $M_2$ = upstream and downstream Mach numbers
-- $\theta_{12}$ = turning angle from state 1 to state 2
-- $\gamma$ = specific heat ratio
+- ``M_1``, ``M_2`` = upstream and downstream Mach numbers
+- ``\theta_{12}`` = turning angle from state 1 to state 2
+- ``\gamma`` = specific heat ratio
 
 ## Functions
 

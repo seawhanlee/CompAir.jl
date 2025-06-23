@@ -26,14 +26,14 @@ For supersonic flow over a circular cone, the flow field is governed by the Tayl
 $$\frac{d^2V_r}{d\theta^2} + \frac{(\gamma - 1)M_{\infty}^2 - 2V_r^2}{(\gamma - 1)M_{\infty}^2 - V_r^2}\frac{dV_r}{d\theta} + \frac{V_r^2 - 1}{\tan\theta} = 0$$
 
 **Boundary conditions**:
-- At shock: $V_r(\theta_s) = V_{rs}$ (shock conditions)
-- At cone surface: $\frac{dV_r}{d\theta}\bigg|_{\theta_c} = 0$ (tangency condition)
+- At shock: ``V_r(\theta_s) = V_{rs}`` (shock conditions)
+- At cone surface: ``\frac{dV_r}{d\theta}\bigg|_{\theta_c} = 0`` (tangency condition)
 
 **Conical coordinate system**:
-- $\theta$ = angle from cone axis
-- $\theta_c$ = cone half-angle
-- $\theta_s$ = shock angle
-- $V_r$ = dimensionless radial velocity
+- ``\theta`` = angle from cone axis
+- ``\theta_c`` = cone half-angle
+- ``\theta_s`` = shock angle
+- ``V_r`` = dimensionless radial velocity
 
 **Property relations**:
 $$M^2 = \frac{V_r^2}{(\gamma - 1)(1 - V_r^2/M_{\infty}^2)}$$
@@ -41,9 +41,9 @@ $$M^2 = \frac{V_r^2}{(\gamma - 1)(1 - V_r^2/M_{\infty}^2)}$$
 $$\frac{p}{p_{\infty}} = \frac{(\gamma + 1)M_{\infty}^2}{(\gamma + 1)M_{\infty}^2 - 2(\gamma - 1)(M_{\infty}^2 - V_r^2)}$$
 
 Where:
-- $M_{\infty}$ = freestream Mach number
-- $\theta_c$ = cone half-angle
-- $\gamma$ = specific heat ratio
+- ``M_{\infty}`` = freestream Mach number
+- ``\theta_c`` = cone half-angle
+- ``\gamma`` = specific heat ratio
 
 ## Functions
 

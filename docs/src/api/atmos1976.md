@@ -22,15 +22,15 @@ The US Standard Atmosphere 1976 is a mathematical model that describes the varia
 The atmosphere is divided into several layers with different temperature profiles:
 
 **Troposphere (0-11 km)**: Linear temperature decrease
-- $T = T_0 - L \cdot h$
-- $L = 6.5$ K/km (lapse rate)
+- ``T = T_0 - L \cdot h``
+- ``L = 6.5`` K/km (lapse rate)
 
 **Stratosphere (11-20 km)**: Isothermal layer
-- $T = T_{11} = 216.65$ K (constant)
+- ``T = T_{11} = 216.65`` K (constant)
 
 **Stratosphere (20-32 km)**: Linear temperature increase
-- $T = T_{20} + L_2 \cdot (h - 20)$
-- $L_2 = 1.0$ K/km
+- ``T = T_{20} + L_2 \cdot (h - 20)``
+- ``L_2 = 1.0`` K/km
 
 **Hydrostatic equation**:
 $$\frac{dp}{dh} = -\rho g$$
@@ -45,13 +45,13 @@ $$h' = \frac{r_0 h}{r_0 + h}$$
 $$\mu = \mu_0 \frac{T^{1.5}}{T + S}$$
 
 Where:
-- $h$ = geometric altitude
-- $h'$ = geopotential altitude  
-- $r_0$ = Earth's radius (6356766 m)
-- $R$ = specific gas constant (287.0 J/kg·K for air)
-- $g_0$ = standard gravity (9.80665 m/s²)
-- $\mu_0$ = reference viscosity (1.716×10⁻⁵ Pa·s)
-- $S$ = Sutherland constant (110.4 K)
+- ``h`` = geometric altitude
+- ``h'`` = geopotential altitude  
+- ``r_0`` = Earth's radius (6356766 m)
+- ``R`` = specific gas constant (287.0 J/kg·K for air)
+- ``g_0`` = standard gravity (9.80665 m/s²)
+- ``\mu_0`` = reference viscosity (1.716×10⁻⁵ Pa·s)
+- ``S`` = Sutherland constant (110.4 K)
 
 ## Functions
 

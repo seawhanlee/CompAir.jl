@@ -19,13 +19,13 @@ Isentropic flow relations are fundamental to compressible flow analysis. They re
 
 For an ideal gas undergoing isentropic flow, the relationships between stagnation and static properties are:
 
-- **Temperature**: $\frac{T_0}{T} = 1 + \frac{\gamma-1}{2}M^2$
-- **Pressure**: $\frac{p_0}{p} = \left(1 + \frac{\gamma-1}{2}M^2\right)^{\frac{\gamma}{\gamma-1}}$
-- **Density**: $\frac{\rho_0}{\rho} = \left(1 + \frac{\gamma-1}{2}M^2\right)^{\frac{1}{\gamma-1}}$
+- **Temperature**: ``\frac{T_0}{T} = 1 + \frac{\gamma-1}{2}M^2``
+- **Pressure**: ``\frac{p_0}{p} = \left(1 + \frac{\gamma-1}{2}M^2\right)^{\frac{\gamma}{\gamma-1}}``
+- **Density**: ``\frac{\rho_0}{\rho} = \left(1 + \frac{\gamma-1}{2}M^2\right)^{\frac{1}{\gamma-1}}``
 
 Where:
-- $M$ is mach number
-- $\gamma$ is specific heat ratio (1.4 for air at standard conditions)
+- ``M`` is mach number
+- ``\gamma`` is specific heat ratio (1.4 for air at standard conditions)
 - Subscript 0 denotes stagnation conditions
 
 ## Functions
