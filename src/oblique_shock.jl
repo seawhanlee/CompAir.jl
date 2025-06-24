@@ -209,5 +209,5 @@ function solve_oblique(M, theta, gamma=1.4)
     theta_r = deg2rad(theta)
     M2 = Mn2 / sin(beta_r - theta_r)
 
-    return (M2=M2, rho2=rho2, p2=p2, p0ratio=p0ratio, beta=beta)
+    return (M2=M2, rho2_ratio=rho2, p2_ratio=p2, p0_ratio=p0ratio, beta=beta)
 end

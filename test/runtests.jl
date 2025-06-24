@@ -29,4 +29,8 @@ using Test
     @testset "US Standard Atmosphere 1976" begin
         include("atmos1976_tests.jl")
     end
+
+    @testset "Intake" begin
+        include("intake_test.jl")
+    end
 end

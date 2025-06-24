@@ -120,5 +120,5 @@ function solve_normal(M, gamma=1.4)
     M2 = normal_mach2(M, gamma)
     rho2, p2 = rho2_over_rho1(M, gamma), p2_over_p1(M, gamma)
     p0ratio = p02_over_p01(M, gamma)
-    return M2, rho2, p2, p0ratio
+    return (M2=M2, rho2_ratio=rho2, p2_ratio=p2, p0_ratio=p0ratio)
 end
