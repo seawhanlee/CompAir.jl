@@ -7,7 +7,7 @@ function intake_ramp(M_infty::Real, ramp_angle::Vector{Real}, gamma=1.4)
         M = mach_number[i]
         theta = ramp_angle[i]
         sol = solve_oblique(M, theta, gamma)
-
+        mach_number[i+1] = sol.M2
     end
     
 end
