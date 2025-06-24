@@ -3,36 +3,36 @@ import Optim
 import Optim: Brent
 
 """
-    _tangent_theta(beta_r, M, gamma=1.4)
+    _tangent_theta(beta_r::Real, M::Real, gamma::Real=1.4)
 
 경사 충격파 각도 `β`와 마하수 `M`을 이용하여 쇄기 각도 `θ`의 탄젠트 값을 계산하는 내부 함수.
 
 # Arguments
-- `beta_r::Float64`: 경사 충격파 각도 (radian)
-- `M::Float64`: 충격파 전 마하수
-- `gamma::Float64=1.4`: 비열비
+- `beta_r::Real`: 경사 충격파 각도 (radian)
+- `M::Real`: 충격파 전 마하수
+- `gamma::Real=1.4`: 비열비
 
 # Returns
 - `Float64`: tan(θ) 값
 """
-function _tangent_theta(beta_r, M, gamma=1.4)
+function _tangent_theta(beta_r::Real, M::Real, gamma::Real=1.4)
     return 2 / tan(beta_r) * ((M * sin(beta_r))^2 - 1) / (M^2 * (gamma + cos(2 * beta_r)) + 2)
 end
 
 """
-    theta_beta(beta, M, gamma=1.4)
+    theta_beta(beta::Real, M::Real, gamma::Real=1.4)
 
 `θ-β-M` 함수를 이용하여, `β`, `M`을 이용하여 `θ`를 계산한다.
 
 # Arguments
-- `beta::Float64`: 경사 충격파 각도 (degree)
-- `M::Float64`: 충격파 전 마하수
-- `gamma::Float64=1.4`: 비열비
+- `beta::Real`: 경사 충격파 각도 (degree)
+- `M::Real`: 충격파 전 마하수
+- `gamma::Real=1.4`: 비열비
 
 # Returns
 - `theta::Float64`: 쇄기 각도 (degree)
 """
-function theta_beta(beta, M, gamma=1.4)
+function theta_beta(beta::Real, M::Real, gamma::Real=1.4)
     # Input validation
     if beta == 0.0 || beta == 90.0
         throw(DomainError(beta, "beta must be between 0 and 90 degrees, exclusive."))
@@ -51,20 +51,20 @@ function theta_beta(beta, M, gamma=1.4)
 end
 
 """
-    _beta_weak(M, theta, gamma=1.4)
+    _beta_weak(M::Real, theta::Real, gamma::Real=1.4)
 
 마하수 `M`과 쇄기 각도 `θ`를 이용하여 약한 경사 충격파 각도 `β`를 계산하는 내부 함수.
 Newton-Raphson 방법을 사용하여 수치적으로 해를 구한다.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `theta::Float64`: 쇄기 각도 (degree)
-- `gamma::Float64=1.4`: 비열비
+- `M::Real`: 충격파 전 마하수
+- `theta::Real`: 쇄기 각도 (degree)
+- `gamma::Real=1.4`: 비열비
 
 # Returns
 - `Float64`: 경사 충격파 각도 (radian)
 """
-function _beta_weak(M, theta, gamma=1.4)
+function _beta_weak(M::Real, theta::Real, gamma::Real=1.4)
     # Convert deg to rad
     theta_r = deg2rad(theta)
 
@@ -75,37 +75,37 @@ function _beta_weak(M, theta, gamma=1.4)
 end
 
 """
-    oblique_beta_weak(M, theta, gamma=1.4)
+    oblique_beta_weak(M::Real, theta::Real, gamma::Real=1.4)
 
 `θ-β-M` 관계식을 수치적으로 계산하여 마하수 `M`, 쐐기 각도 `θ` 일 때
 경사 충격파 각도 `β`를 계산한다.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `theta::Float64`: 쇄기 각도 (degree)
-- `gamma::Float64=1.4`: 비열비
+- `M::Real`: 충격파 전 마하수
+- `theta::Real`: 쇄기 각도 (degree)
+- `gamma::Real=1.4`: 비열비
 
 # Returns
 - `beta::Float64`: 경사 충격파 각도 (degree)
 """
-function oblique_beta_weak(M, theta, gamma=1.4)
+function oblique_beta_weak(M::Real, theta::Real, gamma::Real=1.4)
     # Convert rad to deg
     return rad2deg(_beta_weak(M, theta, gamma))
 end
 
 """
-    theta_max(M, gamma=1.4)
+    theta_max(M::Real, gamma::Real=1.4)
 
 주어진 마하수 `M`에 대해서 `θ-β-M` 관계식에서 Weak 해가 존재할 수 있는 최대 쇄기각 `θ`를 계산한다.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `gamma::Float64=1.4`: 비열비
+- `M::Real`: 충격파 전 마하수
+- `gamma::Real=1.4`: 비열비
 
 # Returns
 - `theta::Float64`: 최대 쇄기 각도 (degree)
 """
-function theta_max(M, gamma=1.4)
+function theta_max(M::Real, gamma::Real=1.4)
     # Maximize tangent theta
     f(x) = -_tangent_theta(x, M, gamma)
 
@@ -119,24 +119,24 @@ function theta_max(M, gamma=1.4)
     return rad2deg(atan(tan_theta))
 end
 
-function _Mn1(M, beta_r, gamma=1.4)
+function _Mn1(M::Real, beta_r::Real, gamma::Real=1.4)
     return M * sin(beta_r)
 end
 
 """
-    Mn1(M, theta, gamma=1.4)
+    Mn1(M::Real, theta::Real, gamma::Real=1.4)
 
 마하수 `M`, 쐐기각 `θ` 일때 발생한 경사충격파에 수직인 마하수
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `theta::Float64`: 쇄기 각도 (degree)
-- `gamma::Float64=1.4`: 비열비
+- `M::Real`: 충격파 전 마하수
+- `theta::Real`: 쇄기 각도 (degree)
+- `gamma::Real=1.4`: 비열비
 
 # Returns
 - `Mn1::Float64`: 경사 충격파에 수직인 마하수
 """
-function Mn1(M, theta, gamma=1.4)
+function Mn1(M::Real, theta::Real, gamma::Real=1.4)
     # Get beta in rad
     beta_r = _beta_weak(M, theta, gamma)
 
@@ -144,19 +144,19 @@ function Mn1(M, theta, gamma=1.4)
 end
 
 """
-    oblique_mach2(M, theta, gamma=1.4)
+    oblique_mach2(M::Real, theta::Real, gamma::Real=1.4)
 
 마하수 `M`, 쐐기각 `θ` 일때 발생한 경사충격파를 지난 후 마하수
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `theta::Float64`: 쇄기 각도 (degree)
-- `gamma::Float64=1.4`: 비열비
+- `M::Real`: 충격파 전 마하수
+- `theta::Real`: 쇄기 각도 (degree)
+- `gamma::Real=1.4`: 비열비
 
 # Returns
 - `M2::Float64`: 경사 충격파후 마하수
 """
-function oblique_mach2(M, theta, gamma=1.4)
+function oblique_mach2(M::Real, theta::Real, gamma::Real=1.4)
     # Get beta in rad
     beta_r = _beta_weak(M, theta, gamma)
 
@@ -173,23 +173,24 @@ function oblique_mach2(M, theta, gamma=1.4)
 end
 
 """
-    solve_oblique(M, theta, gamma=1.4)
+    solve_oblique(M::Real, theta::Real, gamma::Real=1.4)
 
 마하수 `M`, 쐐기각 `θ` 일때 발생한 경사충격파를 지난 후 물성치 계산
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `theta::Float64`: 쇄기 각도 (degree)
-- `gamma::Float64=1.4`: 비열비
+- `M::Real`: 충격파 전 마하수
+- `theta::Real`: 쇄기 각도 (degree)
+- `gamma::Real=1.4`: 비열비
 
 # Returns
-- `m2::Float64`: 수직충격파 후 마하수
-- `rho2::Float64`: 수직충격파 전/후 밀도비
-- `p2::Float64`: 수직충격파 전/후 압력비
-- `p0ratio::Float64`: 수직충격파 전/후 전압력비
-- `beta::Float64`: 경사 충격파 각도 (degree)
+- `NamedTuple`
+    - `M2::Float64`: 수직충격파 후 마하수
+    - `rho2::Float64`: 수직충격파 전/후 밀도비
+    - `p2::Float64`: 수직충격파 전/후 압력비
+    - `p0ratio::Float64`: 수직충격파 전/후 전압력비
+    - `beta::Float64`: 경사 충격파 각도 (degree)
 """
-function solve_oblique(M, theta, gamma=1.4)
+function solve_oblique(M::Real, theta::Real, gamma::Real=1.4)
     if theta < theta_max(M, gamma)
         beta_r = _beta_weak(M, theta, gamma)
     else
