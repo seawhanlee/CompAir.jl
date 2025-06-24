@@ -24,6 +24,7 @@ makedocs(
             "Prandtl-Meyer Expansion" => "api/prandtl_expand.md",
             "Cone Shock Analysis" => "api/cone_shock.md",
             "Nozzle Analysis" => "api/nozzle.md",
+            "Intake Ramp Analysis" => "api/intake.md",
             "Atmospheric Model" => "api/atmos1976.md"
         ],
         "Development" => [
