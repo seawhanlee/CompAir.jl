@@ -124,8 +124,16 @@ If you use CompAir.jl in your research, please cite both the original Python mod
   title = {CompAir.jl: A Julia Port of CompAir for Computational Aerodynamics},
   url = {https://github.com/seawhanlee/CompAir.jl},
   version = {1.0.0},
-  year = {2024},
+  year = {2025},
   note = {Julia port of the original Python CompAir module by Inha AADL}
+}
+
+@software{CompAir_python,
+  author = {Inha AADL},
+  title = {CompAir: Computational Aerodynamics Module},
+  url = {https://gitlab.com/aadl_inha/CompAir},
+  year = {2022},
+  note = {Original Python implementation}
 }
 ```
 
