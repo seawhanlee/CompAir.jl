@@ -8,8 +8,8 @@ WORKDIR /app
 COPY Project.toml Manifest.toml ./
 COPY src/ ./src/
 
-# Install package dependencies and Plots.jl
-RUN julia -e 'using Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.add("Plots"); Pkg.precompile()'
+# Install package dependencies
+RUN julia -e 'using Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.precompile()'
 
 # Set default command to Julia REPL
 CMD ["julia", "--project=."]
