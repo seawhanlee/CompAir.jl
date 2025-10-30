@@ -5,15 +5,15 @@ import Optim: Brent
 """
     _tangent_theta(beta_r::Real, M::Real, gamma::Real=1.4)
 
-경사 충격파 각도 `β`와 마하수 `M`을 이용하여 쇄기 각도 `θ`의 탄젠트 값을 계산하는 내부 함수.
+Internal function to calculate the tangent of the wedge angle `θ` using the oblique shock wave angle `β` and Mach number `M`.
 
 # Arguments
-- `beta_r::Real`: 경사 충격파 각도 (radian)
-- `M::Real`: 충격파 전 마하수
-- `gamma::Real=1.4`: 비열비
+- `beta_r::Real`: Oblique shock wave angle (radians)
+- `M::Real`: Upstream Mach number
+- `gamma::Real=1.4`: Specific heat ratio
 
 # Returns
-- `Float64`: tan(θ) 값
+- `Float64`: Value of tan(θ)
 """
 function _tangent_theta(beta_r::Real, M::Real, gamma::Real=1.4)
     return 2 / tan(beta_r) * ((M * sin(beta_r))^2 - 1) / (M^2 * (gamma + cos(2 * beta_r)) + 2)
@@ -22,15 +22,15 @@ end
 """
     theta_beta(beta::Real, M::Real, gamma::Real=1.4)
 
-`θ-β-M` 함수를 이용하여, `β`, `M`을 이용하여 `θ`를 계산한다.
+Calculates the wedge angle `θ` using the `θ-β-M` relation given the shock angle `β` and Mach number `M`.
 
 # Arguments
-- `beta::Real`: 경사 충격파 각도 (degree)
-- `M::Real`: 충격파 전 마하수
-- `gamma::Real=1.4`: 비열비
+- `beta::Real`: Oblique shock wave angle (degrees)
+- `M::Real`: Upstream Mach number
+- `gamma::Real=1.4`: Specific heat ratio
 
 # Returns
-- `theta::Float64`: 쇄기 각도 (degree)
+- `theta::Float64`: Wedge angle (degrees)
 """
 function theta_beta(beta::Real, M::Real, gamma::Real=1.4)
     # Input validation
@@ -53,16 +53,16 @@ end
 """
     _beta_weak(M::Real, theta::Real, gamma::Real=1.4)
 
-마하수 `M`과 쇄기 각도 `θ`를 이용하여 약한 경사 충격파 각도 `β`를 계산하는 내부 함수.
-Newton-Raphson 방법을 사용하여 수치적으로 해를 구한다.
+Internal function to calculate the weak oblique shock wave angle `β` using the Mach number `M` and wedge angle `θ`.
+Solves numerically using the Newton-Raphson method.
 
 # Arguments
-- `M::Real`: 충격파 전 마하수
-- `theta::Real`: 쇄기 각도 (degree)
-- `gamma::Real=1.4`: 비열비
+- `M::Real`: Upstream Mach number
+- `theta::Real`: Wedge angle (degrees)
+- `gamma::Real=1.4`: Specific heat ratio
 
 # Returns
-- `Float64`: 경사 충격파 각도 (radian)
+- `Float64`: Oblique shock wave angle (radians)
 """
 function _beta_weak(M::Real, theta::Real, gamma::Real=1.4)
     # Convert deg to rad
@@ -77,16 +77,16 @@ end
 """
     oblique_beta_weak(M::Real, theta::Real, gamma::Real=1.4)
 
-`θ-β-M` 관계식을 수치적으로 계산하여 마하수 `M`, 쐐기 각도 `θ` 일 때
-경사 충격파 각도 `β`를 계산한다.
+Numerically calculates the weak oblique shock wave angle `β` using the `θ-β-M` relation
+for a given Mach number `M` and wedge angle `θ`.
 
 # Arguments
-- `M::Real`: 충격파 전 마하수
-- `theta::Real`: 쇄기 각도 (degree)
-- `gamma::Real=1.4`: 비열비
+- `M::Real`: Upstream Mach number
+- `theta::Real`: Wedge angle (degrees)
+- `gamma::Real=1.4`: Specific heat ratio
 
 # Returns
-- `beta::Float64`: 경사 충격파 각도 (degree)
+- `beta::Float64`: Oblique shock wave angle (degrees)
 """
 function oblique_beta_weak(M::Real, theta::Real, gamma::Real=1.4)
     # Convert rad to deg
@@ -96,14 +96,15 @@ end
 """
     theta_max(M::Real, gamma::Real=1.4)
 
-주어진 마하수 `M`에 대해서 `θ-β-M` 관계식에서 Weak 해가 존재할 수 있는 최대 쇄기각 `θ`를 계산한다.
+Calculates the maximum wedge angle `θ` for which a weak shock solution exists in the `θ-β-M` relation
+for a given Mach number `M`.
 
 # Arguments
-- `M::Real`: 충격파 전 마하수
-- `gamma::Real=1.4`: 비열비
+- `M::Real`: Upstream Mach number
+- `gamma::Real=1.4`: Specific heat ratio
 
 # Returns
-- `theta::Float64`: 최대 쇄기 각도 (degree)
+- `theta::Float64`: Maximum wedge angle (degrees)
 """
 function theta_max(M::Real, gamma::Real=1.4)
     # Maximize tangent theta
@@ -126,15 +127,16 @@ end
 """
     Mn1(M::Real, theta::Real, gamma::Real=1.4)
 
-마하수 `M`, 쐐기각 `θ` 일때 발생한 경사충격파에 수직인 마하수
+Calculates the Mach number component normal to the oblique shock wave for a given
+Mach number `M` and wedge angle `θ`.
 
 # Arguments
-- `M::Real`: 충격파 전 마하수
-- `theta::Real`: 쇄기 각도 (degree)
-- `gamma::Real=1.4`: 비열비
+- `M::Real`: Upstream Mach number
+- `theta::Real`: Wedge angle (degrees)
+- `gamma::Real=1.4`: Specific heat ratio
 
 # Returns
-- `Mn1::Float64`: 경사 충격파에 수직인 마하수
+- `Mn1::Float64`: Normal component of Mach number upstream of the shock
 """
 function Mn1(M::Real, theta::Real, gamma::Real=1.4)
     # Get beta in rad
@@ -146,15 +148,16 @@ end
 """
     oblique_mach2(M::Real, theta::Real, gamma::Real=1.4)
 
-마하수 `M`, 쐐기각 `θ` 일때 발생한 경사충격파를 지난 후 마하수
+Calculates the Mach number downstream of an oblique shock wave for a given
+upstream Mach number `M` and wedge angle `θ`.
 
 # Arguments
-- `M::Real`: 충격파 전 마하수
-- `theta::Real`: 쇄기 각도 (degree)
-- `gamma::Real=1.4`: 비열비
+- `M::Real`: Upstream Mach number
+- `theta::Real`: Wedge angle (degrees)
+- `gamma::Real=1.4`: Specific heat ratio
 
 # Returns
-- `M2::Float64`: 경사 충격파후 마하수
+- `M2::Float64`: Downstream Mach number
 """
 function oblique_mach2(M::Real, theta::Real, gamma::Real=1.4)
     # Get beta in rad
@@ -175,20 +178,21 @@ end
 """
     solve_oblique(M::Real, theta::Real, gamma::Real=1.4)
 
-마하수 `M`, 쐐기각 `θ` 일때 발생한 경사충격파를 지난 후 물성치 계산
+Calculates the flow properties downstream of an oblique shock wave for a given
+upstream Mach number `M` and wedge angle `θ`.
 
 # Arguments
-- `M::Real`: 충격파 전 마하수
-- `theta::Real`: 쇄기 각도 (degree)
-- `gamma::Real=1.4`: 비열비
+- `M::Real`: Upstream Mach number
+- `theta::Real`: Wedge angle (degrees)
+- `gamma::Real=1.4`: Specific heat ratio
 
 # Returns
-- `NamedTuple`
-    - `M2::Float64`: 수직충격파 후 마하수
-    - `rho2::Float64`: 수직충격파 전/후 밀도비
-    - `p2::Float64`: 수직충격파 전/후 압력비
-    - `p0ratio::Float64`: 수직충격파 전/후 전압력비
-    - `beta::Float64`: 경사 충격파 각도 (degree)
+A `NamedTuple` containing:
+- `M2::Float64`: Downstream Mach number
+- `rho2_ratio::Float64`: Density ratio across the shock (ρ₂/ρ₁)
+- `p2_ratio::Float64`: Pressure ratio across the shock (p₂/p₁)
+- `p0_ratio::Float64`: Total pressure ratio across the shock (p₀₂/p₀₁)
+- `beta::Float64`: Oblique shock wave angle (degrees)
 """
 function solve_oblique(M::Real, theta::Real, gamma::Real=1.4)
     if theta < theta_max(M, gamma)

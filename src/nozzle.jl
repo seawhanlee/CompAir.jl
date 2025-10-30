@@ -9,18 +9,18 @@ end
 """
     mdot(M::Real, area::Real=1, p0::Real=1, t0::Real=1, gamma::Real=1.4, R::Real=1)
 
-노즐 내 유량 계산
+Calculates the mass flow rate through a nozzle.
 
 # Arguments
-- `M::Real`: 입구 마하수
-- `area::Real`: 입구 면적
-- `p0::Real`: 전압력
-- `t0::Real`: 전 온도
-- `R::Real`: Gas 상수
-- `gamma::Real=1.4`: 비열비
+- `M::Real`: Mach number
+- `area::Real=1`: Cross-sectional area
+- `p0::Real=1`: Total pressure
+- `t0::Real=1`: Total temperature
+- `gamma::Real=1.4`: Specific heat ratio
+- `R::Real=1`: Gas constant
 
 # Returns
-- `Float64`: 질량 유량
+- `Float64`: Mass flow rate
 """
 function mdot(M::Real, area::Real=1, p0::Real=1, t0::Real=1, gamma::Real=1.4, R::Real=1)
     _mdot(Float64(M), Float64(area), Float64(p0), Float64(t0), Float64(gamma), Float64(R))
@@ -34,14 +34,14 @@ end
 """
     area_ratio_at(M::Real, gamma::Real=1.4)
 
-마하수 `M`일 때 목 면적 비율
+Calculates the area ratio (A/A*) for a given Mach number, where A* is the throat area.
 
 # Arguments
-- `M::Real`: 마하수
-- `gamma::Real=1.4`: 비열비
+- `M::Real`: Mach number
+- `gamma::Real=1.4`: Specific heat ratio
 
 # Returns
-- `Float64`: 목면적 대비 면적비
+- `Float64`: Area ratio (A/A*)
 """
 function area_ratio_at(M::Real, gamma::Real=1.4)
     _area_ratio_at(Float64(M), Float64(gamma))
@@ -56,15 +56,16 @@ end
 """
     mach_by_area_ratio(area::Real, gamma::Real=1.4, x0::Real=0.1)
 
-면적비 `area` 일 때 마하수 계산
+Calculates the Mach number for a given area ratio (A/A*).
 
 # Arguments
-- `area::Real`: 목면적 대비 면적비
-- `gamma::Real=1.4`: 비열비
-- `x0::Real=0.1`: 초기 예측 값, 1 이하면 아음속, 1 이상이면 초음속 계산
+- `area::Real`: Area ratio (A/A*)
+- `gamma::Real=1.4`: Specific heat ratio
+- `x0::Real=0.1`: Initial guess for the solver. If x0 < 1, solves for subsonic Mach number; 
+  if x0 ≥ 1, solves for supersonic Mach number.
 
 # Returns
-- `Float64`: 마하수
+- `Float64`: Mach number
 """
 function mach_by_area_ratio(area::Real, gamma::Real=1.4, x0::Real=0.1)
     _mach_by_area_ratio(Float64(area), Float64(gamma), Float64(x0))

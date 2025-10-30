@@ -4,17 +4,17 @@ import OrdinaryDiffEq
 import LinearAlgebra
 
 """
-    _taylor_maccoll(y, p, t)
+    _taylor_maccoll(theta, y, gamma=1.4)
 
-Taylor-Maccoll 방정식의 미분 방정식을 계산하는 내부 함수
+Internal function to compute the differential equation for the Taylor-Maccoll equation.
 
 # Arguments
-- `y::Vector{Float64}`: [v_r, v_theta] 속도 벡터
-- `p::Float64`: 비열비
-- `t::Float64`: 각도 (radian)
+- `theta::Float64`: Angle (radians)
+- `y::Vector{Float64}`: Velocity vector [v_r, v_theta]
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `dydt::Vector{Float64}`: 미분 방정식의 우변 벡터
+- `dydt::Vector{Float64}`: Right-hand side vector of the differential equation
 """
 function _taylor_maccoll(theta, y, gamma=1.4)
     # Taylor-Maccoll function
@@ -31,16 +31,16 @@ end
 """
     _integrate_tm(M, angle, theta, gamma=1.4)
 
-Taylor-Maccoll 방정식을 수치적으로 적분하는 내부 함수
+Internal function to numerically integrate the Taylor-Maccoll equation.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `angle::Float64`: 계산하려는 각도 (degree)
-- `theta::Float64`: 쇄기 각도 (degree)
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `angle::Float64`: Target angle for calculation (degrees)
+- `theta::Float64`: Wedge angle (degrees)
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `sol`: DifferentialEquations.jl의 해 객체
+- `sol`: Solution object from DifferentialEquations.jl
 """
 function _integrate_tm(M, angle, theta, gamma=1.4)
     theta_max_val = theta_max(M, gamma)
@@ -75,15 +75,15 @@ end
 """
     theta_eff(M, angle, gamma=1.4)
 
-Cone 형상 각도 계산
+Calculates the effective wedge angle for a conical shock.
 
 # Arguments
-- `M::Float64`: 마하수
-- `angle::Float64`: Cone 반각 (degree)
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Mach number
+- `angle::Float64`: Cone half-angle (degrees)
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `theta_eff::Float64`: 형상 각도 (degree)
+- `theta_eff::Float64`: Effective wedge angle (degrees)
 """
 function theta_eff(M, angle, gamma=1.4)
     f(x) = _integrate_tm(M, angle, x, gamma).u[end][2] # Use v_theta (tangential velocity component)
@@ -93,15 +93,15 @@ end
 """
     cone_beta_weak(M, angle, gamma=1.4)
 
-마하수 `M`, Cone 반각 `θ` 일때 Cone 충격파 각도 계산
+Calculates the conical shock wave angle for a given Mach number `M` and cone half-angle.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `angle::Float64`: Cone 반각 (degree)
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `angle::Float64`: Cone half-angle (degrees)
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `beta::Float64`: 경사 충격파 각도 (degree)
+- `beta::Float64`: Conical shock wave angle (degrees)
 """
 function cone_beta_weak(M, angle, gamma=1.4)
     theta = theta_eff(M, angle, gamma)
@@ -111,15 +111,16 @@ end
 """
     cone_mach2(M, angle, gamma=1.4)
 
-마하수 `M`, Cone 반각 `θ` 일때 발생한 경사충격파를 지난 후 마하수
+Calculates the Mach number downstream of a conical shock wave for a given
+upstream Mach number `M` and cone half-angle.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `angle::Float64`: Cone 반각 (degree)
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `angle::Float64`: Cone half-angle (degrees)
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `M2::Float64`: 경사 충격파후 마하수
+- `M2::Float64`: Downstream Mach number
 """
 function cone_mach2(M, angle, gamma=1.4)
     theta = theta_eff(M, angle, gamma)
@@ -129,17 +130,18 @@ end
 """
     _cone_mach(M, angle, theta, gamma)
 
-주어진 마하수, 각도에서 콘 표면의 마하수와 유동 방향을 계산하는 내부 함수
+Internal function to calculate the Mach number and flow direction at the cone surface
+for a given Mach number and angle.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `angle::Float64`: 계산하려는 각도 (degree)
-- `theta::Float64`: 쇄기 각도 (degree)
-- `gamma::Float64`: 비열비
+- `M::Float64`: Upstream Mach number
+- `angle::Float64`: Target angle for calculation (degrees)
+- `theta::Float64`: Wedge angle (degrees)
+- `gamma::Float64`: Specific heat ratio
 
 # Returns
-- `M2::Float64`: 표면에서의 마하수
-- `phi::Float64`: 유동 방향 각도 (degree)
+- `M2::Float64`: Mach number at the surface
+- `phi::Float64`: Flow direction angle (degrees)
 """
 function _cone_mach(M, angle, theta, gamma)
     vec = _integrate_tm(M, angle, theta, gamma).u[end]
@@ -151,17 +153,18 @@ function _cone_mach(M, angle, theta, gamma)
 end
 
 """
-    cone_mach(M, angle, gamma=1.4)
+    cone_mach_surface(M, angle, gamma=1.4)
 
-마하수 `M`, Cone 반각 `θ` 일때 Cone 표면 마하수
+Calculates the Mach number at the cone surface for a given upstream Mach number `M`
+and cone half-angle.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `angle::Float64`: Cone 반각 (degree)
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `angle::Float64`: Cone half-angle (degrees)
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `M2::Float64`: 경사 충격파후 마하수
+- `M2::Float64`: Mach number at the cone surface
 """
 function cone_mach_surface(M, angle, gamma=1.4)
     theta = theta_eff(M, angle, gamma)
@@ -171,19 +174,21 @@ end
 """
     solve_shock(M, angle, gamma=1.4)
 
-마하수 `M`, Cone 반각 `angle` 일때 발생한 경사충격파를 지난 후 물성치 계산
+Calculates the flow properties downstream of a conical shock wave for a given
+upstream Mach number `M` and cone half-angle.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `angle::Float64`: Cone 반각 (degree)
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `angle::Float64`: Cone half-angle (degrees)
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `M2::Float64`: 경사충격파 후 마하수
-- `rho2::Float64`: 경사충격파 전/후 밀도비
-- `p2::Float64`: 경사충격파 전/후 압력비
-- `p0ratio::Float64`: 경사충격파 전/후 전압력비
-- `beta::Float64`: 경사 충격파 각도 (degree)
+A `NamedTuple` containing:
+- `M2::Float64`: Downstream Mach number
+- `rho2_ratio::Float64`: Density ratio across the shock (ρ₂/ρ₁)
+- `p2_ratio::Float64`: Pressure ratio across the shock (p₂/p₁)
+- `p0_ratio::Float64`: Total pressure ratio across the shock (p₀₂/p₀₁)
+- `beta::Float64`: Conical shock wave angle (degrees)
 """
 function solve_shock(M, angle, gamma=1.4)
     theta = theta_eff(M, angle, gamma)
@@ -193,28 +198,30 @@ end
 """
     solve_cone_properties(M, angle; psi::Union{Float64, Nothing}=nothing, gamma=1.4)
 
-마하수 `M`, Cone 반각 `angle`일 때 콘 표면 또는 특정 ray 각도 `psi`에서의 물성치를 계산합니다.
+Calculates the flow properties at the cone surface or at a specific ray angle `psi`
+for a given upstream Mach number `M` and cone half-angle.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `angle::Float64`: Cone 반각 (degree)
-- `psi::Union{Float64, Nothing}=nothing`: Ray 각도 (degree). 제공되지 않거나 `nothing`이면 `angle`과 동일하게 간주되어 콘 표면에서의 물성치를 계산합니다.
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `angle::Float64`: Cone half-angle (degrees)
+- `psi::Union{Float64, Nothing}=nothing`: Ray angle (degrees). If not provided or `nothing`, 
+  properties at the cone surface (psi = angle) are calculated.
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- If `psi` is `nothing` (콘 표면 물성치):
-    - `mc::Float64`: 콘 표면 마하수
-    - `rhoc::Float64`: 콘 표면 밀도비 (자유흐름 밀도 대비)
-    - `pc::Float64`: 콘 표면 압력비 (자유흐름 압력 대비)
-    - `p0ratio::Float64`: 전압력비 (충격파 통과 후 / 전)
-    - `beta::Float64`: 경사 충격파 각도 (degree)
-- If `psi` is provided (특정 ray 각도 `psi`에서의 물성치):
-    - `Mc::Float64`: `psi`에서의 마하수
-    - `rhoc::Float64`: `psi`에서의 밀도비 (자유흐름 밀도 대비)
-    - `pc::Float64`: `psi`에서의 압력비 (자유흐름 압력 대비)
-    - `p0ratio::Float64`: 전압력비 (충격파 통과 후 / 전)
-    - `beta::Float64`: 경사 충격파 각도 (degree)
-    - `phi::Float64`: `psi`에서의 유동 방향 (degree)
+- If `psi` is `nothing` (cone surface properties):
+    - `mc::Float64`: Mach number at cone surface
+    - `rhoc::Float64`: Density ratio relative to freestream (ρ_c/ρ_∞)
+    - `pc::Float64`: Pressure ratio relative to freestream (p_c/p_∞)
+    - `p0ratio::Float64`: Total pressure ratio (p₀₂/p₀₁)
+    - `beta::Float64`: Conical shock wave angle (degrees)
+- If `psi` is provided (properties at ray angle `psi`):
+    - `Mc::Float64`: Mach number at ray angle psi
+    - `rhoc::Float64`: Density ratio relative to freestream (ρ/ρ_∞)
+    - `pc::Float64`: Pressure ratio relative to freestream (p/p_∞)
+    - `p0ratio::Float64`: Total pressure ratio (p₀₂/p₀₁)
+    - `beta::Float64`: Conical shock wave angle (degrees)
+    - `phi::Float64`: Flow direction at psi (degrees)
 """
 function solve_cone_properties(M, angle; psi::Union{Float64, Nothing}=nothing, gamma=1.4)
     theta_eff_val = theta_eff(M, angle, gamma)

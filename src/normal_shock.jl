@@ -101,17 +101,18 @@ end
 """
     solve_normal(M::Float64, gamma::Float64=1.4)
 
-수직 충격파 후 물성치 변화
+Calculates the flow properties after a normal shock wave.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `M2::Float64`: 수직충격파 후 마하수
-- `rho2::Float64`: 수직충격파 전/후 밀도비
-- `p2::Float64`: 수직충격파 전/후 압력비
-- `p0ratio::Float64`: 수직충격파 전/후 전압력비
+A `NamedTuple` containing:
+- `M2::Float64`: Downstream Mach number
+- `rho2_ratio::Float64`: Density ratio across the shock (ρ₂/ρ₁)
+- `p2_ratio::Float64`: Pressure ratio across the shock (p₂/p₁)
+- `p0_ratio::Float64`: Total pressure ratio across the shock (p₀₂/p₀₁)
 """
 function solve_normal(M::Float64, gamma::Float64=1.4)
     M2 = mach_after_normal_shock(M, gamma)
