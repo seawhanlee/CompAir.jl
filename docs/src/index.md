@@ -139,4 +139,25 @@ If you use CompAir.jl in your research, please cite both the original Python mod
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)** license.
+
+**Original Work:**
+- Copyright (c) 2022 Inha University AADL (Advanced Aerospace Development Laboratory)
+- Source: [https://gitlab.com/aadl_inha/CompAir](https://gitlab.com/aadl_inha/CompAir)
+
+**Modified Work (CompAir.jl):**
+- Copyright (c) 2025 Seawhan Lee
+- Source: [https://github.com/seawhanlee/CompAir.jl](https://github.com/seawhanlee/CompAir.jl)
+
+### License Terms
+
+You are free to:
+- **Share** — copy and redistribute the material in any medium or format
+- **Adapt** — remix, transform, and build upon the material
+
+Under the following terms:
+- **Attribution** — You must give appropriate credit to both the original work (Inha University AADL) and this modified work (Seawhan Lee)
+- **NonCommercial** — You may not use the material for commercial purposes
+- **ShareAlike** — If you remix, transform, or build upon the material, you must distribute your contributions under the same license
+
+For complete details, see the [LICENSE](https://github.com/seawhanlee/CompAir.jl/blob/main/LICENSE) file or visit [Creative Commons](http://creativecommons.org/licenses/by-nc-sa/4.0/).

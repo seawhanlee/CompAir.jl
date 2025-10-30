@@ -348,6 +348,22 @@ Contributors will be acknowledged in:
 - Release notes for significant contributions
 - Academic citations when appropriate
 
+## License and Attribution
+
+By contributing to CompAir.jl, you agree that your contributions will be licensed under the same **CC BY-NC-SA 4.0** license as the project.
+
+### Important Notes
+
+- This project is based on the original Python CompAir module by Inha University AADL
+- All contributions must comply with the NonCommercial (NC) terms of the license
+- Your contributions will be attributed in the project's commit history and release notes
+- Significant contributions may be acknowledged in the README and documentation
+
+Please ensure that any code, documentation, or other materials you contribute:
+- Do not violate any third-party copyrights or licenses
+- Are your original work or properly attributed
+- Comply with the project's license terms
+
 ## Questions?
 
 If you have any questions about contributing, please:

@@ -2,6 +2,7 @@ name = "CompAir"
 uuid = "4888ff1c-74b1-49c5-b7ba-2d54c6dc65c5"
 authors = ["Seawhan Lee"]
 version = "1.1.0"
+license = "CC-BY-NC-SA-4.0"
 
 [deps]
 DiffEqBase = "2b5f629d-d688-5b77-993f-72d75c75574e"
