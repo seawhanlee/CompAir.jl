@@ -31,17 +31,17 @@ Where:
 ## Functions
 
 ```@docs
-t0_over_t
-p0_over_p
-rho0_over_rho
+total_to_static_temperature_ratio
+total_to_static_pressure_ratio
+total_to_static_density_ratio
 ```
 
 ## Function Details
 
-### t0\_over\_t
+### total_to_static_temperature_ratio
 
 ```julia
-t0_over_t(M, gamma=1.4)
+total_to_static_temperature_ratio(M, gamma=1.4)
 ```
 
 Calculate the stagnation to static temperature ratio for isentropic flow.
@@ -58,17 +58,17 @@ $$\frac{T_0}{T} = 1 + \frac{\gamma-1}{2}M^2$$
 
 **Example:**
 ```julia
-julia> t0_over_t(2.0)
+julia> total_to_static_temperature_ratio(2.0)
 1.8
 
-julia> t0_over_t(1.5, 1.67)  # Helium
+julia> total_to_static_temperature_ratio(1.5, 1.67)  # Helium
 2.005
 ```
 
-### p0\_over\_p
+### total_to_static_pressure_ratio
 
 ```julia
-p0_over_p(M, gamma=1.4)
+total_to_static_pressure_ratio(M, gamma=1.4)
 ```
 
 Calculate the stagnation to static pressure ratio for isentropic flow.
@@ -85,17 +85,17 @@ $$\frac{p_0}{p} = \left(1 + \frac{\gamma-1}{2}M^2\right)^{\frac{\gamma}{\gamma-1
 
 **Example:**
 ```julia
-julia> p0_over_p(2.0)
+julia> total_to_static_pressure_ratio(2.0)
 7.824481684411352
 
-julia> p0_over_p(1.0)
+julia> total_to_static_pressure_ratio(1.0)
 1.8929441933097926
 ```
 
-### rho0\_over\_rho
+### total_to_static_density_ratio
 
 ```julia
-rho0_over_rho(M, gamma=1.4)
+total_to_static_density_ratio(M, gamma=1.4)
 ```
 
 Calculate the stagnation to static density ratio for isentropic flow.
@@ -112,10 +112,10 @@ $$\frac{\rho_0}{\rho} = \left(1 + \frac{\gamma-1}{2}M^2\right)^{\frac{1}{\gamma-
 
 **Example:**
 ```julia
-julia> rho0_over_rho(2.0)
+julia> total_to_static_density_ratio(2.0)
 4.346837646954653
 
-julia> rho0_over_rho(3.0)
+julia> total_to_static_density_ratio(3.0)
 14.621473116765412
 ```
 
@@ -132,8 +132,8 @@ T0_measured = 300     # K
 M_test = 1.8
 
 # Calculate static conditions
-p_static = p0_measured / p0_over_p(M_test)
-T_static = T0_measured / t0_over_t(M_test)
+p_static = p0_measured / total_to_static_pressure_ratio(M_test)
+T_static = T0_measured / total_to_static_temperature_ratio(M_test)
 
 println("Test section conditions:")
 println("Static pressure: $(round(p_static/1000, digits=1)) kPa")
@@ -148,7 +148,7 @@ Calculate dynamic pressure coefficient:
 M = 0.8  # Subsonic flow
 
 # Pressure coefficient from pitot measurements
-p0_p_ratio = p0_over_p(M)
+p0_p_ratio = total_to_static_pressure_ratio(M)
 q_coefficient = p0_p_ratio - 1
 
 println("Dynamic pressure coefficient: $(round(q_coefficient, digits=3))")
@@ -171,9 +171,9 @@ T0_chamber = 3000 # K
 M_exit = 3.5
 
 # Exit conditions
-p_exit = p0_chamber / p0_over_p(M_exit)
-T_exit = T0_chamber / t0_over_t(M_exit)
-rho_ratio = rho0_over_rho(M_exit)
+p_exit = p0_chamber / total_to_static_pressure_ratio(M_exit)
+T_exit = T0_chamber / total_to_static_temperature_ratio(M_exit)
+rho_ratio = total_to_static_density_ratio(M_exit)
 
 println("Rocket nozzle exit conditions:")
 println("Exit pressure: $(round(p_exit/1000, digits=1)) kPa")
@@ -198,9 +198,9 @@ println("M\tGas\tγ\tT₀/T\tp₀/p\tρ₀/ρ")
 println("---\t---\t----\t----\t----\t----")
 
 for (gas, gamma) in gases
-    T_ratio = t0_over_t(M, gamma)
-    p_ratio = p0_over_p(M, gamma)
-    rho_ratio = rho0_over_rho(M, gamma)
+    T_ratio = total_to_static_temperature_ratio(M, gamma)
+    p_ratio = total_to_static_pressure_ratio(M, gamma)
+    rho_ratio = total_to_static_density_ratio(M, gamma)
     
     println("$M\t$gas\t$gamma\t$(round(T_ratio, digits=2))\t$(round(p_ratio, digits=2))\t$(round(rho_ratio, digits=2))")
 end
@@ -216,9 +216,9 @@ Verify thermodynamic consistency:
 M = 2.5
 gamma = 1.4
 
-T_ratio = t0_over_t(M, gamma)
-p_ratio = p0_over_p(M, gamma)
-rho_ratio = rho0_over_rho(M, gamma)
+T_ratio = total_to_static_temperature_ratio(M, gamma)
+p_ratio = total_to_static_pressure_ratio(M, gamma)
+rho_ratio = total_to_static_density_ratio(M, gamma)
 
 # Check ideal gas law: p₀/p = (ρ₀/ρ)(T₀/T)
 consistency = p_ratio - (rho_ratio * T_ratio)
@@ -235,9 +235,9 @@ println("M\tT₀/T\tp₀/p\tρ₀/ρ")
 println("---\t----\t----\t----")
 
 for M in 0.1:0.2:3.0
-    T_ratio = t0_over_t(M)
-    p_ratio = p0_over_p(M)
-    rho_ratio = rho0_over_rho(M)
+    T_ratio = total_to_static_temperature_ratio(M)
+    p_ratio = total_to_static_pressure_ratio(M)
+    rho_ratio = total_to_static_density_ratio(M)
     
     println("$(M)\t$(round(T_ratio, digits=2))\t$(round(p_ratio, digits=2))\t$(round(rho_ratio, digits=2))")
 end

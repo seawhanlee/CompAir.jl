@@ -80,7 +80,7 @@ julia> theta_beta(60.0, 3.0)
 28.040946798183083
 ```
 
-### oblique\_beta\_weak
+### oblique_beta_weak
 
 ```julia
 oblique_beta_weak(M, theta, gamma=1.4)
@@ -204,10 +204,10 @@ Complete oblique shock analysis - calculate all property changes across the shoc
 
 **Example:**
 ```julia
-julia> M2, rho_ratio, p_ratio, p0_ratio, beta = solve_oblique(2.5, 15.0)
-(2.0648650289095266, 1.6862745098039214, 2.40625, 0.9564285714285714, 41.81031489577775)
+julia> sol = solve_oblique(2.5, 15.0)
+(M2 = 2.0648650289095266, rho2_ratio = 1.6862745098039214, p2_ratio = 2.40625, p0_ratio = 0.9564285714285714, beta = 41.81031489577775)
 
-julia> println("M₂ = $(round(M2, digits=3)), β = $(round(beta, digits=1))°")
+julia> println("M₂ = $(round(sol.M2, digits=3)), β = $(round(sol.beta, digits=1))°")
 M₂ = 2.065, β = 41.8°
 ```
 
@@ -229,27 +229,27 @@ println("Angle of attack: $alpha°")
 
 # Upper surface
 theta_upper = half_angle + alpha
-M2_upper, rho_upper, p_upper, p0_upper, beta_upper = solve_oblique(M_inf, theta_upper)
+sol_upper = solve_oblique(M_inf, theta_upper)
 
 println("\nUpper Surface (Leading Edge):")
 println("Deflection angle: $(round(theta_upper, digits=1))°")
-println("Shock angle β₁ = $(round(beta_upper, digits=1))°")
-println("Surface Mach: $(round(M2_upper, digits=3))")
-println("Pressure ratio: $(round(p_upper, digits=3))")
+println("Shock angle β₁ = $(round(sol_upper.beta, digits=1))°")
+println("Surface Mach: $(round(sol_upper.M2, digits=3))")
+println("Pressure ratio: $(round(sol_upper.p2_ratio, digits=3))")
 
 # Lower surface  
 theta_lower = half_angle - alpha
-M2_lower, rho_lower, p_lower, p0_lower, beta_lower = solve_oblique(M_inf, theta_lower)
+sol_lower = solve_oblique(M_inf, theta_lower)
 
 println("\nLower Surface (Leading Edge):")
 println("Deflection angle: $(round(theta_lower, digits=1))°")
-println("Shock angle β₂ = $(round(beta_lower, digits=1))°")
-println("Surface Mach: $(round(M2_lower, digits=3))")
-println("Pressure ratio: $(round(p_lower, digits=3))")
+println("Shock angle β₂ = $(round(sol_lower.beta, digits=1))°")
+println("Surface Mach: $(round(sol_lower.M2, digits=3))")
+println("Pressure ratio: $(round(sol_lower.p2_ratio, digits=3))")
 
 # Pressure coefficients
-Cp_upper = 2/(1.4*M_inf^2) * (p_upper - 1)
-Cp_lower = 2/(1.4*M_inf^2) * (p_lower - 1)
+Cp_upper = 2/(1.4*M_inf^2) * (sol_upper.p2_ratio - 1)
+Cp_lower = 2/(1.4*M_inf^2) * (sol_lower.p2_ratio - 1)
 
 println("\nPressure Coefficients:")
 println("Upper surface: $(round(Cp_upper, digits=4))")
@@ -271,25 +271,25 @@ println("Shock-Shock Interaction:")
 println("Initial Mach: $M1")
 
 # First shock
-M2, rho21, p21, p021, beta1 = solve_oblique(M1, theta1)
+sol1 = solve_oblique(M1, theta1)
 
 println("\nFirst Shock (θ₁ = $theta1°):")
-println("Shock angle: $(round(beta1, digits=1))°")
-println("M₂ = $(round(M2, digits=3))")
-println("p₂/p₁ = $(round(p21, digits=3))")
+println("Shock angle: $(round(sol1.beta, digits=1))°")
+println("M₂ = $(round(sol1.M2, digits=3))")
+println("p₂/p₁ = $(round(sol1.p2_ratio, digits=3))")
 
 # Second shock  
-M3, rho32, p32, p032, beta2 = solve_oblique(M2, theta2)
+sol2 = solve_oblique(sol1.M2, theta2)
 
 println("\nSecond Shock (θ₂ = $theta2°):")
-println("Shock angle: $(round(beta2, digits=1))°")
-println("M₃ = $(round(M3, digits=3))")
-println("p₃/p₂ = $(round(p32, digits=3))")
+println("Shock angle: $(round(sol2.beta, digits=1))°")
+println("M₃ = $(round(sol2.M2, digits=3))")
+println("p₃/p₂ = $(round(sol2.p2_ratio, digits=3))")
 
 # Overall results
 total_deflection = theta1 + theta2
-total_pressure_ratio = p21 * p32
-total_loss = 1 - (p021 * p032)
+total_pressure_ratio = sol1.p2_ratio * sol2.p2_ratio
+total_loss = 1 - (sol1.p0_ratio * sol2.p0_ratio)
 
 println("\nOverall Results:")
 println("Total deflection: $(round(total_deflection, digits=1))°")
@@ -335,13 +335,13 @@ max_deflection = theta_max(M_cruise)
 println("Maximum deflection: $(round(max_deflection, digits=1))°")
 
 if theta_wedge <= max_deflection
-    M2, rho_ratio, p_ratio, p0_ratio, beta = solve_oblique(M_cruise, theta_wedge)
+    sol = solve_oblique(M_cruise, theta_wedge)
     
     println("\nShock Properties:")
-    println("Shock angle: $(round(beta, digits=1))°")
-    println("Downstream Mach: $(round(M2, digits=3))")
-    println("Pressure coefficient: $(round(2/(1.4*M_cruise^2)*(p_ratio-1), digits=4))")
-    println("Total pressure loss: $(round((1-p0_ratio)*100, digits=2))%")
+    println("Shock angle: $(round(sol.beta, digits=1))°")
+    println("Downstream Mach: $(round(sol.M2, digits=3))")
+    println("Pressure coefficient: $(round(2/(1.4*M_cruise^2)*(sol.p2_ratio-1), digits=4))")
+    println("Total pressure loss: $(round((1-sol.p0_ratio)*100, digits=2))%")
 else
     println("\nERROR: Deflection angle exceeds maximum!")
     println("Detached shock will form.")
@@ -366,22 +366,22 @@ theta1 = 8.0   # First ramp angle
 theta2 = 12.0  # Second ramp angle
 
 # First oblique shock
-M1, rho1, p1, p01, beta1 = solve_oblique(M0, theta1)
+sol1 = solve_oblique(M0, theta1)
 
 # Second oblique shock  
-M2, rho2, p2, p02, beta2 = solve_oblique(M1, theta2)
+sol2 = solve_oblique(sol1.M2, theta2)
 
 # Final normal shock to subsonic
-M3, rho3, p3, p03 = solve_normal(M2)
+sol3 = solve_normal(sol2.M2)
 
 println("\nShock System Analysis:")
-println("External shock 1: β₁ = $(round(beta1, digits=1))°, M₁ = $(round(M1, digits=3))")
-println("External shock 2: β₂ = $(round(beta2, digits=1))°, M₂ = $(round(M2, digits=3))")
-println("Terminal normal shock: M₃ = $(round(M3, digits=3))")
+println("External shock 1: β₁ = $(round(sol1.beta, digits=1))°, M₁ = $(round(sol1.M2, digits=3))")
+println("External shock 2: β₂ = $(round(sol2.beta, digits=1))°, M₂ = $(round(sol2.M2, digits=3))")
+println("Terminal normal shock: M₃ = $(round(sol3.M2, digits=3))")
 
 # Total pressure recovery
-total_recovery = p01 * p02 * p03
-overall_pressure_ratio = p1 * p2 * p3
+total_recovery = sol1.p0_ratio * sol2.p0_ratio * sol3.p0_ratio
+overall_pressure_ratio = sol1.p2_ratio * sol2.p2_ratio * sol3.p2_ratio
 
 println("\nInlet Performance:")
 println("Total pressure recovery: $(round(total_recovery, digits=3))")
@@ -438,12 +438,12 @@ println("Shock Solutions for M₁ = $M1, θ = $theta°:")
 println("Weak shock angle: $(round(beta_weak, digits=1))°")
 
 # Analyze weak shock
-M2_weak, rho_weak, p_weak, p0_weak, _ = solve_oblique(M1, theta)
+sol_weak = solve_oblique(M1, theta)
 
 println("\nWeak Shock Properties:")
-println("M₂ = $(round(M2_weak, digits=3))")
-println("p₂/p₁ = $(round(p_weak, digits=3))")
-println("p₀₂/p₀₁ = $(round(p0_weak, digits=3))")
+println("M₂ = $(round(sol_weak.M2, digits=3))")
+println("p₂/p₁ = $(round(sol_weak.p2_ratio, digits=3))")
+println("p₀₂/p₀₁ = $(round(sol_weak.p0_ratio, digits=3))")
 ```
 
 ### Shock Angle vs Deflection Angle

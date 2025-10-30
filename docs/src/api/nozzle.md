@@ -21,10 +21,10 @@ Nozzle analysis is fundamental to propulsion systems, wind tunnels, and fluid ma
 For quasi-one-dimensional isentropic flow through a nozzle, the area-Mach number relationship is:
 
 **Area ratio equation**:
-$$\frac{A}{A^*} = \frac{1}{M}\left[\frac{2}{\gamma+1}\left(1 + \frac{\gamma-1}{2}M^2\right)\right]^{\frac{\gamma+1}{2(\gamma-1)}}$$
+$$\frac{A}{A^*} = \frac{1}{M}\left[\frac{2}{\gamma+1}\left(1 + \frac{\gamma-1}{2}M^2\right)\right]^{\frac{\gamma+1}{2(\gamma-1)}}$$ 
 
 **Mass flow rate**:
-$$\dot{m} = \rho^* A^* a^* = \frac{p_0}{\sqrt{T_0}} \sqrt{\frac{\gamma}{R}} \left(\frac{2}{\gamma+1}\right)^{\frac{\gamma+1}{2(\gamma-1)}} A^*$$
+$$\dot{m} = \rho^* A^* a^* = \frac{p_0}{\sqrt{T_0}} \sqrt{\frac{\gamma}{R}} \left(\frac{2}{\gamma+1}\right)^{\frac{\gamma+1}{2(\gamma-1)}} A^*$$ 
 
 **Choked flow condition** (M = 1 at throat):
 - Maximum mass flow for given stagnation conditions
@@ -44,10 +44,10 @@ Where:
 mdot
 area_ratio_at
 mach_by_area_ratio
-me6
-pe6
-me5
-pe5
+subsonic_mach_from_area_ratio
+subsonic_pressure_from_area_ratio
+mach_after_shock_at_exit
+pressure_after_shock_at_exit
 ```
 
 ## Function Details
@@ -72,7 +72,7 @@ Calculate mass flow rate through a nozzle at given conditions.
 - `Float64`: Mass flow rate
 
 **Formula:**
-$$\dot{m} = \frac{\sqrt{\gamma}}{\sqrt{R T_0}} p_0 M A \left(1 + \frac{\gamma-1}{2}M^2\right)^{-\frac{\gamma+1}{2(\gamma-1)}}$$
+$$\dot{m} = \frac{\sqrt{\gamma}}{\sqrt{R T_0}} p_0 M A \left(1 + \frac{\gamma-1}{2}M^2\right)^{-\frac{\gamma+1}{2(\gamma-1)}}$$ 
 
 **Example:**
 ```julia
@@ -83,23 +83,23 @@ julia> mdot(2.0, 0.005, 300000, 400, 1.4, 287)
 0.32707563300841975
 ```
 
-### area\_ratio\_at
+### area_ratio_at
 
 ```julia
 area_ratio_at(M, gamma=1.4)
 ```
 
-Calculate the area ratio A/A\* for a given Mach number in isentropic flow.
+Calculate the area ratio A/A* for a given Mach number in isentropic flow.
 
 **Arguments:**
 - `M::Real`: Mach number
 - `gamma::Real=1.4`: Specific heat ratio
 
 **Returns:**
-- `Float64`: Area ratio A/A\*
+- `Float64`: Area ratio A/A*
 
 **Formula:**
-$$\frac{A}{A^*} = \frac{1}{M}\left[\frac{2}{\gamma+1}\left(1 + \frac{\gamma-1}{2}M^2\right)\right]^{\frac{\gamma+1}{2(\gamma-1)}}$$
+$$\frac{A}{A^*} = \frac{1}{M}\left[\frac{2}{\gamma+1}\left(1 + \frac{\gamma-1}{2}M^2\right)\right]^{\frac{\gamma+1}{2(\gamma-1)}}$$ 
 
 **Example:**
 ```julia
@@ -113,7 +113,7 @@ julia> area_ratio_at(1.0)
 1.0
 ```
 
-### mach\_by\_area\_ratio
+### mach_by_area_ratio
 
 ```julia
 mach_by_area_ratio(area, gamma=1.4, x0=0.1)
@@ -122,7 +122,7 @@ mach_by_area_ratio(area, gamma=1.4, x0=0.1)
 Calculate the Mach number for a given area ratio using numerical root finding.
 
 **Arguments:**
-- `area::Real`: Area ratio A/A\*
+- `area::Real`: Area ratio A/A*
 - `gamma::Real=1.4`: Specific heat ratio
 - `x0::Real=0.1`: Initial guess for Mach number (< 1 for subsonic, > 1 for supersonic)
 
@@ -138,16 +138,16 @@ julia> mach_by_area_ratio(2.0, 1.4, 2.0)  # Supersonic solution
 2.1972245773362196
 ```
 
-### me6
+### subsonic_mach_from_area_ratio
 
 ```julia
-me6(area, gamma=1.4)
+subsonic_mach_from_area_ratio(area, gamma=1.4)
 ```
 
-Calculate Mach number for given area ratio (wrapper for `mach\_by\_area\_ratio` with default subsonic guess).
+Calculate Mach number for given area ratio (wrapper for `mach_by_area_ratio` with default subsonic guess).
 
 **Arguments:**
-- `area::Real`: Area ratio A/A\*
+- `area::Real`: Area ratio A/A*
 - `gamma::Real=1.4`: Specific heat ratio
 
 **Returns:**
@@ -155,20 +155,20 @@ Calculate Mach number for given area ratio (wrapper for `mach\_by\_area\_ratio` 
 
 **Example:**
 ```julia
-julia> me6(3.0)
+julia> subsonic_mach_from_area_ratio(3.0)
 0.17851240074438515
 ```
 
-### pe6
+### subsonic_pressure_from_area_ratio
 
 ```julia
-pe6(area, gamma=1.4, p0=1)
+subsonic_pressure_from_area_ratio(area, gamma=1.4, p0=1)
 ```
 
 Calculate static pressure at given area ratio location.
 
 **Arguments:**
-- `area::Real`: Area ratio A/A\*
+- `area::Real`: Area ratio A/A*
 - `gamma::Real=1.4`: Specific heat ratio
 - `p0::Real=1`: Stagnation pressure
 
@@ -177,20 +177,20 @@ Calculate static pressure at given area ratio location.
 
 **Example:**
 ```julia
-julia> pe6(2.0, 1.4, 100000)
+julia> subsonic_pressure_from_area_ratio(2.0, 1.4, 100000)
 96859.71831475619
 ```
 
-### me5
+### mach_after_shock_at_exit
 
 ```julia
-me5(area, gamma=1.4)
+mach_after_shock_at_exit(area, gamma=1.4)
 ```
 
 Calculate Mach number after a normal shock at the given area ratio location.
 
 **Arguments:**
-- `area::Real`: Area ratio A/A\*
+- `area::Real`: Area ratio A/A*
 - `gamma::Real=1.4`: Specific heat ratio
 
 **Returns:**
@@ -198,20 +198,20 @@ Calculate Mach number after a normal shock at the given area ratio location.
 
 **Example:**
 ```julia
-julia> me5(4.0)
+julia> mach_after_shock_at_exit(4.0)
 0.4347826086956522
 ```
 
-### pe5
+### pressure_after_shock_at_exit
 
 ```julia
-pe5(area, gamma=1.4, p0=1)
+pressure_after_shock_at_exit(area, gamma=1.4, p0=1)
 ```
 
 Calculate static pressure after a normal shock at the given area ratio location.
 
 **Arguments:**
-- `area::Real`: Area ratio A/A\*
+- `area::Real`: Area ratio A/A*
 - `gamma::Real=1.4`: Specific heat ratio
 - `p0::Real=1`: Stagnation pressure
 
@@ -220,7 +220,7 @@ Calculate static pressure after a normal shock at the given area ratio location.
 
 **Example:**
 ```julia
-julia> pe5(3.0, 1.4, 200000)
+julia> pressure_after_shock_at_exit(3.0, 1.4, 200000)
 138888.8888888889
 ```
 
@@ -251,7 +251,7 @@ M_exit_opt = 3.0  # Initial guess
 tolerance = 1e-6
 
 for i in 1:100
-    p_ratio_calc = p0_over_p(M_exit_opt)
+    p_ratio_calc = total_to_static_pressure_ratio(M_exit_opt)
     error = p_ratio_calc - p_ratio_opt
     
     if abs(error/p_ratio_opt) < tolerance
@@ -273,7 +273,7 @@ A_ratio_opt = area_ratio_at(M_exit_opt)
 println("Optimum area ratio: $(round(A_ratio_opt, digits=1))")
 
 # Performance calculations
-specific_impulse = M_exit_opt * sqrt(1.4 * 287 * T_chamber / t0_over_t(M_exit_opt))
+specific_impulse = M_exit_opt * sqrt(1.4 * 287 * T_chamber / total_to_static_temperature_ratio(M_exit_opt))
 println("Approximate specific impulse: $(round(specific_impulse, digits=1)) m/s")
 ```
 
@@ -297,8 +297,8 @@ A_ratio = area_ratio_at(M_test)
 println("Required area ratio: $(round(A_ratio, digits=2))")
 
 # Test section conditions  
-p_test = p0_settling / p0_over_p(M_test)
-T_test = T0_settling / t0_over_t(M_test)
+p_test = p0_settling / total_to_static_pressure_ratio(M_test)
+T_test = T0_settling / total_to_static_temperature_ratio(M_test)
 rho_test = p_test / (287 * T_test)
 
 println("\nTest Section Conditions:")
@@ -344,7 +344,7 @@ for pr in pressure_ratios
         M_exit = mach_by_area_ratio(A_ratio_design, 1.4, 0.1)
     else
         # Check if design pressure ratio is reached
-        p_design = p0_over_p(M_design)
+        p_design = total_to_static_pressure_ratio(M_design)
         
         if pr < p_design
             condition = "Shock in nozzle"
@@ -384,8 +384,8 @@ for A_ratio in area_ratios
     M_exit = mach_by_area_ratio(A_ratio, 1.4, 2.0)  # Supersonic solution
     
     # Calculate exit conditions
-    p_exit = p0 / p0_over_p(M_exit)
-    T_exit = T0 / t0_over_t(M_exit)
+    p_exit = p0 / total_to_static_pressure_ratio(M_exit)
+    T_exit = T0 / total_to_static_temperature_ratio(M_exit)
     V_exit = M_exit * sqrt(1.4 * 287 * T_exit)
     
     println("$(A_ratio)\t$(round(M_exit, digits=2))\t$(round(p_exit/1000, digits=1))\t\t$(round(T_exit, digits=1))\t\t$(round(V_exit, digits=1))")
@@ -405,21 +405,21 @@ println("Exit area ratio: $A_ratio_exit")
 
 # Design conditions
 M_exit_design = mach_by_area_ratio(A_ratio_exit, 1.4, 2.0)
-p_ratio_design = p0_over_p(M_exit_design)
+p_ratio_design = total_to_static_pressure_ratio(M_exit_design)
 
 println("Design exit Mach: $(round(M_exit_design, digits=2))")
 println("Design pressure ratio: $(round(p_ratio_design, digits=1))")
 
 # Starting condition (shock at exit)
 M_before_shock = M_exit_design
-M_after_shock, _, _, p0_loss = solve_normal(M_before_shock)
+sol = solve_normal(M_before_shock)
 
 # Required starting pressure ratio
-p_ratio_starting = p_ratio_design / p0_loss
+p_ratio_starting = p_ratio_design / sol.p0_ratio
 
 println("\nStarting Analysis:")
-println("Shock downstream Mach: $(round(M_after_shock, digits=3))")
-println("Stagnation pressure loss: $(round((1-p0_loss)*100, digits=1))%")
+println("Shock downstream Mach: $(round(sol.M2, digits=3))")
+println("Stagnation pressure loss: $(round((1-sol.p0_ratio)*100, digits=1))%")
 println("Starting pressure ratio: $(round(p_ratio_starting, digits=1))")
 println("Overexpansion factor: $(round(p_ratio_starting/p_ratio_design, digits=2))")
 ```
@@ -454,7 +454,7 @@ for (gas, gamma, R) in gases
     mass_flow = mdot(1.0, A_throat, p0, T0, gamma, R)
     
     # Exit velocity
-    T_exit = T0 / t0_over_t(M_exit, gamma)
+    T_exit = T0 / total_to_static_temperature_ratio(M_exit, gamma)
     V_exit = M_exit * sqrt(gamma * R * T_exit)
     
     println("$(gas)\t$(gamma)\t$(R)\t\t$(round(A_ratio, digits=2))\t$(round(mass_flow, digits=3))\t\t$(round(V_exit, digits=1))")

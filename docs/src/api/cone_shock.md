@@ -83,7 +83,7 @@ julia> theta_eff(3.0, 20.0)
 16.89234567890123
 ```
 
-### cone\_beta\_weak
+### cone_beta_weak
 
 ```julia
 cone_beta_weak(M, angle, gamma=1.4)
@@ -133,7 +133,7 @@ julia> cone_mach2(3.0, 20.0)
 2.456789012345678
 ```
 
-### cone\_mach\_surface
+### cone_mach_surface
 
 ```julia
 cone_mach_surface(M, angle, gamma=1.4)
@@ -178,11 +178,11 @@ Complete cone shock analysis - calculate all property changes across the shock.
 
 **Example:**
 ```julia
-julia> M2, rho_ratio, p_ratio, p0_ratio, beta = solve_shock(2.5, 15.0)
-(2.123, 1.567, 2.234, 0.934, 43.6)
+julia> sol = solve_shock(2.5, 15.0)
+(M2 = 2.123, rho2_ratio = 1.567, p2_ratio = 2.234, p0_ratio = 0.934, beta = 43.6)
 ```
 
-### solve\_cone\_properties
+### solve_cone_properties
 
 ```julia
 solve_cone_properties(M, angle; psi::Union{Float64, Nothing}=nothing, gamma=1.4)
@@ -239,7 +239,7 @@ println("Altitude: $(altitude/1000) km")
 println("Nose cone half-angle: $theta_nose°")
 
 # Get atmospheric properties
-rho, p_inf, T_inf, a, mu = atmos1976_at(altitude/1000)
+rho, p_inf, T_inf, a, mu = atmosphere_properties_at(altitude/1000)
 
 # Shock analysis
 beta = cone_beta_weak(M_flight, theta_nose)
@@ -276,16 +276,16 @@ println("Cone vs Wedge Comparison at θ = $theta°:")
 println("Freestream Mach: $M_inf")
 
 # Wedge (2D oblique shock)
-M2_wedge, rho_wedge, p_wedge, p0_wedge, beta_wedge = solve_oblique(M_inf, theta)
+sol_wedge = solve_oblique(M_inf, theta)
 
 # Cone (axisymmetric)
 beta_cone = cone_beta_weak(M_inf, theta)
 M_cone, _ = cone_mach_surface(M_inf, theta)
 
 println("\nWedge (2D) Properties:")
-println("Shock angle: $(round(beta_wedge, digits=1))°")
-println("Surface Mach: $(round(M2_wedge, digits=3))")
-println("Pressure ratio: $(round(p_wedge, digits=3))")
+println("Shock angle: $(round(sol_wedge.beta, digits=1))°")
+println("Surface Mach: $(round(sol_wedge.M2, digits=3))")
+println("Pressure ratio: $(round(sol_wedge.p2_ratio, digits=3))")
 
 println("\nCone (Axisymmetric) Properties:")
 println("Shock angle: $(round(beta_cone, digits=1))°")
@@ -298,8 +298,8 @@ p_ratio_cone = 1 + 2*1.4/(1.4+1) * (Mn1_cone^2 - 1)
 println("Pressure ratio (approx): $(round(p_ratio_cone, digits=3))")
 
 println("\nDifferences:")
-println("Shock angle: $(round(beta_cone - beta_wedge, digits=2))° (cone stronger)")
-println("Surface Mach: $(round(M_cone - M2_wedge, digits=3)) (cone higher)")
+println("Shock angle: $(round(beta_cone - sol_wedge.beta, digits=2))° (cone stronger)")
+println("Surface Mach: $(round(M_cone - sol_wedge.M2, digits=3)) (cone higher)")
 ```
 
 ### Supersonic Intake Analysis
@@ -334,10 +334,10 @@ println("Flow capture area: $(round(capture_area, digits=3)) m²")
 
 # Total pressure recovery
 Mn1 = M_cruise * sind(beta)
-_, _, _, p0_recovery, _ = solve_normal(Mn1)
+sol_normal = solve_normal(Mn1)
 
-println("Total pressure recovery: $(round(p0_recovery, digits=3))")
-println("Pressure loss: $(round((1-p0_recovery)*100, digits=1))%")
+println("Total pressure recovery: $(round(sol_normal.p0_ratio, digits=3))")
+println("Pressure loss: $(round((1-sol_normal.p0_ratio)*100, digits=1))%")
 ```
 
 ### Cone Half-Angle Variation
@@ -351,7 +351,7 @@ cone_angles = [5.0, 10.0, 15.0, 20.0, 25.0, 30.0]
 println("Cone Half-Angle Variation Study:")
 println("Freestream Mach: $M_inf")
 println("\nθc(°)\tβ(°)\tMs\tβ-θc\tCp_approx")
-println("-----\t----\t----\t-----\t---------")
+println("-----	----\t----\t-----\t---------")
 
 for theta_c in cone_angles
     try
@@ -389,8 +389,8 @@ println("Stagnation pressure: $(p0_tunnel/1000) kPa")
 println("Stagnation temperature: $T0_tunnel K")
 
 # Test section conditions
-p_test = p0_tunnel / p0_over_p(M_test)
-T_test = T0_tunnel / t0_over_t(M_test)
+p_test = p0_tunnel / total_to_static_pressure_ratio(M_test)
+T_test = T0_tunnel / total_to_static_temperature_ratio(M_test)
 rho_test = p_test / (287 * T_test)
 
 println("\nTest Section Conditions:")
@@ -400,7 +400,7 @@ println("Density: $(round(rho_test, digits=3)) kg/m³")
 
 println("\nCone Model Results:")
 println("θc(°)\tβ(°)\tMs\tCp\tp_surface(kPa)")
-println("-----\t----\t----\t----\t-------------")
+println("-----	----\t----\t----\t-------------")
 
 for theta_c in cone_angles
     beta = cone_beta_weak(M_test, theta_c)
@@ -431,7 +431,7 @@ println("Maximum Cone Angle Analysis:")
 println("Freestream Mach: $M_inf")
 
 # Search for maximum cone angle
-theta_max = 0.0
+theta_max_val = 0.0
 delta_theta = 0.5
 
 println("\nSearching for maximum cone angle...")
@@ -443,7 +443,7 @@ for theta_test in 5.0:delta_theta:45.0
         
         # Check if solution is physical
         if M_surface > 0 && beta > theta_test
-            theta_max = theta_test
+            theta_max_val = theta_test
         else
             break
         end
@@ -452,12 +452,12 @@ for theta_test in 5.0:delta_theta:45.0
     end
 end
 
-println("Maximum cone half-angle: $(theta_max)°")
+println("Maximum cone half-angle: $(theta_max_val)°")
 
 # Compare with 2D maximum deflection
 theta_max_2D = theta_max(M_inf)
 println("2D maximum deflection: $(round(theta_max_2D, digits=1))°")
-println("Reduction for axisymmetric case: $(round(theta_max_2D - theta_max, digits=1))°")
+println("Reduction for axisymmetric case: $(round(theta_max_2D - theta_max_val, digits=1))°")
 ```
 
 ### Effective Deflection Angle
@@ -480,14 +480,14 @@ println("Actual cone angle: $theta_c°")
 println("Difference: $(round(theta_c - theta_eff_val, digits=2))°")
 
 # This effective angle can be used with 2D oblique shock theory
-M2_eff, rho_eff, p_eff, p0_eff, beta_eff = solve_oblique(M_inf, theta_eff_val)
+sol_oblique = solve_oblique(M_inf, theta_eff_val)
 
 # Compare with actual cone solution
 beta_cone = cone_beta_weak(M_inf, theta_c)
 M_cone, _ = cone_mach_surface(M_inf, theta_c)
 
 println("\nComparison of Methods:")
-println("Effective angle method - β: $(round(beta_eff, digits=1))°, M: $(round(M2_eff, digits=3))")
+println("Effective angle method - β: $(round(sol_oblique.beta, digits=1))°, M: $(round(sol_oblique.M2, digits=3))")
 println("Cone solution - β: $(round(beta_cone, digits=1))°, M: $(round(M_cone, digits=3))")
 ```
 

@@ -324,7 +324,7 @@ gases = [
 println("Gas Effects on Prandtl-Meyer Expansion:")
 println("M₁ = $M1, θ = $theta°")
 println("Gas\tγ\tM₂\tp₁/p₂\tν₁ (°)\tν₂ (°)")
-println("---\t----\t----\t-----\t------\t------")
+println("---\t----\t----\t----- -----\t------\t------")
 
 for (gas, gamma) in gases
     M2 = expand_mach2(M1, theta, gamma)
