@@ -25,9 +25,9 @@ For a flow at Mach 2.0, calculate the stagnation property ratios:
 M = 2.0
 
 # Stagnation to static ratios
-T0_T = t0_over_t(M)        # Temperature ratio
-p0_p = p0_over_p(M)        # Pressure ratio  
-rho0_rho = rho0_over_rho(M) # Density ratio
+T0_T = total_to_static_temperature_ratio(M)        # Temperature ratio
+p0_p = total_to_static_pressure_ratio(M)        # Pressure ratio  
+rho0_rho = total_to_static_density_ratio(M) # Density ratio
 
 println("Isentropic Relations at M = $M:")
 println("T₀/T = $(round(T0_T, digits=3))")
@@ -131,7 +131,7 @@ Calculate atmospheric conditions at different altitudes using the US Standard At
 altitudes = [0.0, 11.0]  # km
 
 for alt in altitudes
-    density, pressure, temperature, asound, viscosity = atmos1976_at(alt)
+    density, pressure, temperature, asound, viscosity = atmosphere_properties_at(alt)
     
     println("Altitude: $(alt) km")
     println("  Density: $(round(density, digits=3)) kg/m³")
@@ -151,10 +151,10 @@ Altitude: 0.0 km
   Speed of sound: 340.3 m/s
 
 Altitude: 11.0 km
-  Density: 0.364 kg/m³
-  Pressure: 22.6 kPa
-  Temperature: 216.7 K
-  Speed of sound: 295.1 m/s
+  Density: 0.365 kg/m³
+  Pressure: 22.7 kPa
+  Temperature: 216.8 K
+  Speed of sound: 295.2 m/s
 ```
 
 ## Nozzle Flow Analysis
@@ -199,10 +199,10 @@ Most functions accept a `gamma` parameter for different gases:
 M = 2.0
 
 # Air (γ = 1.4, default)
-T0_T_air = t0_over_t(M)
+T0_T_air = total_to_static_temperature_ratio(M)
 
 # Helium (γ ≈ 1.67)
-T0_T_helium = t0_over_t(M, 1.67)
+T0_T_helium = total_to_static_temperature_ratio(M, 1.67)
 
 println("Temperature ratios at M = $M:")
 println("Air (γ=1.4): $(round(T0_T_air, digits=3))")
@@ -237,8 +237,8 @@ Most functions use sensible defaults:
 
 ```julia
 # These are equivalent
-p0_p_1 = p0_over_p(2.0, 1.4)  # explicit gamma
-p0_p_2 = p0_over_p(2.0)       # default gamma=1.4
+p0_p_1 = total_to_static_pressure_ratio(2.0, 1.4)  # explicit gamma
+p0_p_2 = total_to_static_pressure_ratio(2.0)       # default gamma=1.4
 
 println(p0_p_1 == p0_p_2)  # true
 ```

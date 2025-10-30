@@ -131,7 +131,10 @@ from compair import t0_over_t, solve_normal, atmos1976_at
 
 # Julia CompAir.jl
 using CompAir
-# Same function names: t0_over_t, solve_normal, atmos1976_at
+# Function names updated for clarity:
+# t0_over_t -> total_to_static_temperature_ratio
+# solve_normal (same)
+# atmos1976_at -> atmosphere_properties_at
 ```
 
 #### API Consistency

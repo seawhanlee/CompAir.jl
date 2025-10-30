@@ -55,9 +55,9 @@ using CompAir
 
 # Isentropic flow properties at Mach 2.0
 M = 2.0
-T0_T = t0_over_t(M)      # Total to static temperature ratio
-p0_p = p0_over_p(M)      # Total to static pressure ratio
-rho0_rho = rho0_over_rho(M)  # Total to static density ratio
+T0_T = total_to_static_temperature_ratio(M)      # Total to static temperature ratio
+p0_p = total_to_static_pressure_ratio(M)      # Total to static pressure ratio
+rho0_rho = total_to_static_density_ratio(M)  # Total to static density ratio
 
 println("At M = $M:")
 println("T₀/T = $(round(T0_T, digits=3))")
@@ -118,7 +118,7 @@ println("p₁/p₂ = $(round(p_ratio, digits=3))")
 altitudes = [0.0, 11.0, 20.0, 50.0]  # km
 
 for alt in altitudes
-    density, pressure, temperature, asound, viscosity = atmos1976_at(alt)
+    density, pressure, temperature, asound, viscosity = atmosphere_properties_at(alt)
 
     println("Altitude: $(alt) km")
     println("  Density: $(round(density, digits=3)) kg/m³")
@@ -167,9 +167,9 @@ println("Supersonic M = $(round(M_supersonic, digits=3))")
 ## API Reference
 
 ### Isentropic Relations
-- `t0_over_t(M, gamma=1.4)` - Total to static temperature ratio
-- `p0_over_p(M, gamma=1.4)` - Total to static pressure ratio
-- `rho0_over_rho(M, gamma=1.4)` - Total to static density ratio
+- `total_to_static_temperature_ratio(M, gamma=1.4)` - Total to static temperature ratio
+- `total_to_static_pressure_ratio(M, gamma=1.4)` - Total to static pressure ratio
+- `total_to_static_density_ratio(M, gamma=1.4)` - Total to static density ratio
 
 ### Shock Wave Analysis
 - `solve_normal(M, gamma=1.4)` - Complete normal shock analysis
@@ -182,9 +182,9 @@ println("Supersonic M = $(round(M_supersonic, digits=3))")
 - `expand_p2(M1, theta, gamma=1.4)` - Pressure ratio across expansion
 
 ### Atmospheric Model
-- `atmos1976_at(alt)` - Complete atmospheric properties at altitude
-- `geopot_alt(alt)` - Convert geometric to geopotential altitude
-- `sutherland_mu(theta)` - Dynamic viscosity from Sutherland's law
+- `atmosphere_properties_at(alt)` - Complete atmospheric properties at altitude
+- `geometric_to_geopotential_altitude(alt)` - Convert geometric to geopotential altitude
+- `sutherland_viscosity(theta)` - Dynamic viscosity from Sutherland's law
 
 ### Nozzle Analysis
 - `area_ratio_at(M, gamma=1.4)` - Area ratio A/A* for given Mach number

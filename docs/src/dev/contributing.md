@@ -189,12 +189,12 @@ using CompAir
 @testset "Isentropic Relations" begin
     @testset "Temperature Ratio" begin
         # Test known values
-        @test t0_over_t(0.0) ≈ 1.0
-        @test t0_over_t(1.0) ≈ 1.2
-        @test t0_over_t(2.0) ≈ 1.8
+        @test total_to_static_temperature_ratio(0.0) ≈ 1.0
+        @test total_to_static_temperature_ratio(1.0) ≈ 1.2
+        @test total_to_static_temperature_ratio(2.0) ≈ 1.8
         
         # Test error conditions
-        @test_throws DomainError t0_over_t(-1.0)
+        @test_throws DomainError total_to_static_temperature_ratio(-1.0)
     end
     
     @testset "Pressure Ratio" begin

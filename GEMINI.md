@@ -41,7 +41,7 @@ For example, to use the isentropic flow relations:
 using CompAir
 
 M = 2.0
-T0_T = t0_over_t(M)
+T0_T = total_to_static_temperature_ratio(M)
 println("T₀/T = $(round(T0_T, digits=3))")
 ```
 
