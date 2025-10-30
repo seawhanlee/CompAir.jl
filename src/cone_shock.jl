@@ -50,7 +50,7 @@ function _integrate_tm(M, angle, theta, gamma=1.4)
         M2 = oblique_mach2(M, theta, gamma)
     else
         beta = 90
-        M2 = normal_mach2(M, gamma)
+        M2 = mach_after_normal_shock(M, gamma)
     end
 
     v = sqrt(((gamma - 1) / 2 * M2^2) / (1 + (gamma - 1) / 2 * M2^2))
@@ -238,12 +238,12 @@ function solve_cone_properties(M, angle; psi::Union{Float64, Nothing}=nothing, g
     # 밀도비 계산 (psi_calc 지점의 밀도 / 자유흐름 밀도)
     # rho_psi / rho_freestream = (rho_psi / rho_after_shock) * (rho_after_shock / rho_freestream)
     # 여기서 rho_psi / rho_after_shock = rho0_over_rho(M_after_shock) / rho0_over_rho(Mc_at_psi) (등엔트로피 과정)
-    rhoc_ratio_freestream = rho_ratio_across_shock * rho0_over_rho(M_after_shock, gamma) / rho0_over_rho(Mc_at_psi, gamma)
+    rhoc_ratio_freestream = rho_ratio_across_shock * total_to_static_density_ratio(M_after_shock, gamma) / total_to_static_density_ratio(Mc_at_psi, gamma)
 
     # 압력비 계산 (psi_calc 지점의 압력 / 자유흐름 압력)
     # p_psi / p_freestream = (p_psi / p_after_shock) * (p_after_shock / p_freestream)
     # 여기서 p_psi / p_after_shock = p0_over_p(M_after_shock) / p0_over_p(Mc_at_psi) (등엔트로피 과정)
-    pc_ratio_freestream = p_ratio_across_shock * p0_over_p(M_after_shock, gamma) / p0_over_p(Mc_at_psi, gamma)
+    pc_ratio_freestream = p_ratio_across_shock * total_to_static_pressure_ratio(M_after_shock, gamma) / total_to_static_pressure_ratio(Mc_at_psi, gamma)
 
     if psi === nothing
         # 기존 solve_cone_theta와 동일한 반환 (phi 제외)

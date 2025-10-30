@@ -28,7 +28,7 @@ end
 
 # 내부 함수
 function _area_ratio_at(M::Float64, gamma::Float64=1.4)
-    return 1/M*sqrt((2/(gamma+1)*t0_over_t(M, gamma))^((gamma+1)/(gamma-1)))
+    return 1/M*sqrt((2/(gamma+1)*total_to_static_temperature_ratio(M, gamma))^((gamma+1)/(gamma-1)))
 end
 
 """
@@ -71,83 +71,91 @@ function mach_by_area_ratio(area::Real, gamma::Real=1.4, x0::Real=0.1)
 end
 
 # 내부 함수
-function _me6(area::Float64, gamma::Float64=1.4)
+function _subsonic_mach_from_area_ratio(area::Float64, gamma::Float64=1.4)
     return _mach_by_area_ratio(area, gamma)
 end
 
 """
-    me6(area::Real, gamma::Real=1.4)
+    subsonic_mach_from_area_ratio(area::Real, gamma::Real=1.4)
+
+Calculates the subsonic Mach number for a given nozzle area ratio.
 
 # Arguments
-- `area::Real`: 목면적 대비 면적비
-- `gamma::Real=1.4`: 비열비
+- `area::Real`: Area ratio (A/A*)
+- `gamma::Real=1.4`: Specific heat ratio
 
 # Returns
-- `Float64`: 마하수
+- `Float64`: Subsonic Mach number
 """
-function me6(area::Real, gamma::Real=1.4)
-    _me6(Float64(area), Float64(gamma))
+function subsonic_mach_from_area_ratio(area::Real, gamma::Real=1.4)
+    _subsonic_mach_from_area_ratio(Float64(area), Float64(gamma))
 end
 
 # 내부 함수
-function _pe6(area::Float64, gamma::Float64=1.4, p0::Float64=1.0)
-    Me6 = _me6(area, gamma)
-    return 1/p0_over_p(Me6, gamma)*p0
+function _subsonic_pressure_from_area_ratio(area::Float64, gamma::Float64=1.4, p0::Float64=1.0)
+    Me6 = _subsonic_mach_from_area_ratio(area, gamma)
+    return 1/total_to_static_pressure_ratio(Me6, gamma)*p0
 end
 
 """
-    pe6(area::Real, gamma::Real=1.4, p0::Real=1)
+    subsonic_pressure_from_area_ratio(area::Real, gamma::Real=1.4, p0::Real=1)
+
+Calculates the subsonic pressure for a given nozzle area ratio, assuming isentropic flow.
 
 # Arguments
-- `area::Real`: 목면적 대비 면적비
-- `gamma::Real=1.4`: 비열비
-- `p0::Real=1`: 전압력
+- `area::Real`: Area ratio (A/A*)
+- `gamma::Real=1.4`: Specific heat ratio
+- `p0::Real=1`: Total pressure
 
 # Returns
-- `Float64`: 압력
+- `Float64`: Subsonic pressure
 """
-function pe6(area::Real, gamma::Real=1.4, p0::Real=1)
-    _pe6(Float64(area), Float64(gamma), Float64(p0))
+function subsonic_pressure_from_area_ratio(area::Real, gamma::Real=1.4, p0::Real=1)
+    _subsonic_pressure_from_area_ratio(Float64(area), Float64(gamma), Float64(p0))
 end
 
 # 내부 함수
-function _me5(area::Float64, gamma::Float64=1.4)
-    Me = _me6(area, gamma)
-    return normal_mach2(Me, gamma)
+function _mach_after_shock_at_exit(area::Float64, gamma::Float64=1.4)
+    Me = _subsonic_mach_from_area_ratio(area, gamma)
+    return mach_after_normal_shock(Me, gamma)
 end
 
 """
-    me5(area::Real, gamma::Real=1.4)
+    mach_after_shock_at_exit(area::Real, gamma::Real=1.4)
+
+Calculates the Mach number after a normal shock at the nozzle exit.
 
 # Arguments
-- `area::Real`: 목면적 대비 면적비
-- `gamma::Real=1.4`: 비열비
+- `area::Real`: Area ratio (A/A*)
+- `gamma::Real=1.4`: Specific heat ratio
 
 # Returns
-- `Float64`: 마하수
+- `Float64`: Mach number after the shock
 """
-function me5(area::Real, gamma::Real=1.4)
-    _me5(Float64(area), Float64(gamma))
+function mach_after_shock_at_exit(area::Real, gamma::Real=1.4)
+    _mach_after_shock_at_exit(Float64(area), Float64(gamma))
 end
 
 # 내부 함수
-function _pe5(area::Float64, gamma::Float64=1.4, p0::Float64=1.0)
-    Me = _me6(area, gamma)
-    pe= _pe6(area, gamma, p0)
-    return pe*p2_over_p1(Me, gamma)
+function _pressure_after_shock_at_exit(area::Float64, gamma::Float64=1.4, p0::Float64=1.0)
+    Me = _subsonic_mach_from_area_ratio(area, gamma)
+    pe = _subsonic_pressure_from_area_ratio(area, gamma, p0)
+    return pe*pressure_ratio_normal_shock(Me, gamma)
 end
 
 """
-    pe5(area::Real, gamma::Real=1.4, p0::Real=1)
+    pressure_after_shock_at_exit(area::Real, gamma::Real=1.4, p0::Real=1)
+
+Calculates the pressure after a normal shock at the nozzle exit.
 
 # Arguments
-- `area::Real`: 목면적 대비 면적비
-- `gamma::Real=1.4`: 비열비
-- `p0::Real=1`: 전압력
+- `area::Real`: Area ratio (A/A*)
+- `gamma::Real=1.4`: Specific heat ratio
+- `p0::Real=1`: Total pressure
 
 # Returns
-- `Float64`: 압력
+- `Float64`: Pressure after the shock
 """
-function pe5(area::Real, gamma::Real=1.4, p0::Real=1)
-    _pe5(Float64(area), Float64(gamma), Float64(p0))
+function pressure_after_shock_at_exit(area::Real, gamma::Real=1.4, p0::Real=1)
+    _pressure_after_shock_at_exit(Float64(area), Float64(gamma), Float64(p0))
 end

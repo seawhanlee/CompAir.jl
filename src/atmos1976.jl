@@ -1,19 +1,19 @@
 """
-    atmos1976_at(alt)
+    atmosphere_properties_at(alt)
 
-고도에 따른 표준 대기 (US Standard 1976) 물성치 계산
+Calculates properties of the US Standard Atmosphere 1976 at a given altitude.
 
 # Arguments
-- `alt::Float64`: 고도 (km)
+- `alt::Float64`: Altitude (km)
 
 # Returns
-- `density::Float64`: 밀도 (kg/m^3)
-- `pressure::Float64`: 압력 (Pa)
-- `temperature::Float64`: 온도 (K)
-- `asound::Float64`: 음속 (m/s)
-- `viscosity::Float64`: Dynamics 점도 (Pa s)
+- `density::Float64`: Density (kg/m^3)
+- `pressure::Float64`: Pressure (Pa)
+- `temperature::Float64`: Temperature (K)
+- `asound::Float64`: Speed of sound (m/s)
+- `viscosity::Float64`: Dynamic viscosity (Pa s)
 """
-function atmos1976_at(alt)
+function atmosphere_properties_at(alt)
     t0, p0, rho0, a0 = 288.15, 101325.0, 1.225, 340.294
 
     # Compute ratio
@@ -28,40 +28,40 @@ function atmos1976_at(alt)
     asound = a0 * sqrt(tr)
 
     # Get viscosity
-    viscosity = sutherland_mu(tr)
+    viscosity = sutherland_viscosity(tr)
 
     return density, pressure, temperature, asound, viscosity
 end
 
 """
-    geopot_alt(alt, rearth=6369.0)
+    geometric_to_geopotential_altitude(alt, rearth=6369.0)
 
-Geometric 고도 (Z)를 Geopotential 고도 (H)로 변환
+Converts geometric altitude (Z) to geopotential altitude (H).
 
 # Arguments
-- `alt::Float64`: Geometric 고도 (km)
-- `rearth::Float64=6369.0`: 지구 반지름(km)
+- `alt::Float64`: Geometric altitude (km)
+- `rearth::Float64=6369.0`: Earth's radius (km)
 
 # Returns
-- `H::Float64`: Geopotential 고도 (km)
+- `H::Float64`: Geopotential altitude (km)
 """
-function geopot_alt(alt, rearth=6369.0)
+function geometric_to_geopotential_altitude(alt, rearth=6369.0)
     return alt * rearth / (rearth + alt)
 end
 
 """
-    geometric_alt(alt, rearth=6369.0)
+    geopotential_to_geometric_altitude(alt, rearth=6369.0)
 
-Geopotential 고도 (H)를 Geometric 고도 (Z)로 변환
+Converts geopotential altitude (H) to geometric altitude (Z).
 
 # Arguments
-- `alt::Float64`: Geopotential 고도 (km)
-- `rearth::Float64=6369.0`: 지구 반지름(km)
+- `alt::Float64`: Geopotential altitude (km)
+- `rearth::Float64=6369.0`: Earth's radius (km)
 
 # Returns
-- `Z::Float64`: Geometric 고도 (km)
+- `Z::Float64`: Geometric altitude (km)
 """
-function geometric_alt(alt, rearth=6369.0)
+function geopotential_to_geometric_altitude(alt, rearth=6369.0)
     return alt * rearth / (rearth - alt)
 end
 
@@ -77,7 +77,7 @@ function _air1976(alt, gmr=34.163195)
     tbase0 = air_layers[2, 1]
 
     # Compute geopotential altitude
-    h = geopot_alt(alt)
+    h = geometric_to_geopotential_altitude(alt)
 
     # Find index - determine which atmospheric layer the altitude belongs to
     if h >= air_layers[1, end]
@@ -116,20 +116,20 @@ function _air1976(alt, gmr=34.163195)
 end
 
 """
-    sutherland_mu(theta, t0=288.15, mu0=1.458e-6, suth=110.4)
+    sutherland_viscosity(theta, t0=288.15, mu0=1.458e-6, suth=110.4)
 
-Sutherland law for viscosity - 온도에 따른 Dynamics 점도 계산
+Calculates dynamic viscosity using Sutherland's law.
 
 # Arguments
-- `theta::Float64`: 온도 비 (15C 대비 현재 온도)
-- `t0::Float64=288.15`: 기준 온도(K)
-- `mu0::Float64=1.458e-6`: 기준 온도에서 점도
-- `suth::Float64=110.4`: Sutherland 관계식 계수
+- `theta::Float64`: Temperature ratio (T/T0)
+- `t0::Float64=288.15`: Reference temperature (K)
+- `mu0::Float64=1.458e-6`: Reference viscosity (Pa s)
+- `suth::Float64=110.4`: Sutherland's constant
 
 # Returns
-- `mu::Float64`: 온도에 따른 Dynamic 점도(Pa s)
+- `mu::Float64`: Dynamic viscosity (Pa s)
 """
-function sutherland_mu(theta, t0=288.15, mu0=1.716e-5, suth=110.4)
+function sutherland_viscosity(theta, t0=288.15, mu0=1.716e-5, suth=110.4)
     t = t0 * theta
     return mu0 * t^1.5 / (t + suth)
 end

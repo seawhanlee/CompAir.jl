@@ -17,16 +17,16 @@ end
     @test isapprox(CompAir.area_ratio_at(4.0), 10.7187, rtol=1e-3)
 end
 
-@testset "me6" begin
-    @test isapprox(CompAir.me6(1), 1.0, rtol=1e-3)
-    @test isapprox(CompAir.me6(2), 0.3059, rtol=1e-3)
-    @test isapprox(CompAir.me6(3), 0.1974, rtol=1e-3)
-    @test isapprox(CompAir.me6(4), 0.1465, rtol=1e-3)
+@testset "subsonic_mach_from_area_ratio" begin
+    @test isapprox(CompAir.subsonic_mach_from_area_ratio(1), 1.0, rtol=1e-3)
+    @test isapprox(CompAir.subsonic_mach_from_area_ratio(2), 0.3059, rtol=1e-3)
+    @test isapprox(CompAir.subsonic_mach_from_area_ratio(3), 0.1974, rtol=1e-3)
+    @test isapprox(CompAir.subsonic_mach_from_area_ratio(4), 0.1465, rtol=1e-3)
 end
 
-@testset "pe6" begin
-   @test isapprox(CompAir.pe6(1), 0.5282817970269534, rtol=1e-3)
-   @test isapprox(CompAir.pe6(2), 0.9371625024322057, rtol=1e-3)
-   @test isapprox(CompAir.pe6(3), 0.9731817988106134, rtol=1e-3)
-   @test isapprox(CompAir.pe6(4), 0.9851106875021334, rtol=1e-3)
+@testset "subsonic_pressure_from_area_ratio" begin
+   @test isapprox(CompAir.subsonic_pressure_from_area_ratio(1), 0.5282817970269534, rtol=1e-3)
+   @test isapprox(CompAir.subsonic_pressure_from_area_ratio(2), 0.9371625024322057, rtol=1e-3)
+   @test isapprox(CompAir.subsonic_pressure_from_area_ratio(3), 0.9731817988106134, rtol=1e-3)
+   @test isapprox(CompAir.subsonic_pressure_from_area_ratio(4), 0.9851106875021334, rtol=1e-3)
 end

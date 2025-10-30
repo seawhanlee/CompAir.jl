@@ -25,19 +25,19 @@ end
 
 @testset "solve_shock" begin
 
-    M2_1, rho2_1, p2_1, p0ratio_1, beta_1 = CompAir.solve_shock(2, 10)
-    @test isapprox(M2_1, 1.9469, rtol=1e-3)
-    @test isapprox(rho2_1, 1.0605, rtol=1e-3)
-    @test isapprox(p2_1, 1.0857, rtol=1e-3)
-    @test isapprox(p0ratio_1, 0.9999, rtol=1e-3)
-    @test isapprox(beta_1, 31.2018, rtol=1e-3)
+    sol1 = CompAir.solve_shock(2, 10)
+    @test isapprox(sol1.M2, 1.9469, rtol=1e-3)
+    @test isapprox(sol1.rho2_ratio, 1.0605, rtol=1e-3)
+    @test isapprox(sol1.p2_ratio, 1.0857, rtol=1e-3)
+    @test isapprox(sol1.p0_ratio, 0.9999, rtol=1e-3)
+    @test isapprox(sol1.beta, 31.2018, rtol=1e-3)
 
-    M2_2, rho2_2, p2_2, p0ratio_2, beta_2 = CompAir.solve_shock(3, 20)
-    @test isapprox(M2_2, 2.3871, rtol=1e-3)
-    @test isapprox(rho2_2, 1.8320, rtol=1e-3)
-    @test isapprox(p2_2, 2.3973, rtol=1e-3)
-    @test isapprox(p0ratio_2, 0.9352, rtol=1e-3)
-    @test isapprox(beta_2, 29.6145, rtol=1e-3)
+    sol2 = CompAir.solve_shock(3, 20)
+    @test isapprox(sol2.M2, 2.3871, rtol=1e-3)
+    @test isapprox(sol2.rho2_ratio, 1.8320, rtol=1e-3)
+    @test isapprox(sol2.p2_ratio, 2.3973, rtol=1e-3)
+    @test isapprox(sol2.p0_ratio, 0.9352, rtol=1e-3)
+    @test isapprox(sol2.beta, 29.6145, rtol=1e-3)
 end
 
 @testset "solve_cone_properties" begin

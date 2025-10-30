@@ -1,103 +1,100 @@
 """
-    normal_mach2(M::Float64, gamma::Float64=1.4)
+    mach_after_normal_shock(M::Float64, gamma::Float64=1.4)
 
-수직 충격파 후 마하수
+Calculates the Mach number after a normal shock wave.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `mach::Float64`: 충격파 후 마하수
+- `mach::Float64`: Downstream Mach number
 """
-function normal_mach2(M::Float64, gamma::Float64=1.4)
+function mach_after_normal_shock(M::Float64, gamma::Float64=1.4)
     return sqrt((1 + 0.5 * (gamma - 1) * M^2) / (gamma * M^2 - 0.5 * (gamma - 1)))
 end
 
 """
-    rho2_over_rho1(M::Float64, gamma::Float64=1.4)
+    density_ratio_normal_shock(M::Float64, gamma::Float64=1.4)
 
-수직 충격파 전/후 밀도비
+Calculates the density ratio across a normal shock wave.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `rho::Float64`: 충격파 전/후 밀도비
-
-# Notes
-수직 충격파 전/후 밀도비는 압축성 유체역학 이론을 통해 유도된다.
+- `rho2/rho1::Float64`: Density ratio
 """
-function rho2_over_rho1(M::Float64, gamma::Float64=1.4)
+function density_ratio_normal_shock(M::Float64, gamma::Float64=1.4)
     return (gamma + 1) * M^2 / (2 + (gamma - 1) * M^2)
 end
 
 """
-    p2_over_p1(M::Float64, gamma::Float64=1.4)
+    pressure_ratio_normal_shock(M::Float64, gamma::Float64=1.4)
 
-수직 충격파 전/후 압력비
+Calculates the pressure ratio across a normal shock wave.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `p::Float64`: 충격파 전/후 압력비
+- `p2/p1::Float64`: Pressure ratio
 """
-function p2_over_p1(M::Float64, gamma::Float64=1.4)
+function pressure_ratio_normal_shock(M::Float64, gamma::Float64=1.4)
     return 1 + 2 * gamma / (gamma + 1) * (M^2 - 1)
 end
 
 """
-    t2_over_t1(M::Float64, gamma::Float64=1.4)
+    temperature_ratio_normal_shock(M::Float64, gamma::Float64=1.4)
 
-수직 충격파 전/후 온도비
+Calculates the temperature ratio across a normal shock wave.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `t::Float64`: 충격파 전/후 온도비
+- `t2/t1::Float64`: Temperature ratio
 """
-function t2_over_t1(M::Float64, gamma::Float64=1.4)
-    return p2_over_p1(M, gamma) / rho2_over_rho1(M, gamma)
+function temperature_ratio_normal_shock(M::Float64, gamma::Float64=1.4)
+    return pressure_ratio_normal_shock(M, gamma) / density_ratio_normal_shock(M, gamma)
 end
 
 """
-    normal_p02(M::Float64, gamma::Float64=1.4)
+    total_pressure_after_normal_shock(M::Float64, gamma::Float64=1.4)
 
-수직 충격파 후 전압력
+Calculates the total pressure after a normal shock wave.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `p0::Float64`: 충격파 후 전압력
+- `p02::Float64`: Total pressure after the shock
 """
-function normal_p02(M::Float64, gamma::Float64=1.4)
-    p2 = p2_over_p1(M, gamma)
-    M2 = normal_mach2(M, gamma)
-    return p0_over_p(M2, gamma) * p2
+function total_pressure_after_normal_shock(M::Float64, gamma::Float64=1.4)
+    p2 = pressure_ratio_normal_shock(M, gamma)
+    M2 = mach_after_normal_shock(M, gamma)
+    return total_to_static_pressure_ratio(M2, gamma) * p2
 end
 
 """
-    p02_over_p01(M::Float64, gamma::Float64=1.4)
+    total_pressure_ratio_normal_shock(M::Float64, gamma::Float64=1.4)
 
-수직 충격파 후 전압력비
+Calculates the total pressure ratio across a normal shock wave.
 
 # Arguments
-- `M::Float64`: 충격파 전 마하수
-- `gamma::Float64=1.4`: 비열비
+- `M::Float64`: Upstream Mach number
+- `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `p02/p01::Float64`: 충격파 후 전압력비
+- `p02/p01::Float64`: Total pressure ratio
 """
-function p02_over_p01(M::Float64, gamma::Float64=1.4)
-    p01 = p0_over_p(M, gamma)
-    p02 = normal_p02(M, gamma)
+function total_pressure_ratio_normal_shock(M::Float64, gamma::Float64=1.4)
+    p01 = total_to_static_pressure_ratio(M, gamma)
+    p02 = total_pressure_after_normal_shock(M, gamma)
     return p02 / p01
 end
 
@@ -117,8 +114,8 @@ end
 - `p0ratio::Float64`: 수직충격파 전/후 전압력비
 """
 function solve_normal(M::Float64, gamma::Float64=1.4)
-    M2 = normal_mach2(M, gamma)
-    rho2, p2 = rho2_over_rho1(M, gamma), p2_over_p1(M, gamma)
-    p0ratio = p02_over_p01(M, gamma)
+    M2 = mach_after_normal_shock(M, gamma)
+    rho2, p2 = density_ratio_normal_shock(M, gamma), pressure_ratio_normal_shock(M, gamma)
+    p0ratio = total_pressure_ratio_normal_shock(M, gamma)
     return (M2=M2, rho2_ratio=rho2, p2_ratio=p2, p0_ratio=p0ratio)
 end

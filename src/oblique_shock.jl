@@ -164,7 +164,7 @@ function oblique_mach2(M::Real, theta::Real, gamma::Real=1.4)
     Mn1 = _Mn1(M, beta_r, gamma)
 
     # Normal shock relation
-    Mn2 = normal_mach2(Mn1, gamma)
+    Mn2 = mach_after_normal_shock(Mn1, gamma)
 
     theta_r = deg2rad(theta)
 
@@ -204,7 +204,8 @@ function solve_oblique(M::Real, theta::Real, gamma::Real=1.4)
     Mn1 = _Mn1(M, beta_r, gamma)
 
     # Normal shock relation
-    Mn2, rho2, p2, p0ratio = solve_normal(Mn1, gamma)
+    sol = solve_normal(Mn1, gamma)
+    Mn2, rho2, p2, p0ratio = sol.M2, sol.rho2_ratio, sol.p2_ratio, sol.p0_ratio
 
     # Compute M2
     theta_r = deg2rad(theta)

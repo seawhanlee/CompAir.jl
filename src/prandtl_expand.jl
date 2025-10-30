@@ -55,7 +55,7 @@ end
 """
 function expand_p2(M1, theta, gamma=1.4)
     M2 = expand_mach2(M1, theta, gamma)
-    return p0_over_p(M1, gamma) / p0_over_p(M2, gamma)
+    return total_to_static_pressure_ratio(M1, gamma) / total_to_static_pressure_ratio(M2, gamma)
 end
 
 """
