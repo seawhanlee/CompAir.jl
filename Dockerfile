@@ -5,7 +5,7 @@ FROM julia:1.11
 WORKDIR /app
 
 # Copy package files
-COPY Project.toml Manifest.toml ./
+COPY Project.toml ./
 COPY src/ ./src/
 
 # Install package dependencies
