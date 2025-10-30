@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Atmospheric Model · CompAir.jl</title><meta name="title" content="Atmospheric Model · CompAir.jl"/><meta property="og:title" content="Atmospheric Model · CompAir.jl"/><meta property="twitter:title" content="Atmospheric Model · CompAir.jl"/><meta name="description" content="Documentation for CompAir.jl."/><meta property="og:description" content="Documentation for CompAir.jl."/><meta property="twitter:description" content="Documentation for CompAir.jl."/><meta property="og:url" content="https://seawhanlee.github.io/CompAir.jl/api/atmos1976/"/><meta property="twitter:url" content="https://seawhanlee.github.io/CompAir.jl/api/atmos1976/"/><link rel="canonical" href="https://seawhanlee.github.io/CompAir.jl/api/atmos1976/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">CompAir.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Manual</span><ul><li><a class="tocitem" href="../../manual/installation/">Installation</a></li><li><a class="tocitem" href="../../manual/quickstart/">Quick Start</a></li><li><a class="tocitem" href="../../manual/examples/">Examples</a></li></ul></li><li><span class="tocitem">API Reference</span><ul><li><a class="tocitem" href="../isentropic/">Isentropic Relations</a></li><li><a class="tocitem" href="../normal_shock/">Normal Shock Waves</a></li><li><a class="tocitem" href="../oblique_shock/">Oblique Shock Waves</a></li><li><a class="tocitem" href="../prandtl_expand/">Prandtl-Meyer Expansion</a></li><li><a class="tocitem" href="../cone_shock/">Cone Shock Analysis</a></li><li><a class="tocitem" href="../nozzle/">Nozzle Analysis</a></li><li><a class="tocitem" href="../intake/">Intake Ramp Analysis</a></li><li class="is-active"><a class="tocitem" href>Atmospheric Model</a><ul class="internal"><li><a class="tocitem" href="#Overview"><span>Overview</span></a></li><li><a class="tocitem" href="#Theory"><span>Theory</span></a></li><li><a class="tocitem" href="#Functions"><span>Functions</span></a></li><li><a class="tocitem" href="#Function-Details"><span>Function Details</span></a></li><li><a class="tocitem" href="#Applications"><span>Applications</span></a></li><li><a class="tocitem" href="#Validation-Examples"><span>Validation Examples</span></a></li><li><a class="tocitem" href="#Atmospheric-Density-Scale-Height"><span>Atmospheric Density Scale Height</span></a></li><li><a class="tocitem" href="#Different-Units-and-Conversions"><span>Different Units and Conversions</span></a></li><li><a class="tocitem" href="#Limitations-and-Considerations"><span>Limitations and Considerations</span></a></li><li><a class="tocitem" href="#See-Also"><span>See Also</span></a></li></ul></li></ul></li><li><span class="tocitem">Development</span><ul><li><a class="tocitem" href="../../dev/contributing/">Contributing</a></li><li><a class="tocitem" href="../../dev/changelog/">Changelog</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">API Reference</a></li><li class="is-active"><a href>Atmospheric Model</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Atmospheric Model</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/seawhanlee/CompAir.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/seawhanlee/CompAir.jl/blob/main/docs/src/api/atmos1976.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Atmospheric-Model-(US-Standard-Atmosphere-1976)"><a class="docs-heading-anchor" href="#Atmospheric-Model-(US-Standard-Atmosphere-1976)">Atmospheric Model (US Standard Atmosphere 1976)</a><a id="Atmospheric-Model-(US-Standard-Atmosphere-1976)-1"></a><a class="docs-heading-anchor-permalink" href="#Atmospheric-Model-(US-Standard-Atmosphere-1976)" title="Permalink"></a></h1><p>This module provides functions for calculating atmospheric properties based on the US Standard Atmosphere 1976 model, which is widely used in aerospace engineering and meteorology.</p><h2 id="Overview"><a class="docs-heading-anchor" href="#Overview">Overview</a><a id="Overview-1"></a><a class="docs-heading-anchor-permalink" href="#Overview" title="Permalink"></a></h2><p>The US Standard Atmosphere 1976 is a mathematical model that describes the variation of atmospheric properties with altitude. It provides:</p><ul><li><strong>Density</strong>: Air density variation with altitude</li><li><strong>Pressure</strong>: Atmospheric pressure profiles</li><li><strong>Temperature</strong>: Temperature lapse rates in different atmospheric layers</li><li><strong>Speed of Sound</strong>: Acoustic velocity based on temperature</li><li><strong>Dynamic Viscosity</strong>: Temperature-dependent viscosity using Sutherland&#39;s law</li><li><strong>Geopotential Altitude</strong>: Conversion between geometric and geopotential altitudes</li></ul><h2 id="Theory"><a class="docs-heading-anchor" href="#Theory">Theory</a><a id="Theory-1"></a><a class="docs-heading-anchor-permalink" href="#Theory" title="Permalink"></a></h2><p>The atmosphere is divided into several layers with different temperature profiles:</p><p><strong>Troposphere (0-11 km)</strong>: Linear temperature decrease</p><ul><li><span>$T = T_0 - L \cdot h$</span></li><li><span>$L = 6.5$</span> K/km (lapse rate)</li></ul><p><strong>Stratosphere (11-20 km)</strong>: Isothermal layer</p><ul><li><span>$T = T_{11} = 216.65$</span> K (constant)</li></ul><p><strong>Stratosphere (20-32 km)</strong>: Linear temperature increase</p><ul><li><span>$T = T_{20} + L_2 \cdot (h - 20)$</span></li><li><span>$L_2 = 1.0$</span> K/km</li></ul><p><strong>Hydrostatic equation</strong>: <span>$\frac{dp}{dh} = -\rho g$</span></p><p><strong>Perfect gas law</strong>: <span>$p = \rho R T$</span></p><p><strong>Geopotential altitude</strong>: <span>$h&#39; = \frac{r_0 h}{r_0 + h}$</span></p><p><strong>Sutherland viscosity law</strong>: <span>$\mu = \mu_0 \frac{T^{1.5}}{T + S}$</span></p><p>Where:</p><ul><li><span>$h$</span> = geometric altitude</li><li><span>$h&#39;$</span> = geopotential altitude  </li><li><span>$r_0$</span> = Earth&#39;s radius (6356766 m)</li><li><span>$R$</span> = specific gas constant (287.0 J/kg·K for air)</li><li><span>$g_0$</span> = standard gravity (9.80665 m/s²)</li><li><span>$\mu_0$</span> = reference viscosity (1.716×10⁻⁵ Pa·s)</li><li><span>$S$</span> = Sutherland constant (110.4 K)</li></ul><h2 id="Functions"><a class="docs-heading-anchor" href="#Functions">Functions</a><a id="Functions-1"></a><a class="docs-heading-anchor-permalink" href="#Functions" title="Permalink"></a></h2><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.atmosphere_properties_at" href="#CompAir.atmosphere_properties_at"><code>CompAir.atmosphere_properties_at</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">atmosphere_properties_at(alt)</code></pre><p>Calculates properties of the US Standard Atmosphere 1976 at a given altitude.</p><p><strong>Arguments</strong></p><ul><li><code>alt::Float64</code>: Altitude (km)</li></ul><p><strong>Returns</strong></p><ul><li><code>density::Float64</code>: Density (kg/m^3)</li><li><code>pressure::Float64</code>: Pressure (Pa)</li><li><code>temperature::Float64</code>: Temperature (K)</li><li><code>asound::Float64</code>: Speed of sound (m/s)</li><li><code>viscosity::Float64</code>: Dynamic viscosity (Pa s)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/22529a89ea2cd253c2b8518cf2ac22a8ead4f924/src/atmos1976.jl#L1-L15">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.geometric_to_geopotential_altitude" href="#CompAir.geometric_to_geopotential_altitude"><code>CompAir.geometric_to_geopotential_altitude</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">geometric_to_geopotential_altitude(alt, rearth=6369.0)</code></pre><p>Converts geometric altitude (Z) to geopotential altitude (H).</p><p><strong>Arguments</strong></p><ul><li><code>alt::Float64</code>: Geometric altitude (km)</li><li><code>rearth::Float64=6369.0</code>: Earth&#39;s radius (km)</li></ul><p><strong>Returns</strong></p><ul><li><code>H::Float64</code>: Geopotential altitude (km)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/22529a89ea2cd253c2b8518cf2ac22a8ead4f924/src/atmos1976.jl#L36-L47">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.geopotential_to_geometric_altitude" href="#CompAir.geopotential_to_geometric_altitude"><code>CompAir.geopotential_to_geometric_altitude</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">geopotential_to_geometric_altitude(alt, rearth=6369.0)</code></pre><p>Converts geopotential altitude (H) to geometric altitude (Z).</p><p><strong>Arguments</strong></p><ul><li><code>alt::Float64</code>: Geopotential altitude (km)</li><li><code>rearth::Float64=6369.0</code>: Earth&#39;s radius (km)</li></ul><p><strong>Returns</strong></p><ul><li><code>Z::Float64</code>: Geometric altitude (km)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/22529a89ea2cd253c2b8518cf2ac22a8ead4f924/src/atmos1976.jl#L52-L63">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.sutherland_viscosity" href="#CompAir.sutherland_viscosity"><code>CompAir.sutherland_viscosity</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">sutherland_viscosity(theta, t0=288.15, mu0=1.458e-6, suth=110.4)</code></pre><p>Calculates dynamic viscosity using Sutherland&#39;s law.</p><p><strong>Arguments</strong></p><ul><li><code>theta::Float64</code>: Temperature ratio (T/T0)</li><li><code>t0::Float64=288.15</code>: Reference temperature (K)</li><li><code>mu0::Float64=1.458e-6</code>: Reference viscosity (Pa s)</li><li><code>suth::Float64=110.4</code>: Sutherland&#39;s constant</li></ul><p><strong>Returns</strong></p><ul><li><code>mu::Float64</code>: Dynamic viscosity (Pa s)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/22529a89ea2cd253c2b8518cf2ac22a8ead4f924/src/atmos1976.jl#L118-L131">source</a></section></article><h2 id="Function-Details"><a class="docs-heading-anchor" href="#Function-Details">Function Details</a><a id="Function-Details-1"></a><a class="docs-heading-anchor-permalink" href="#Function-Details" title="Permalink"></a></h2><h3 id="atmosphere*properties*at"><a class="docs-heading-anchor" href="#atmosphere*properties*at">atmosphere<em>properties</em>at</a><a id="atmosphere*properties*at-1"></a><a class="docs-heading-anchor-permalink" href="#atmosphere*properties*at" title="Permalink"></a></h3><pre><code class="language-julia hljs">atmosphere_properties_at(alt)</code></pre><p>Calculate complete atmospheric properties at a given altitude using the US Standard Atmosphere 1976 model.</p><p><strong>Arguments:</strong></p><ul><li><code>alt::Real</code>: Geometric altitude in kilometers</li></ul><p><strong>Returns:</strong></p><ul><li><code>density::Float64</code>: Air density in kg/m³</li><li><code>pressure::Float64</code>: Atmospheric pressure in Pa</li><li><code>temperature::Float64</code>: Temperature in K</li><li><code>asound::Float64</code>: Speed of sound in m/s</li><li><code>viscosity::Float64</code>: Dynamic viscosity in Pa·s</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; density, pressure, temperature, asound, viscosity = atmosphere_properties_at(11.0)
+(0.36391, 22632.1, 216.65, 295.07, 1.4216e-5)
+
+julia&gt; println(&quot;At 11 km: ρ=$(round(density, digits=3)) kg/m³, p=$(round(pressure/1000, digits=1)) kPa&quot;)
+At 11 km: ρ=0.364 kg/m³, p=22.6 kPa</code></pre><h3 id="geometric*to*geopotential_altitude"><a class="docs-heading-anchor" href="#geometric*to*geopotential_altitude">geometric<em>to</em>geopotential_altitude</a><a id="geometric*to*geopotential_altitude-1"></a><a class="docs-heading-anchor-permalink" href="#geometric*to*geopotential_altitude" title="Permalink"></a></h3><pre><code class="language-julia hljs">geometric_to_geopotential_altitude(alt, rearth=6369.0)</code></pre><p>Convert geometric altitude to geopotential altitude.</p><p><strong>Arguments:</strong></p><ul><li><code>alt::Real</code>: Geometric altitude in km</li><li><code>rearth::Real=6369.0</code>: Earth&#39;s radius in km</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Geopotential altitude in km</li></ul><p><strong>Formula:</strong> <span>$h&#39; = \frac{r_0 h}{r_0 + h}$</span></p><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; geometric_to_geopotential_altitude(20.0)
+19.93743718592965
+
+julia&gt; geometric_to_geopotential_altitude(50.0)
+49.61139896373057</code></pre><h3 id="geopotential*to*geometric_altitude"><a class="docs-heading-anchor" href="#geopotential*to*geometric_altitude">geopotential<em>to</em>geometric_altitude</a><a id="geopotential*to*geometric_altitude-1"></a><a class="docs-heading-anchor-permalink" href="#geopotential*to*geometric_altitude" title="Permalink"></a></h3><pre><code class="language-julia hljs">geopotential_to_geometric_altitude(alt, rearth=6369.0)</code></pre><p>Convert geopotential altitude to geometric altitude.</p><p><strong>Arguments:</strong></p><ul><li><code>alt::Real</code>: Geopotential altitude in km</li><li><code>rearth::Real=6369.0</code>: Earth&#39;s radius in km</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Geometric altitude in km</li></ul><p><strong>Formula:</strong> <span>$h = \frac{r_0 h&#39;}{r_0 - h&#39;}$</span></p><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; geopotential_to_geometric_altitude(19.937)
+19.999685738514174
+
+julia&gt; geopotential_to_geometric_altitude(49.611)
+49.999743718592965</code></pre><h3 id="sutherland_viscosity"><a class="docs-heading-anchor" href="#sutherland_viscosity">sutherland_viscosity</a><a id="sutherland_viscosity-1"></a><a class="docs-heading-anchor-permalink" href="#sutherland_viscosity" title="Permalink"></a></h3><pre><code class="language-julia hljs">sutherland_viscosity(theta, t0=288.15, mu0=1.716e-5, suth=110.4)</code></pre><p>Calculate dynamic viscosity using Sutherland&#39;s law for temperature dependence.</p><p><strong>Arguments:</strong></p><ul><li><code>theta::Real</code>: Temperature ratio (T/T₀) or absolute temperature</li><li><code>t0::Real=288.15</code>: Reference temperature in K</li><li><code>mu0::Real=1.716e-5</code>: Reference viscosity in Pa·s</li><li><code>suth::Real=110.4</code>: Sutherland constant in K</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Dynamic viscosity in Pa·s</li></ul><p><strong>Formula:</strong> <span>$\mu = \mu_0 \frac{T^{1.5}}{T + S}$</span></p><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; sutherland_viscosity(1.0)  # At standard conditions
+1.716e-5
+
+julia&gt; sutherland_viscosity(216.65/288.15)  # At 11 km
+1.4216e-5</code></pre><h2 id="Applications"><a class="docs-heading-anchor" href="#Applications">Applications</a><a id="Applications-1"></a><a class="docs-heading-anchor-permalink" href="#Applications" title="Permalink"></a></h2><h3 id="Flight-Performance-Analysis"><a class="docs-heading-anchor" href="#Flight-Performance-Analysis">Flight Performance Analysis</a><a id="Flight-Performance-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Flight-Performance-Analysis" title="Permalink"></a></h3><p>Calculate flight conditions at cruise altitude:</p><pre><code class="language-julia hljs"># Commercial aircraft cruise conditions
+cruise_alt = 11.0  # km (36,000 ft)
+airspeed = 250     # m/s
+
+# Get atmospheric properties
+rho, p, T, a, mu = atmosphere_properties_at(cruise_alt)
+
+# Calculate flight parameters
+Mach = airspeed / a
+dynamic_pressure = 0.5 * rho * airspeed^2
+Reynolds_per_meter = rho * airspeed / mu
+
+println(&quot;Flight Analysis at $(cruise_alt) km:&quot;)
+println(&quot;True airspeed: $(airspeed) m/s&quot;)
+println(&quot;Mach number: $(round(Mach, digits=3))&quot;)
+println(&quot;Dynamic pressure: $(round(dynamic_pressure, digits=1)) Pa&quot;)
+println(&quot;Reynolds number per meter: $(round(Reynolds_per_meter/1e6, digits=2)) million/m&quot;)
+println(&quot;Air density: $(round(rho, digits=3)) kg/m³&quot;)
+println(&quot;Temperature: $(round(T, digits=1)) K&quot;)</code></pre><h3 id="Atmospheric-Property-Variation"><a class="docs-heading-anchor" href="#Atmospheric-Property-Variation">Atmospheric Property Variation</a><a id="Atmospheric-Property-Variation-1"></a><a class="docs-heading-anchor-permalink" href="#Atmospheric-Property-Variation" title="Permalink"></a></h3><p>Analyze how atmospheric properties change with altitude:</p><pre><code class="language-julia hljs">altitudes = [0.0, 5.0, 11.0, 20.0, 30.0, 50.0]  # km
+
+println(&quot;Atmospheric Property Variation:&quot;)
+println(&quot;Alt(km)\tρ(kg/m³)\tp(kPa)\tT(K)\ta(m/s)\tμ(μPa·s)&quot;)
+println(&quot;------\t--------\t------\t-----\t------\t--------&quot;)
+
+for alt in altitudes
+    density, pressure, temperature, asound, viscosity = atmosphere_properties_at(alt)
+    
+    println(&quot;$(alt)\t$(round(density, digits=3))\t\t$(round(pressure/1000, digits=1))\t$(round(temperature, digits=1))\t$(round(asound, digits=1))\t$(round(viscosity*1e6, digits=1))&quot;)
+end</code></pre><h3 id="Rocket-Launch-Analysis"><a class="docs-heading-anchor" href="#Rocket-Launch-Analysis">Rocket Launch Analysis</a><a id="Rocket-Launch-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Rocket-Launch-Analysis" title="Permalink"></a></h3><p>Analyze atmospheric conditions during rocket ascent:</p><pre><code class="language-julia hljs">println(&quot;Rocket Ascent Atmospheric Analysis:&quot;)
+println(&quot;Alt(km)\tρ(kg/m³)\tDrag∝ρ\tq∝ρV²(rel)&quot;)
+println(&quot;------\t--------\t------\t-----------&quot;)
+
+# Assume constant velocity for simplification
+V_rocket = 500  # m/s (approximate)
+
+for alt in 0:5:30
+    rho, p, T, a, mu = atmosphere_properties_at(alt)
+    
+    # Relative density and dynamic pressure
+    rho0, _, _, _, _ = atmosphere_properties_at(0.0)
+    rho_rel = rho / rho0
+    q_rel = rho_rel  # Assuming constant velocity
+    
+    println(&quot;$(alt)\t$(round(rho, digits=4))\t\t$(round(rho_rel, digits=3))\t$(round(q_rel, digits=3))&quot;)
+end</code></pre><h3 id="Wind-Tunnel-Corrections"><a class="docs-heading-anchor" href="#Wind-Tunnel-Corrections">Wind Tunnel Corrections</a><a id="Wind-Tunnel-Corrections-1"></a><a class="docs-heading-anchor-permalink" href="#Wind-Tunnel-Corrections" title="Permalink"></a></h3><p>Calculate air properties for wind tunnel testing:</p><pre><code class="language-julia hljs"># Wind tunnel facility analysis
+test_conditions = [
+    (&quot;Sea Level&quot;, 0.0),
+    (&quot;Denver&quot;, 1.609),      # 5,280 ft
+    (&quot;High Altitude&quot;, 4.0)
+]
+
+println(&quot;Wind Tunnel Facility Conditions:&quot;)
+println(&quot;Location\tAlt(km)\tρ(kg/m³)\tp(kPa)\tRe correction&quot;)
+println(&quot;--------\t------\t--------\t------\t-------------&quot;)
+
+# Reference: sea level
+rho_ref, p_ref, T_ref, a_ref, mu_ref = atmosphere_properties_at(0.0)
+
+for (location, alt) in test_conditions
+    rho, p, T, a, mu = atmosphere_properties_at(alt)
+    
+    # Reynolds number correction factor
+    Re_correction = (rho/rho_ref) * (mu_ref/mu)
+    
+    println(&quot;$location\t$(alt)\t$(round(rho, digits=3))\t\t$(round(p/1000, digits=1))\t$(round(Re_correction, digits=3))&quot;)
+end</code></pre><h3 id="Supersonic-Aircraft-Analysis"><a class="docs-heading-anchor" href="#Supersonic-Aircraft-Analysis">Supersonic Aircraft Analysis</a><a id="Supersonic-Aircraft-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Supersonic-Aircraft-Analysis" title="Permalink"></a></h3><p>Analyze conditions for supersonic flight:</p><pre><code class="language-julia hljs"># Concorde-type aircraft analysis
+cruise_alts = [16.0, 18.0, 20.0]  # km
+cruise_mach = 2.0
+
+println(&quot;Supersonic Cruise Analysis:&quot;)
+println(&quot;Alt(km)\tT(K)\ta(m/s)\tV(m/s)\tρ(kg/m³)\tRe/m(×10⁶)&quot;)
+println(&quot;------\t-----\t------\t------\t--------\t----------&quot;)
+
+for alt in cruise_alts
+    rho, p, T, a, mu = atmosphere_properties_at(alt)
+    
+    V_cruise = cruise_mach * a
+    Re_per_m = rho * V_cruise / mu
+    
+    println(&quot;$(alt)\t$(round(T, digits=1))\t$(round(a, digits=1))\t$(round(V_cruise, digits=1))\t$(round(rho, digits=3))\t\t$(round(Re_per_m/1e6, digits=2))&quot;)
+end</code></pre><h2 id="Validation-Examples"><a class="docs-heading-anchor" href="#Validation-Examples">Validation Examples</a><a id="Validation-Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Validation-Examples" title="Permalink"></a></h2><h3 id="Standard-Atmosphere-Verification"><a class="docs-heading-anchor" href="#Standard-Atmosphere-Verification">Standard Atmosphere Verification</a><a id="Standard-Atmosphere-Verification-1"></a><a class="docs-heading-anchor-permalink" href="#Standard-Atmosphere-Verification" title="Permalink"></a></h3><p>Compare with known atmospheric data:</p><pre><code class="language-julia hljs"># Validate against standard atmosphere tables
+validation_points = [
+    (0.0, 1.2250, 101325, 288.15),      # Sea level
+    (11.0, 0.3639, 22632, 216.65),     # Tropopause
+    (20.0, 0.0880, 5474.9, 216.65),    # Lower stratosphere
+]
+
+println(&quot;Model Validation:&quot;)
+println(&quot;Alt(km)\tParameter\tCalculated\tStandard\tError(%)&quot;)
+println(&quot;------\t---------\t----------\t--------\t-------&quot;)
+
+for (alt, rho_std, p_std, T_std) in validation_points
+    rho_calc, p_calc, T_calc, _, _ = atmosphere_properties_at(alt)
+    
+    rho_error = abs(rho_calc - rho_std) / rho_std * 100
+    p_error = abs(p_calc - p_std) / p_std * 100
+    T_error = abs(T_calc - T_std) / T_std * 100
+    
+    println(&quot;$(alt)\tDensity\t\t$(round(rho_calc, digits=4))\t\t$(rho_std)\t$(round(rho_error, digits=3))&quot;)
+    println(&quot;$(alt)\tPressure\t$(round(p_calc, digits=1))\t$(p_std)\t$(round(p_error, digits=3))&quot;)
+    println(&quot;$(alt)\tTemperature\t$(round(T_calc, digits=2))\t\t$(T_std)\t$(round(T_error, digits=3))&quot;)
+    println()
+end</code></pre><h3 id="Altitude-Conversion-Verification"><a class="docs-heading-anchor" href="#Altitude-Conversion-Verification">Altitude Conversion Verification</a><a id="Altitude-Conversion-Verification-1"></a><a class="docs-heading-anchor-permalink" href="#Altitude-Conversion-Verification" title="Permalink"></a></h3><p>Verify geopotential altitude conversions:</p><pre><code class="language-julia hljs">println(&quot;Altitude Conversion Verification:&quot;)
+println(&quot;Geometric(km)\tGeopotential(km)\tDifference(m)&quot;)
+println(&quot;------------\t---------------\t-------------&quot;)
+
+for h_geom in [0, 10, 20, 30, 50, 80]
+    h_geop = geometric_to_geopotential_altitude(h_geom)
+    h_back = geopotential_to_geometric_altitude(h_geop)
+    difference = (h_geom - h_geop) * 1000  # Convert to meters
+    error = abs(h_back - h_geom)
+    
+    println(&quot;$(h_geom)\t\t$(round(h_geop, digits=3))\t\t$(round(difference, digits=1))&quot;)
+    println(&quot;Round-trip error: $(round(error*1000, digits=3)) m&quot;)
+end</code></pre><h3 id="Viscosity-Temperature-Dependence"><a class="docs-heading-anchor" href="#Viscosity-Temperature-Dependence">Viscosity Temperature Dependence</a><a id="Viscosity-Temperature-Dependence-1"></a><a class="docs-heading-anchor-permalink" href="#Viscosity-Temperature-Dependence" title="Permalink"></a></h3><p>Analyze viscosity variation with temperature:</p><pre><code class="language-julia hljs">println(&quot;Viscosity Analysis:&quot;)
+println(&quot;T(K)\tμ(μPa·s)\tμ/μ₀&quot;)
+println(&quot;----\t--------\t----&quot;)
+
+# Reference viscosity at 288.15 K
+mu_ref = sutherland_viscosity(288.15)
+
+temperatures = [200, 250, 288.15, 300, 400, 500]
+
+for T in temperatures
+    mu = sutherland_viscosity(T)
+    mu_ratio = mu / mu_ref
+    
+    println(&quot;$(T)\t$(round(mu*1e6, digits=1))\t\t$(round(mu_ratio, digits=3))&quot;)
+end</code></pre><h2 id="Atmospheric-Density-Scale-Height"><a class="docs-heading-anchor" href="#Atmospheric-Density-Scale-Height">Atmospheric Density Scale Height</a><a id="Atmospheric-Density-Scale-Height-1"></a><a class="docs-heading-anchor-permalink" href="#Atmospheric-Density-Scale-Height" title="Permalink"></a></h2><p>Calculate density scale height in different layers:</p><pre><code class="language-julia hljs"># Scale height analysis
+altitudes = [0.0, 5.0, 11.0, 15.0, 20.0]
+
+println(&quot;Atmospheric Scale Height Analysis:&quot;)
+println(&quot;Alt Range(km)\tρ₁(kg/m³)\tρ₂(kg/m³)\tH(km)&quot;)
+println(&quot;------------\t---------\t---------\t-----&quot;)
+
+for i in 1:length(altitudes)-1
+    alt1 = altitudes[i]
+    alt2 = altitudes[i+1]
+    
+    rho1, _, _, _, _ = atmosphere_properties_at(alt1)
+    rho2, _, _, _, _ = atmosphere_properties_at(alt2)
+    
+    # Calculate scale height: H = Δh / ln(ρ₁/ρ₂)
+    delta_h = alt2 - alt1
+    scale_height = delta_h / log(rho1/rho2)
+    
+    println(&quot;$(alt1)-$(alt2)\t\t$(round(rho1, digits=3))\t\t$(round(rho2, digits=3))\t\t$(round(scale_height, digits=1))&quot;)
+end</code></pre><h2 id="Different-Units-and-Conversions"><a class="docs-heading-anchor" href="#Different-Units-and-Conversions">Different Units and Conversions</a><a id="Different-Units-and-Conversions-1"></a><a class="docs-heading-anchor-permalink" href="#Different-Units-and-Conversions" title="Permalink"></a></h2><p>Working with different unit systems:</p><pre><code class="language-julia hljs"># Convert to different units
+alt_ft = 36000  # feet
+alt_km = alt_ft * 0.0003048  # Convert to km
+
+rho, p, T, a, mu = atmosphere_properties_at(alt_km)
+
+# Convert to imperial units
+rho_slugft3 = rho / 515.379  # kg/m³ to slug/ft³
+p_lbft2 = p / 47.88  # Pa to lb/ft²
+T_F = T * 9/5 - 459.67  # K to °F
+a_fts = a * 3.28084  # m/s to ft/s
+
+println(&quot;Atmospheric Properties at $(alt_ft) ft:&quot;)
+println(&quot;Metric Units:&quot;)
+println(&quot;  Density: $(round(rho, digits=4)) kg/m³&quot;)
+println(&quot;  Pressure: $(round(p, digits=1)) Pa&quot;)
+println(&quot;  Temperature: $(round(T, digits=1)) K&quot;)
+println(&quot;  Speed of sound: $(round(a, digits=1)) m/s&quot;)
+
+println(&quot;\nImperial Units:&quot;)
+println(&quot;  Density: $(round(rho_slugft3, digits=6)) slug/ft³&quot;)
+println(&quot;  Pressure: $(round(p_lbft2, digits=1)) lb/ft²&quot;)
+println(&quot;  Temperature: $(round(T_F, digits=1)) °F&quot;)
+println(&quot;  Speed of sound: $(round(a_fts, digits=1)) ft/s&quot;)</code></pre><h2 id="Limitations-and-Considerations"><a class="docs-heading-anchor" href="#Limitations-and-Considerations">Limitations and Considerations</a><a id="Limitations-and-Considerations-1"></a><a class="docs-heading-anchor-permalink" href="#Limitations-and-Considerations" title="Permalink"></a></h2><ol><li><strong>Altitude Range</strong>: Valid up to approximately 86 km altitude</li><li><strong>Standard Conditions</strong>: Represents average mid-latitude conditions</li><li><strong>Seasonal Variations</strong>: Does not account for seasonal or geographical variations</li><li><strong>Weather Effects</strong>: Does not include local weather phenomena</li><li><strong>Composition</strong>: Assumes constant gas composition with altitude</li><li><strong>Real Atmosphere</strong>: Actual conditions may vary significantly from the model</li></ol><p>For precise applications requiring local atmospheric data, meteorological measurements should be used instead of or in addition to the standard atmosphere model.</p><h2 id="See-Also"><a class="docs-heading-anchor" href="#See-Also">See Also</a><a id="See-Also-1"></a><a class="docs-heading-anchor-permalink" href="#See-Also" title="Permalink"></a></h2><ul><li><a href="../isentropic/">Isentropic Relations</a>: For flow property calculations</li><li><a href="../normal_shock/">Normal Shock Waves</a>: For shock wave analysis in atmospheric conditions</li><li><a href="../nozzle/">Nozzle Analysis</a>: For propulsion system analysis at altitude</li></ul></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../intake/">« Intake Ramp Analysis</a><a class="docs-footer-nextpage" href="../../dev/contributing/">Contributing »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Thursday 30 October 2025 02:43">Thursday 30 October 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
