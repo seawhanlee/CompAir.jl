@@ -1,0 +1,15 @@
+# Use official Julia image as base
+FROM julia:1.11
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY Project.toml Manifest.toml ./
+COPY src/ ./src/
+
+# Install package dependencies and Plots.jl
+RUN julia -e 'using Pkg; Pkg.activate("."); Pkg.instantiate(); Pkg.add("Plots"); Pkg.precompile()'
+
+# Set default command to Julia REPL
+CMD ["julia", "--project=."]
