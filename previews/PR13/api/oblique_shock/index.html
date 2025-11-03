@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Oblique Shock Waves · CompAir.jl</title><meta name="title" content="Oblique Shock Waves · CompAir.jl"/><meta property="og:title" content="Oblique Shock Waves · CompAir.jl"/><meta property="twitter:title" content="Oblique Shock Waves · CompAir.jl"/><meta name="description" content="Documentation for CompAir.jl."/><meta property="og:description" content="Documentation for CompAir.jl."/><meta property="twitter:description" content="Documentation for CompAir.jl."/><meta property="og:url" content="https://seawhanlee.github.io/CompAir.jl/api/oblique_shock/"/><meta property="twitter:url" content="https://seawhanlee.github.io/CompAir.jl/api/oblique_shock/"/><link rel="canonical" href="https://seawhanlee.github.io/CompAir.jl/api/oblique_shock/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">CompAir.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Manual</span><ul><li><a class="tocitem" href="../../manual/installation/">Installation</a></li><li><a class="tocitem" href="../../manual/quickstart/">Quick Start</a></li><li><a class="tocitem" href="../../manual/examples/">Examples</a></li></ul></li><li><span class="tocitem">API Reference</span><ul><li><a class="tocitem" href="../isentropic/">Isentropic Relations</a></li><li><a class="tocitem" href="../normal_shock/">Normal Shock Waves</a></li><li class="is-active"><a class="tocitem" href>Oblique Shock Waves</a><ul class="internal"><li><a class="tocitem" href="#Overview"><span>Overview</span></a></li><li><a class="tocitem" href="#Theory"><span>Theory</span></a></li><li><a class="tocitem" href="#Functions"><span>Functions</span></a></li><li><a class="tocitem" href="#Function-Details"><span>Function Details</span></a></li><li><a class="tocitem" href="#Applications"><span>Applications</span></a></li><li><a class="tocitem" href="#Different-Gases"><span>Different Gases</span></a></li><li><a class="tocitem" href="#Validation-Examples"><span>Validation Examples</span></a></li><li><a class="tocitem" href="#Limitations-and-Considerations"><span>Limitations and Considerations</span></a></li><li><a class="tocitem" href="#See-Also"><span>See Also</span></a></li></ul></li><li><a class="tocitem" href="../prandtl_expand/">Prandtl-Meyer Expansion</a></li><li><a class="tocitem" href="../cone_shock/">Cone Shock Analysis</a></li><li><a class="tocitem" href="../nozzle/">Nozzle Analysis</a></li><li><a class="tocitem" href="../intake/">Intake Ramp Analysis</a></li><li><a class="tocitem" href="../atmos1976/">Atmospheric Model</a></li></ul></li><li><span class="tocitem">Development</span><ul><li><a class="tocitem" href="../../dev/contributing/">Contributing</a></li><li><a class="tocitem" href="../../dev/changelog/">Changelog</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">API Reference</a></li><li class="is-active"><a href>Oblique Shock Waves</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Oblique Shock Waves</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/seawhanlee/CompAir.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/seawhanlee/CompAir.jl/blob/main/docs/src/api/oblique_shock.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Oblique-Shock-Waves"><a class="docs-heading-anchor" href="#Oblique-Shock-Waves">Oblique Shock Waves</a><a id="Oblique-Shock-Waves-1"></a><a class="docs-heading-anchor-permalink" href="#Oblique-Shock-Waves" title="Permalink"></a></h1><p>This module provides functions for analyzing oblique shock waves, which are compression waves that occur at an angle to the flow direction in supersonic flows.</p><h2 id="Overview"><a class="docs-heading-anchor" href="#Overview">Overview</a><a id="Overview-1"></a><a class="docs-heading-anchor-permalink" href="#Overview" title="Permalink"></a></h2><p>Oblique shock waves are compression phenomena that occur when supersonic flow encounters a wedge, cone, or other angular obstruction. Unlike normal shocks, oblique shocks:</p><ul><li>Deflect the flow through a specific angle</li><li>Can have weak or strong solutions</li><li>Maintain supersonic flow downstream (for weak shocks)</li><li>Are characterized by the shock angle β and deflection angle θ</li><li>Have a maximum deflection angle for each upstream Mach number</li></ul><h2 id="Theory"><a class="docs-heading-anchor" href="#Theory">Theory</a><a id="Theory-1"></a><a class="docs-heading-anchor-permalink" href="#Theory" title="Permalink"></a></h2><p>Oblique shock waves are governed by the θ-β-M relationships derived from conservation laws:</p><p><strong>Shock angle relation</strong>: <span>$\tan\theta = 2\cot\beta \frac{M_1^2\sin^2\beta - 1}{M_1^2(\gamma + \cos 2\beta) + 2}$</span></p><p><strong>Downstream Mach number</strong>: <span>$M_2 = \frac{M_1\sin(\beta - \theta)}{\sin\beta} \sqrt{\frac{1 + \frac{\gamma-1}{2}M_1^2\sin^2\beta}{\gamma M_1^2\sin^2\beta - \frac{\gamma-1}{2}}}$</span></p><p><strong>Property ratios</strong> (same as normal shock with <span>$M_{1n} = M_1\sin\beta$</span>):</p><ul><li>Pressure: <span>$\frac{p_2}{p_1} = 1 + \frac{2\gamma}{\gamma+1}(M_1^2\sin^2\beta - 1)$</span></li><li>Density: <span>$\frac{\rho_2}{\rho_1} = \frac{(\gamma+1)M_1^2\sin^2\beta}{2 + (\gamma-1)M_1^2\sin^2\beta}$</span></li></ul><p><strong>Maximum deflection angle</strong>: <span>$\theta_{max} = \arcsin\left(\frac{1}{M_1}\right) - \arccos\left(\frac{\gamma+1}{2\gamma M_1^2}\right) + \arccos\left(\sqrt{\frac{(\gamma+1)^2M_1^4 - 4(M_1^2-1)}{4\gamma M_1^2(\gamma M_1^2 - (\gamma-1)/2)}}\right)$</span></p><p>Where:</p><ul><li><span>$\theta$</span> = flow deflection angle</li><li><span>$\beta$</span> = shock wave angle</li><li><span>$M_1$</span> = upstream Mach number</li><li><span>$\gamma$</span> = specific heat ratio</li></ul><h2 id="Functions"><a class="docs-heading-anchor" href="#Functions">Functions</a><a id="Functions-1"></a><a class="docs-heading-anchor-permalink" href="#Functions" title="Permalink"></a></h2><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.theta_beta" href="#CompAir.theta_beta"><code>CompAir.theta_beta</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">theta_beta(beta::Real, M::Real, gamma::Real=1.4)</code></pre><p>Calculates the wedge angle <code>θ</code> using the <code>θ-β-M</code> relation given the shock angle <code>β</code> and Mach number <code>M</code>.</p><p><strong>Arguments</strong></p><ul><li><code>beta::Real</code>: Oblique shock wave angle (degrees)</li><li><code>M::Real</code>: Upstream Mach number</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns</strong></p><ul><li><code>theta::Float64</code>: Wedge angle (degrees)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/41daa1c44f24e5bd56c7b5bad115e2e458b03c2c/src/oblique_shock.jl#L22-L34">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.oblique_beta_weak" href="#CompAir.oblique_beta_weak"><code>CompAir.oblique_beta_weak</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">oblique_beta_weak(M::Real, theta::Real, gamma::Real=1.4)</code></pre><p>Numerically calculates the weak oblique shock wave angle <code>β</code> using the <code>θ-β-M</code> relation for a given Mach number <code>M</code> and wedge angle <code>θ</code>.</p><p><strong>Arguments</strong></p><ul><li><code>M::Real</code>: Upstream Mach number</li><li><code>theta::Real</code>: Wedge angle (degrees)</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns</strong></p><ul><li><code>beta::Float64</code>: Oblique shock wave angle (degrees)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/41daa1c44f24e5bd56c7b5bad115e2e458b03c2c/src/oblique_shock.jl#L77-L90">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.theta_max" href="#CompAir.theta_max"><code>CompAir.theta_max</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">theta_max(M::Real, gamma::Real=1.4)</code></pre><p>Calculates the maximum wedge angle <code>θ</code> for which a weak shock solution exists in the <code>θ-β-M</code> relation for a given Mach number <code>M</code>.</p><p><strong>Arguments</strong></p><ul><li><code>M::Real</code>: Upstream Mach number</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns</strong></p><ul><li><code>theta::Float64</code>: Maximum wedge angle (degrees)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/41daa1c44f24e5bd56c7b5bad115e2e458b03c2c/src/oblique_shock.jl#L96-L108">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.Mn1" href="#CompAir.Mn1"><code>CompAir.Mn1</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">Mn1(M::Real, theta::Real, gamma::Real=1.4)</code></pre><p>Calculates the Mach number component normal to the oblique shock wave for a given Mach number <code>M</code> and wedge angle <code>θ</code>.</p><p><strong>Arguments</strong></p><ul><li><code>M::Real</code>: Upstream Mach number</li><li><code>theta::Real</code>: Wedge angle (degrees)</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns</strong></p><ul><li><code>Mn1::Float64</code>: Normal component of Mach number upstream of the shock</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/41daa1c44f24e5bd56c7b5bad115e2e458b03c2c/src/oblique_shock.jl#L127-L140">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.oblique_mach2" href="#CompAir.oblique_mach2"><code>CompAir.oblique_mach2</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">oblique_mach2(M::Real, theta::Real, gamma::Real=1.4)</code></pre><p>Calculates the Mach number downstream of an oblique shock wave for a given upstream Mach number <code>M</code> and wedge angle <code>θ</code>.</p><p><strong>Arguments</strong></p><ul><li><code>M::Real</code>: Upstream Mach number</li><li><code>theta::Real</code>: Wedge angle (degrees)</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns</strong></p><ul><li><code>M2::Float64</code>: Downstream Mach number</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/41daa1c44f24e5bd56c7b5bad115e2e458b03c2c/src/oblique_shock.jl#L148-L161">source</a></section></article><article class="docstring"><header><a class="docstring-article-toggle-button fa-solid fa-chevron-down" href="javascript:;" title="Collapse docstring"></a><a class="docstring-binding" id="CompAir.solve_oblique" href="#CompAir.solve_oblique"><code>CompAir.solve_oblique</code></a> — <span class="docstring-category">Function</span><span class="is-flex-grow-1 docstring-article-toggle-button" title="Collapse docstring"></span></header><section><div><pre><code class="language-julia hljs">solve_oblique(M::Real, theta::Real, gamma::Real=1.4)</code></pre><p>Calculates the flow properties downstream of an oblique shock wave for a given upstream Mach number <code>M</code> and wedge angle <code>θ</code>.</p><p><strong>Arguments</strong></p><ul><li><code>M::Real</code>: Upstream Mach number</li><li><code>theta::Real</code>: Wedge angle (degrees)</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns</strong></p><p>A <code>NamedTuple</code> containing:</p><ul><li><code>M2::Float64</code>: Downstream Mach number</li><li><code>rho2_ratio::Float64</code>: Density ratio across the shock (ρ₂/ρ₁)</li><li><code>p2_ratio::Float64</code>: Pressure ratio across the shock (p₂/p₁)</li><li><code>p0_ratio::Float64</code>: Total pressure ratio across the shock (p₀₂/p₀₁)</li><li><code>beta::Float64</code>: Oblique shock wave angle (degrees)</li></ul></div><a class="docs-sourcelink" target="_blank" href="https://github.com/seawhanlee/CompAir.jl/blob/41daa1c44f24e5bd56c7b5bad115e2e458b03c2c/src/oblique_shock.jl#L178-L196">source</a></section></article><h2 id="Function-Details"><a class="docs-heading-anchor" href="#Function-Details">Function Details</a><a id="Function-Details-1"></a><a class="docs-heading-anchor-permalink" href="#Function-Details" title="Permalink"></a></h2><h3 id="theta_beta"><a class="docs-heading-anchor" href="#theta_beta">theta_beta</a><a id="theta_beta-1"></a><a class="docs-heading-anchor-permalink" href="#theta_beta" title="Permalink"></a></h3><pre><code class="language-julia hljs">theta_beta(beta, M, gamma=1.4)</code></pre><p>Calculate the deflection angle θ from shock angle β and Mach number using the θ-β-M relationship.</p><p><strong>Arguments:</strong></p><ul><li><code>beta::Real</code>: Shock angle in degrees</li><li><code>M::Real</code>: Upstream Mach number</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Deflection angle θ in degrees</li></ul><p><strong>Formula:</strong> <span>$\tan\theta = 2\cot\beta \frac{M_1^2\sin^2\beta - 1}{M_1^2(\gamma + \cos 2\beta) + 2}$</span></p><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; theta_beta(45.0, 2.0)
+11.309932474020215
+
+julia&gt; theta_beta(60.0, 3.0)
+28.040946798183083</code></pre><h3 id="oblique*beta*weak"><a class="docs-heading-anchor" href="#oblique*beta*weak">oblique<em>beta</em>weak</a><a id="oblique*beta*weak-1"></a><a class="docs-heading-anchor-permalink" href="#oblique*beta*weak" title="Permalink"></a></h3><pre><code class="language-julia hljs">oblique_beta_weak(M, theta, gamma=1.4)</code></pre><p>Calculate the weak shock angle β for given Mach number and deflection angle using numerical solution of the θ-β-M relationship.</p><p><strong>Arguments:</strong></p><ul><li><code>M::Real</code>: Upstream Mach number</li><li><code>theta::Real</code>: Deflection angle in degrees</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Weak shock angle β in degrees</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; oblique_beta_weak(2.0, 10.0)
+39.31417164408201
+
+julia&gt; oblique_beta_weak(3.0, 20.0)
+47.40460643973166</code></pre><h3 id="theta_max"><a class="docs-heading-anchor" href="#theta_max">theta_max</a><a id="theta_max-1"></a><a class="docs-heading-anchor-permalink" href="#theta_max" title="Permalink"></a></h3><pre><code class="language-julia hljs">theta_max(M, gamma=1.4)</code></pre><p>Calculate the maximum deflection angle for which a weak oblique shock can exist at the given Mach number.</p><p><strong>Arguments:</strong></p><ul><li><code>M::Real</code>: Upstream Mach number</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Maximum deflection angle in degrees</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; theta_max(2.0)
+23.078692262638353
+
+julia&gt; theta_max(3.0)
+34.07775155814027</code></pre><h3 id="Mn1"><a class="docs-heading-anchor" href="#Mn1">Mn1</a><a id="Mn1-1"></a><a class="docs-heading-anchor-permalink" href="#Mn1" title="Permalink"></a></h3><pre><code class="language-julia hljs">Mn1(M, theta, gamma=1.4)</code></pre><p>Calculate the normal component of the upstream Mach number (component perpendicular to the shock wave).</p><p><strong>Arguments:</strong></p><ul><li><code>M::Real</code>: Upstream Mach number</li><li><code>theta::Real</code>: Deflection angle in degrees</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Normal Mach number component</li></ul><p><strong>Formula:</strong> <span>$M_{n1} = M_1 \sin\beta$</span></p><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; Mn1(2.0, 10.0)
+1.2649110640673516
+
+julia&gt; Mn1(3.0, 15.0)
+2.0788046194771835</code></pre><h3 id="oblique_mach2"><a class="docs-heading-anchor" href="#oblique_mach2">oblique_mach2</a><a id="oblique_mach2-1"></a><a class="docs-heading-anchor-permalink" href="#oblique_mach2" title="Permalink"></a></h3><pre><code class="language-julia hljs">oblique_mach2(M, theta, gamma=1.4)</code></pre><p>Calculate the downstream Mach number after an oblique shock wave.</p><p><strong>Arguments:</strong></p><ul><li><code>M::Real</code>: Upstream Mach number</li><li><code>theta::Real</code>: Deflection angle in degrees</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>Float64</code>: Downstream Mach number</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; oblique_mach2(2.0, 10.0)
+1.640880221070567
+
+julia&gt; oblique_mach2(3.0, 20.0)
+2.1862348686827446</code></pre><h3 id="solve_oblique"><a class="docs-heading-anchor" href="#solve_oblique">solve_oblique</a><a id="solve_oblique-1"></a><a class="docs-heading-anchor-permalink" href="#solve_oblique" title="Permalink"></a></h3><pre><code class="language-julia hljs">solve_oblique(M, theta, gamma=1.4)</code></pre><p>Complete oblique shock analysis - calculate all property changes across the shock.</p><p><strong>Arguments:</strong></p><ul><li><code>M::Real</code>: Upstream Mach number</li><li><code>theta::Real</code>: Deflection angle in degrees</li><li><code>gamma::Real=1.4</code>: Specific heat ratio</li></ul><p><strong>Returns:</strong></p><ul><li><code>M2::Float64</code>: Downstream Mach number</li><li><code>rho2::Float64</code>: Density ratio (ρ₂/ρ₁)</li><li><code>p2::Float64</code>: Pressure ratio (p₂/p₁)</li><li><code>p0ratio::Float64</code>: Stagnation pressure ratio (p₀₂/p₀₁)</li><li><code>beta::Float64</code>: Shock angle in degrees</li></ul><p><strong>Example:</strong></p><pre><code class="language-julia hljs">julia&gt; sol = solve_oblique(2.5, 15.0)
+(M2 = 2.0648650289095266, rho2_ratio = 1.6862745098039214, p2_ratio = 2.40625, p0_ratio = 0.9564285714285714, beta = 41.81031489577775)
+
+julia&gt; println(&quot;M₂ = $(round(sol.M2, digits=3)), β = $(round(sol.beta, digits=1))°&quot;)
+M₂ = 2.065, β = 41.8°</code></pre><h2 id="Applications"><a class="docs-heading-anchor" href="#Applications">Applications</a><a id="Applications-1"></a><a class="docs-heading-anchor-permalink" href="#Applications" title="Permalink"></a></h2><h3 id="Diamond-Airfoil-Analysis"><a class="docs-heading-anchor" href="#Diamond-Airfoil-Analysis">Diamond Airfoil Analysis</a><a id="Diamond-Airfoil-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Diamond-Airfoil-Analysis" title="Permalink"></a></h3><p>Analyze flow over a symmetric diamond airfoil:</p><pre><code class="language-julia hljs">M_inf = 2.5
+half_angle = 8.0  # degrees
+alpha = 2.0       # angle of attack, degrees
+
+println(&quot;Diamond Airfoil Analysis:&quot;)
+println(&quot;Freestream Mach: $M_inf&quot;)
+println(&quot;Half-angle: $half_angle°&quot;)
+println(&quot;Angle of attack: $alpha°&quot;)
+
+# Upper surface
+theta_upper = half_angle + alpha
+sol_upper = solve_oblique(M_inf, theta_upper)
+
+println(&quot;\nUpper Surface (Leading Edge):&quot;)
+println(&quot;Deflection angle: $(round(theta_upper, digits=1))°&quot;)
+println(&quot;Shock angle β₁ = $(round(sol_upper.beta, digits=1))°&quot;)
+println(&quot;Surface Mach: $(round(sol_upper.M2, digits=3))&quot;)
+println(&quot;Pressure ratio: $(round(sol_upper.p2_ratio, digits=3))&quot;)
+
+# Lower surface  
+theta_lower = half_angle - alpha
+sol_lower = solve_oblique(M_inf, theta_lower)
+
+println(&quot;\nLower Surface (Leading Edge):&quot;)
+println(&quot;Deflection angle: $(round(theta_lower, digits=1))°&quot;)
+println(&quot;Shock angle β₂ = $(round(sol_lower.beta, digits=1))°&quot;)
+println(&quot;Surface Mach: $(round(sol_lower.M2, digits=3))&quot;)
+println(&quot;Pressure ratio: $(round(sol_lower.p2_ratio, digits=3))&quot;)
+
+# Pressure coefficients
+Cp_upper = 2/(1.4*M_inf^2) * (sol_upper.p2_ratio - 1)
+Cp_lower = 2/(1.4*M_inf^2) * (sol_lower.p2_ratio - 1)
+
+println(&quot;\nPressure Coefficients:&quot;)
+println(&quot;Upper surface: $(round(Cp_upper, digits=4))&quot;)
+println(&quot;Lower surface: $(round(Cp_lower, digits=4))&quot;)
+println(&quot;Lift coefficient (approx): $(round(Cp_lower - Cp_upper, digits=4))&quot;)</code></pre><h3 id="Shock-Shock-Interaction"><a class="docs-heading-anchor" href="#Shock-Shock-Interaction">Shock-Shock Interaction</a><a id="Shock-Shock-Interaction-1"></a><a class="docs-heading-anchor-permalink" href="#Shock-Shock-Interaction" title="Permalink"></a></h3><p>Analyze intersection of two oblique shocks:</p><pre><code class="language-julia hljs"># Two wedges in series
+M1 = 3.0
+theta1 = 12.0  # First wedge angle
+theta2 = 8.0   # Second wedge angle
+
+println(&quot;Shock-Shock Interaction:&quot;)
+println(&quot;Initial Mach: $M1&quot;)
+
+# First shock
+sol1 = solve_oblique(M1, theta1)
+
+println(&quot;\nFirst Shock (θ₁ = $theta1°):&quot;)
+println(&quot;Shock angle: $(round(sol1.beta, digits=1))°&quot;)
+println(&quot;M₂ = $(round(sol1.M2, digits=3))&quot;)
+println(&quot;p₂/p₁ = $(round(sol1.p2_ratio, digits=3))&quot;)
+
+# Second shock  
+sol2 = solve_oblique(sol1.M2, theta2)
+
+println(&quot;\nSecond Shock (θ₂ = $theta2°):&quot;)
+println(&quot;Shock angle: $(round(sol2.beta, digits=1))°&quot;)
+println(&quot;M₃ = $(round(sol2.M2, digits=3))&quot;)
+println(&quot;p₃/p₂ = $(round(sol2.p2_ratio, digits=3))&quot;)
+
+# Overall results
+total_deflection = theta1 + theta2
+total_pressure_ratio = sol1.p2_ratio * sol2.p2_ratio
+total_loss = 1 - (sol1.p0_ratio * sol2.p0_ratio)
+
+println(&quot;\nOverall Results:&quot;)
+println(&quot;Total deflection: $(round(total_deflection, digits=1))°&quot;)
+println(&quot;Total pressure ratio: $(round(total_pressure_ratio, digits=3))&quot;)
+println(&quot;Total pressure loss: $(round(total_loss*100, digits=1))%&quot;)</code></pre><h3 id="Maximum-Deflection-Analysis"><a class="docs-heading-anchor" href="#Maximum-Deflection-Analysis">Maximum Deflection Analysis</a><a id="Maximum-Deflection-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Maximum-Deflection-Analysis" title="Permalink"></a></h3><p>Find the maximum deflection angle for different Mach numbers:</p><pre><code class="language-julia hljs">println(&quot;M₁\tθₘₐₓ (°)&quot;)
+println(&quot;---\t-------&quot;)
+
+for M1 in 1.2:0.2:4.0
+    theta_maximum = theta_max(M1)
+    println(&quot;$(round(M1, digits=1))\t$(round(theta_maximum, digits=1))&quot;)
+end</code></pre><h3 id="Wedge-Design-Analysis"><a class="docs-heading-anchor" href="#Wedge-Design-Analysis">Wedge Design Analysis</a><a id="Wedge-Design-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Wedge-Design-Analysis" title="Permalink"></a></h3><p>Design analysis for supersonic vehicle:</p><pre><code class="language-julia hljs"># Vehicle nose cone design
+M_cruise = 3.0
+L_wedge = 2.0  # meters
+h_wedge = 0.3  # meters
+
+# Calculate wedge half-angle
+theta_wedge = atand(h_wedge / L_wedge)
+
+println(&quot;Supersonic Vehicle Nose Analysis:&quot;)
+println(&quot;Cruise Mach: $M_cruise&quot;)
+println(&quot;Wedge length: $L_wedge m&quot;)
+println(&quot;Wedge height: $h_wedge m&quot;)
+println(&quot;Wedge half-angle: $(round(theta_wedge, digits=1))°&quot;)
+
+# Check if shock is possible
+max_deflection = theta_max(M_cruise)
+println(&quot;Maximum deflection: $(round(max_deflection, digits=1))°&quot;)
+
+if theta_wedge &lt;= max_deflection
+    sol = solve_oblique(M_cruise, theta_wedge)
+    
+    println(&quot;\nShock Properties:&quot;)
+    println(&quot;Shock angle: $(round(sol.beta, digits=1))°&quot;)
+    println(&quot;Downstream Mach: $(round(sol.M2, digits=3))&quot;)
+    println(&quot;Pressure coefficient: $(round(2/(1.4*M_cruise^2)*(sol.p2_ratio-1), digits=4))&quot;)
+    println(&quot;Total pressure loss: $(round((1-sol.p0_ratio)*100, digits=2))%&quot;)
+else
+    println(&quot;\nERROR: Deflection angle exceeds maximum!&quot;)
+    println(&quot;Detached shock will form.&quot;)
+end</code></pre><h3 id="Supersonic-Inlet-Analysis"><a class="docs-heading-anchor" href="#Supersonic-Inlet-Analysis">Supersonic Inlet Analysis</a><a id="Supersonic-Inlet-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Supersonic-Inlet-Analysis" title="Permalink"></a></h3><p>Calculate oblique shock system for supersonic inlet:</p><pre><code class="language-julia hljs"># Multi-shock inlet design
+M0 = 2.8  # Flight Mach
+target_M = 1.3  # Target subsonic Mach after final normal shock
+
+println(&quot;Supersonic Inlet Design:&quot;)
+println(&quot;Flight Mach: $M0&quot;)
+println(&quot;Target inlet Mach: $target_M&quot;)
+
+# Two-shock external compression
+theta1 = 8.0   # First ramp angle
+theta2 = 12.0  # Second ramp angle
+
+# First oblique shock
+sol1 = solve_oblique(M0, theta1)
+
+# Second oblique shock  
+sol2 = solve_oblique(sol1.M2, theta2)
+
+# Final normal shock to subsonic
+sol3 = solve_normal(sol2.M2)
+
+println(&quot;\nShock System Analysis:&quot;)
+println(&quot;External shock 1: β₁ = $(round(sol1.beta, digits=1))°, M₁ = $(round(sol1.M2, digits=3))&quot;)
+println(&quot;External shock 2: β₂ = $(round(sol2.beta, digits=1))°, M₂ = $(round(sol2.M2, digits=3))&quot;)
+println(&quot;Terminal normal shock: M₃ = $(round(sol3.M2, digits=3))&quot;)
+
+# Total pressure recovery
+total_recovery = sol1.p0_ratio * sol2.p0_ratio * sol3.p0_ratio
+overall_pressure_ratio = sol1.p2_ratio * sol2.p2_ratio * sol3.p2_ratio
+
+println(&quot;\nInlet Performance:&quot;)
+println(&quot;Total pressure recovery: $(round(total_recovery, digits=3))&quot;)
+println(&quot;Static pressure ratio: $(round(overall_pressure_ratio, digits=2))&quot;)
+println(&quot;Pressure recovery efficiency: $(round(total_recovery*100, digits=1))%&quot;)</code></pre><h2 id="Different-Gases"><a class="docs-heading-anchor" href="#Different-Gases">Different Gases</a><a id="Different-Gases-1"></a><a class="docs-heading-anchor-permalink" href="#Different-Gases" title="Permalink"></a></h2><p>Analyze oblique shocks in different gases:</p><pre><code class="language-julia hljs">M1 = 2.5
+theta = 15.0
+
+gases = [
+    (&quot;Air&quot;, 1.4),
+    (&quot;Helium&quot;, 1.67), 
+    (&quot;Argon&quot;, 1.67),
+    (&quot;CO₂&quot;, 1.3)
+]
+
+println(&quot;Gas Effects on Oblique Shocks:&quot;)
+println(&quot;M₁ = $M1, θ = $theta°&quot;)
+println(&quot;Gas\tγ\tβ (°)\tM₂\tp₂/p₁&quot;)
+println(&quot;---\t----\t-----\t----\t-----&quot;)
+
+for (gas, gamma) in gases
+    beta = oblique_beta_weak(M1, theta, gamma)
+    M2 = oblique_mach2(M1, theta, gamma)
+    
+    # Calculate pressure ratio using normal shock relations
+    Mn1 = M1 * sind(beta)
+    p_ratio = 1 + 2*gamma/(gamma+1) * (Mn1^2 - 1)
+    
+    println(&quot;$gas\t$gamma\t$(round(beta, digits=1))\t$(round(M2, digits=3))\t$(round(p_ratio, digits=2))&quot;)
+end</code></pre><h2 id="Validation-Examples"><a class="docs-heading-anchor" href="#Validation-Examples">Validation Examples</a><a id="Validation-Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Validation-Examples" title="Permalink"></a></h2><h3 id="Weak-vs-Strong-Shock-Solutions"><a class="docs-heading-anchor" href="#Weak-vs-Strong-Shock-Solutions">Weak vs Strong Shock Solutions</a><a id="Weak-vs-Strong-Shock-Solutions-1"></a><a class="docs-heading-anchor-permalink" href="#Weak-vs-Strong-Shock-Solutions" title="Permalink"></a></h3><p>Compare weak and strong shock solutions for the same deflection:</p><pre><code class="language-julia hljs">M1 = 2.0
+theta = 10.0
+
+# Calculate weak shock angle
+beta_weak = oblique_beta_weak(M1, theta)
+
+println(&quot;Shock Solutions for M₁ = $M1, θ = $theta°:&quot;)
+println(&quot;Weak shock angle: $(round(beta_weak, digits=1))°&quot;)
+
+# Analyze weak shock
+sol_weak = solve_oblique(M1, theta)
+
+println(&quot;\nWeak Shock Properties:&quot;)
+println(&quot;M₂ = $(round(sol_weak.M2, digits=3))&quot;)
+println(&quot;p₂/p₁ = $(round(sol_weak.p2_ratio, digits=3))&quot;)
+println(&quot;p₀₂/p₀₁ = $(round(sol_weak.p0_ratio, digits=3))&quot;)</code></pre><h3 id="Shock-Angle-vs-Deflection-Angle"><a class="docs-heading-anchor" href="#Shock-Angle-vs-Deflection-Angle">Shock Angle vs Deflection Angle</a><a id="Shock-Angle-vs-Deflection-Angle-1"></a><a class="docs-heading-anchor-permalink" href="#Shock-Angle-vs-Deflection-Angle" title="Permalink"></a></h3><p>Plot the relationship between shock angle and deflection angle:</p><pre><code class="language-julia hljs">M1 = 2.5
+max_theta = theta_max(M1)
+
+println(&quot;θ-β Relationship for M₁ = $M1:&quot;)
+println(&quot;θ (°)\tβ (°)\tM₂&quot;)
+println(&quot;-----\t-----\t----&quot;)
+
+for theta in 0:2:max_theta
+    if theta &gt; 0
+        beta = oblique_beta_weak(M1, theta)
+        M2 = oblique_mach2(M1, theta)
+        println(&quot;$(round(theta, digits=1))\t$(round(beta, digits=1))\t$(round(M2, digits=3))&quot;)
+    else
+        println(&quot;$(round(theta, digits=1))\t$(round(asind(1/M1), digits=1))\t$(round(M1, digits=3))&quot;)
+    end
+end</code></pre><h2 id="Limitations-and-Considerations"><a class="docs-heading-anchor" href="#Limitations-and-Considerations">Limitations and Considerations</a><a id="Limitations-and-Considerations-1"></a><a class="docs-heading-anchor-permalink" href="#Limitations-and-Considerations" title="Permalink"></a></h2><ol><li><strong>Weak shock assumption</strong>: Most functions return weak shock solutions</li><li><strong>Attached shock</strong>: Assumes shock remains attached to the leading edge</li><li><strong>Two-dimensional flow</strong>: Assumes infinite span or axisymmetric conditions</li><li><strong>Perfect gas</strong>: Constant specific heats and ideal gas behavior</li><li><strong>Steady flow</strong>: Time-invariant conditions</li><li><strong>Inviscid flow</strong>: No boundary layer or viscous effects</li></ol><p>For detached shocks, strong shock solutions, or three-dimensional effects, specialized analysis methods are required.</p><h2 id="See-Also"><a class="docs-heading-anchor" href="#See-Also">See Also</a><a id="See-Also-1"></a><a class="docs-heading-anchor-permalink" href="#See-Also" title="Permalink"></a></h2><ul><li><a href="../normal_shock/">Normal Shock Waves</a>: For perpendicular shock waves</li><li><a href="../prandtl_expand/">Prandtl-Meyer Expansion</a>: For expansion around corners</li><li><a href="../cone_shock/">Cone Shock Analysis</a>: For axisymmetric geometries  </li><li><a href="../isentropic/">Isentropic Relations</a>: For shock-free flow regions</li></ul></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../normal_shock/">« Normal Shock Waves</a><a class="docs-footer-nextpage" href="../prandtl_expand/">Prandtl-Meyer Expansion »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Monday 3 November 2025 01:26">Monday 3 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
