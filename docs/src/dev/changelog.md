@@ -16,6 +16,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Improved function documentation with mathematical background
 - Enhanced error messages and type annotations
+- **Improved internal variable naming for better code readability**:
+  - `atmos1976.jl`: More descriptive atmospheric model variables (e.g., `h` → `geopotential_altitude`, `dh` → `altitude_difference`)
+  - `nozzle.jl`: Clearer nozzle flow variables (e.g., `Me6` → `exit_mach`, `pe` → `exit_pressure`)
+  - `oblique_shock.jl`, `prandtl_expand.jl`: Better closure function names (e.g., `f(x)` → `beta_objective(beta_angle)`)
+  - `cone_shock.jl`: Improved Taylor-Maccoll integration variables (e.g., `vec` → `velocity_vector`, `v` → `velocity_magnitude`)
+  - `intake.jl`: More meaningful multi-stage intake variables (e.g., `n` → `num_stages`, `i` → `stage_index`)
+  - Translated Korean comments to English for consistency
+  - Note: Public API and domain-standard notation (M, gamma, theta, beta) remain unchanged for backward compatibility
 
 ## [1.0.0] - 2024-12-19
 

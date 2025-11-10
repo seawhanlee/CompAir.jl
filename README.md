@@ -152,6 +152,15 @@ println("Supersonic M = $(round(M_supersonic, digits=3))")
 
 ## Recent Improvements
 
+### Version 1.1.1 - Code Quality Improvements
+- **Improved internal variable naming**: Enhanced code readability with more descriptive variable names in internal functions
+  - Atmospheric model: `h` → `geopotential_altitude`, `dh` → `altitude_difference`
+  - Nozzle analysis: `Me6` → `exit_mach`, `pe` → `exit_pressure`
+  - Flow analysis: Better closure function names (e.g., `f(x)` → `beta_objective(beta_angle)`)
+  - Cone shock: `vec` → `velocity_vector`, `v` → `velocity_magnitude`
+  - Multi-stage intake: `n` → `num_stages`, `i` → `stage_index`
+  - Note: Public API remains unchanged for backward compatibility
+
 ### Version 1.1.0 - Critical Bug Fixes
 - **Fixed atmospheric model indexing**: Corrected layer selection algorithm in US Standard Atmosphere 1976
 - **Improved Sutherland viscosity**: Updated constants and formula for accurate dynamic viscosity calculations
