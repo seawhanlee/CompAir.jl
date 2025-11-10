@@ -13,10 +13,10 @@ Calculates the Prandtl-Meyer function ν for a given Mach number.
 - `nu::Float64`: Prandtl-Meyer function value (degrees)
 """
 function prandtl_meyer(M, gamma=1.4)
-    gratio = sqrt((gamma + 1) / (gamma - 1))
-    fm = sqrt(M^2 - 1)
-    rad = gratio * atan(fm / gratio) - atan(fm)
-    return rad2deg(rad)
+    gamma_ratio = sqrt((gamma + 1) / (gamma - 1))
+    mach_squared_minus_one = sqrt(M^2 - 1)
+    angle_radians = gamma_ratio * atan(mach_squared_minus_one / gamma_ratio) - atan(mach_squared_minus_one)
+    return rad2deg(angle_radians)
 end
 
 """
@@ -34,11 +34,11 @@ via a Prandtl-Meyer expansion wave.
 - `mach::Float64`: Mach number after the expansion wave
 """
 function expand_mach2(M1, theta, gamma=1.4)
-    nu1 = prandtl_meyer(M1, gamma)
-    nu2 = nu1 + theta
+    initial_prandtl_meyer = prandtl_meyer(M1, gamma)
+    final_prandtl_meyer = initial_prandtl_meyer + theta
 
-    f(M) = prandtl_meyer(M, gamma) - nu2
-    return Roots.find_zero(f, M1)
+    mach_objective(M) = prandtl_meyer(M, gamma) - final_prandtl_meyer
+    return Roots.find_zero(mach_objective, M1)
 end
 
 """
@@ -75,6 +75,6 @@ through a Prandtl-Meyer expansion wave.
 - `theta::Float64`: Flow turning angle (degrees)
 """
 function theta_p(pratio, M1, gamma=1.4)
-    f(theta) = expand_p2(M1, theta, gamma) - pratio
-    return Roots.find_zero(f, 0.1)
+    pressure_objective(turning_angle) = expand_p2(M1, turning_angle, gamma) - pratio
+    return Roots.find_zero(pressure_objective, 0.1)
 end

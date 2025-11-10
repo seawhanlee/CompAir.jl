@@ -19,24 +19,24 @@ A `NamedTuple` containing:
 - `beta`: Vector of shock angles at each stage (length n)
 """
 function _intake_ramp(M_infty::Float64, ramp_angle::Vector{Float64}, gamma::Float64=1.4)
-    n = length(ramp_angle)
-    mach_number = zeros(n+1)
-    rho, p, p0ratio, beta = zeros(n), zeros(n), zeros(n), zeros(n)
+    num_stages = length(ramp_angle)
+    mach_number = zeros(num_stages+1)
+    density_ratio, pressure_ratio, total_pressure_ratio, shock_angle = zeros(num_stages), zeros(num_stages), zeros(num_stages), zeros(num_stages)
 
     mach_number[1] = M_infty
 
-    for i in 1:n
-        M = mach_number[i]
-        theta = ramp_angle[i]
-        sol = solve_oblique(M, theta, gamma)
-        mach_number[i+1] = sol.M2
-        rho[i] = sol.rho2_ratio
-        p[i] = sol.p2_ratio
-        p0ratio[i] = sol.p0_ratio
-        beta[i] = sol.beta
+    for stage_index in 1:num_stages
+        upstream_mach = mach_number[stage_index]
+        deflection_angle = ramp_angle[stage_index]
+        shock_solution = solve_oblique(upstream_mach, deflection_angle, gamma)
+        mach_number[stage_index+1] = shock_solution.M2
+        density_ratio[stage_index] = shock_solution.rho2_ratio
+        pressure_ratio[stage_index] = shock_solution.p2_ratio
+        total_pressure_ratio[stage_index] = shock_solution.p0_ratio
+        shock_angle[stage_index] = shock_solution.beta
     end
     
-    return (M=mach_number, rho2_ratio=rho, p2_ratio=p, p0_ratio=p0ratio, beta=beta)
+    return (M=mach_number, rho2_ratio=density_ratio, p2_ratio=pressure_ratio, p0_ratio=total_pressure_ratio, beta=shock_angle)
 
 end
 

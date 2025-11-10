@@ -43,33 +43,33 @@ Internal function to numerically integrate the Taylor-Maccoll equation.
 - `sol`: Solution object from DifferentialEquations.jl
 """
 function _integrate_tm(M, angle, theta, gamma=1.4)
-    theta_max_val = theta_max(M, gamma)
+    maximum_deflection_angle = theta_max(M, gamma)
 
-    if theta <= theta_max_val
-        beta = oblique_beta_weak(M, theta, gamma)
-        M2 = oblique_mach2(M, theta, gamma)
+    if theta <= maximum_deflection_angle
+        shock_angle = oblique_beta_weak(M, theta, gamma)
+        downstream_mach = oblique_mach2(M, theta, gamma)
     else
-        beta = 90
-        M2 = mach_after_normal_shock(M, gamma)
+        shock_angle = 90
+        downstream_mach = mach_after_normal_shock(M, gamma)
     end
 
-    v = sqrt(((gamma - 1) / 2 * M2^2) / (1 + (gamma - 1) / 2 * M2^2))
-    v_theta = -v * sind(beta - theta)
-    v_r = v * cosd(beta - theta)
+    normalized_velocity = sqrt(((gamma - 1) / 2 * downstream_mach^2) / (1 + (gamma - 1) / 2 * downstream_mach^2))
+    tangential_velocity = -normalized_velocity * sind(shock_angle - theta)
+    radial_velocity = normalized_velocity * cosd(shock_angle - theta)
 
-    # Integrate over [beta, angle]
-    tspan = (deg2rad(beta), deg2rad(angle))
+    # Integrate over [shock_angle, angle]
+    integration_span = (deg2rad(shock_angle), deg2rad(angle))
 
-    # Integrate over [beta, angle]
-    ode_function_wrapper = (u_state, param_gamma, time_angle) -> _taylor_maccoll(time_angle, u_state, param_gamma)
+    # Define ODE function wrapper
+    ode_function_wrapper = (velocity_state, specific_heat_ratio, cone_angle) -> _taylor_maccoll(cone_angle, velocity_state, specific_heat_ratio)
 
-    # 초기값 u0 설정
-    u0 = [v_r, v_theta]
+    # Set initial conditions
+    initial_state = [radial_velocity, tangential_velocity]
 
-    prob = DiffEqBase.ODEProblem(ode_function_wrapper, u0, tspan, gamma)
-    sol = OrdinaryDiffEq.solve(prob)
+    problem = DiffEqBase.ODEProblem(ode_function_wrapper, initial_state, integration_span, gamma)
+    solution = OrdinaryDiffEq.solve(problem)
     # Return solution
-    return sol
+    return solution
 end
 
 """
@@ -86,8 +86,8 @@ Calculates the effective wedge angle for a conical shock.
 - `theta_eff::Float64`: Effective wedge angle (degrees)
 """
 function theta_eff(M, angle, gamma=1.4)
-    f(x) = _integrate_tm(M, angle, x, gamma).u[end][2] # Use v_theta (tangential velocity component)
-    return Roots.find_zero(f, 1e-3)
+    tangential_velocity_objective(wedge_angle) = _integrate_tm(M, angle, wedge_angle, gamma).u[end][2] # Use v_theta (tangential velocity component)
+    return Roots.find_zero(tangential_velocity_objective, 1e-3)
 end
 
 """
@@ -144,12 +144,13 @@ for a given Mach number and angle.
 - `phi::Float64`: Flow direction angle (degrees)
 """
 function _cone_mach(M, angle, theta, gamma)
-    vec = _integrate_tm(M, angle, theta, gamma).u[end]
+    velocity_vector = _integrate_tm(M, angle, theta, gamma).u[end]
 
-    v = LinearAlgebra.norm(vec)
-    phi = angle + rad2deg(atan(vec[2] / vec[1]))
+    velocity_magnitude = LinearAlgebra.norm(velocity_vector)
+    flow_direction = angle + rad2deg(atan(velocity_vector[2] / velocity_vector[1]))
 
-    return sqrt(2 / (gamma - 1) * (v^2 / (1 - v^2))), phi
+    local_mach = sqrt(2 / (gamma - 1) * (velocity_magnitude^2 / (1 - velocity_magnitude^2)))
+    return local_mach, flow_direction
 end
 
 """
