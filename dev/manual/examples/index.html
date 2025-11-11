@@ -42,40 +42,40 @@ println(&quot;=== Shock Wave Interaction Analysis ===&quot;)
 println(&quot;Initial Mach number: $M1&quot;)
 
 # First oblique shock
-M2, rho21, p21, p021, beta1 = solve_oblique(M1, theta1)
+result1 = solve_oblique(M1, theta1)
 
 println(&quot;\nFirst Oblique Shock (θ = $(theta1)°):&quot;)
-println(&quot;Shock angle β₁ = $(round(beta1, digits=1))°&quot;)
-println(&quot;M₂ = $(round(M2, digits=3))&quot;)
-println(&quot;p₂/p₁ = $(round(p21, digits=3))&quot;)
+println(&quot;Shock angle β₁ = $(round(result1.beta, digits=1))°&quot;)
+println(&quot;M₂ = $(round(result1.M2, digits=3))&quot;)
+println(&quot;p₂/p₁ = $(round(result1.p2_ratio, digits=3))&quot;)
 
 # Second oblique shock with different angle
 theta2 = 15.0
-M3, rho32, p32, p032, beta2 = solve_oblique(M2, theta2)
+result2 = solve_oblique(result1.M2, theta2)
 
 println(&quot;\nSecond Oblique Shock (θ = $(theta2)°):&quot;)
-println(&quot;Shock angle β₂ = $(round(beta2, digits=1))°&quot;)
-println(&quot;M₃ = $(round(M3, digits=3))&quot;)
-println(&quot;p₃/p₂ = $(round(p32, digits=3))&quot;)
+println(&quot;Shock angle β₂ = $(round(result2.beta, digits=1))°&quot;)
+println(&quot;M₃ = $(round(result2.M2, digits=3))&quot;)
+println(&quot;p₃/p₂ = $(round(result2.p2_ratio, digits=3))&quot;)
 
 # Total pressure ratios and losses
-total_p_ratio = p21 * p32
-total_p0_ratio = p021 * p032
+total_p_ratio = result1.p2_ratio * result2.p2_ratio
+total_p0_ratio = result1.p0_ratio * result2.p0_ratio
 
 println(&quot;\nOverall Results:&quot;)
 println(&quot;Total deflection: $(theta1 + theta2)°&quot;)
-println(&quot;Final Mach number: $(round(M3, digits=3))&quot;)
+println(&quot;Final Mach number: $(round(result2.M2, digits=3))&quot;)
 println(&quot;Total pressure ratio p₃/p₁: $(round(total_p_ratio, digits=3))&quot;)
 println(&quot;Total pressure loss: $(round((1-total_p0_ratio)*100, digits=1))%&quot;)
 
 # Compare with single shock at same total angle
 theta_total = theta1 + theta2
-M_single, rho_single, p_single, p0_single, beta_single = solve_oblique(M1, theta_total)
+result_single = solve_oblique(M1, theta_total)
 
 println(&quot;\nComparison with Single Shock (θ = $(theta_total)°):&quot;)
-println(&quot;Single shock β = $(round(beta_single, digits=1))°&quot;)
-println(&quot;Single shock M₂ = $(round(M_single, digits=3))&quot;)
-println(&quot;Single shock pressure loss: $(round((1-p0_single)*100, digits=1))%&quot;)</code></pre><h2 id="Example-3:-Nozzle-Flow-with-Back-Pressure-Effects"><a class="docs-heading-anchor" href="#Example-3:-Nozzle-Flow-with-Back-Pressure-Effects">Example 3: Nozzle Flow with Back Pressure Effects</a><a id="Example-3:-Nozzle-Flow-with-Back-Pressure-Effects-1"></a><a class="docs-heading-anchor-permalink" href="#Example-3:-Nozzle-Flow-with-Back-Pressure-Effects" title="Permalink"></a></h2><p>Analyze nozzle performance under different back pressure conditions.</p><pre><code class="language-julia hljs">using CompAir
+println(&quot;Single shock β = $(round(result_single.beta, digits=1))°&quot;)
+println(&quot;Single shock M₂ = $(round(result_single.M2, digits=3))&quot;)
+println(&quot;Single shock pressure loss: $(round((1-result_single.p0_ratio)*100, digits=1))%&quot;)</code></pre><h2 id="Example-3:-Nozzle-Flow-with-Back-Pressure-Effects"><a class="docs-heading-anchor" href="#Example-3:-Nozzle-Flow-with-Back-Pressure-Effects">Example 3: Nozzle Flow with Back Pressure Effects</a><a id="Example-3:-Nozzle-Flow-with-Back-Pressure-Effects-1"></a><a class="docs-heading-anchor-permalink" href="#Example-3:-Nozzle-Flow-with-Back-Pressure-Effects" title="Permalink"></a></h2><p>Analyze nozzle performance under different back pressure conditions.</p><pre><code class="language-julia hljs">using CompAir
 
 # Nozzle geometry
 A_ratio_exit = 3.0  # Exit area ratio A_e/A*
@@ -184,15 +184,15 @@ println(&quot;Freestream Mach: $M_inf&quot;)
 println(&quot;\nUpper Surface:&quot;)
 
 # Leading edge oblique shock
-M2_upper, rho21_upper, p21_upper, p021_upper, beta1_upper = solve_oblique(M_inf, half_angle)
+result_upper_shock = solve_oblique(M_inf, half_angle)
 println(&quot;Leading edge shock:&quot;)
-println(&quot;  Shock angle: $(round(beta1_upper, digits=1))°&quot;)
-println(&quot;  M₂: $(round(M2_upper, digits=3))&quot;)
-println(&quot;  p₂/p₁: $(round(p21_upper, digits=3))&quot;)
+println(&quot;  Shock angle: $(round(result_upper_shock.beta, digits=1))°&quot;)
+println(&quot;  M₂: $(round(result_upper_shock.M2, digits=3))&quot;)
+println(&quot;  p₂/p₁: $(round(result_upper_shock.p2_ratio, digits=3))&quot;)
 
 # Trailing edge expansion
-M3_upper = expand_mach2(M2_upper, 2*half_angle)  # Turn back to freestream direction
-p31_upper = expand_p2(M2_upper, 2*half_angle)    # Pressure ratio p2/p3
+M3_upper = expand_mach2(result_upper_shock.M2, 2*half_angle)  # Turn back to freestream direction
+p31_upper = expand_p2(result_upper_shock.M2, 2*half_angle)    # Pressure ratio p2/p3
 
 println(&quot;Trailing edge expansion:&quot;)
 println(&quot;  M₃: $(round(M3_upper, digits=3))&quot;)
@@ -210,15 +210,15 @@ println(&quot;  M₂: $(round(M2_lower, digits=3))&quot;)
 println(&quot;  p₁/p₂: $(round(p21_lower, digits=3))&quot;)
 
 # Trailing edge shock
-M3_lower, rho32_lower, p32_lower, p032_lower, beta2_lower = solve_oblique(M2_lower, half_angle)
+result_lower_shock = solve_oblique(M2_lower, half_angle)
 
 println(&quot;Trailing edge shock:&quot;)
-println(&quot;  Shock angle: $(round(beta2_lower, digits=1))°&quot;)
-println(&quot;  M₃: $(round(M3_lower, digits=3))&quot;)
-println(&quot;  p₃/p₂: $(round(p32_lower, digits=3))&quot;)
+println(&quot;  Shock angle: $(round(result_lower_shock.beta, digits=1))°&quot;)
+println(&quot;  M₃: $(round(result_lower_shock.M2, digits=3))&quot;)
+println(&quot;  p₃/p₂: $(round(result_lower_shock.p2_ratio, digits=3))&quot;)
 
 # Pressure coefficient calculation
-p_upper = p21_upper  # Pressure on upper surface relative to freestream
+p_upper = result_upper_shock.p2_ratio  # Pressure on upper surface relative to freestream
 p_lower = 1.0 / p21_lower  # Pressure on lower surface relative to freestream
 
 Cp_upper = 2/(1.4 * M_inf^2) * (p_upper - 1)
@@ -245,7 +245,9 @@ println(&quot;Required pressure ratio p₀/pb: $(round(p_ratio_design, digits=2)
 # Starting pressure ratio (when shock is at exit)
 # At nozzle exit, we need the shock to just disappear
 M_shock_upstream = M_exit_design
-M_shock_downstream, _, _, p0_loss, _ = solve_normal(M_shock_upstream)
+shock_result = solve_normal(M_shock_upstream)
+M_shock_downstream = shock_result.M2
+p0_loss = shock_result.p0_ratio
 
 # The upstream stagnation pressure must account for the shock loss
 p_ratio_starting = p_ratio_design / p0_loss
@@ -306,4 +308,4 @@ end
 
 # Compare with exact solution
 M_exact = expand_mach2(M1, theta_total)
-println(&quot;\nExact solution M_final: $(round(M_exact, digits=3))&quot;)</code></pre><p>These examples demonstrate the versatility of CompAir.jl for solving practical compressible flow problems. Each example builds upon the basic functions to analyze complex scenarios encountered in aerospace engineering, propulsion systems, and wind tunnel design.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../quickstart/">« Quick Start</a><a class="docs-footer-nextpage" href="../../api/isentropic/">Isentropic Relations »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Tuesday 11 November 2025 06:28">Tuesday 11 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+println(&quot;\nExact solution M_final: $(round(M_exact, digits=3))&quot;)</code></pre><p>These examples demonstrate the versatility of CompAir.jl for solving practical compressible flow problems. Each example builds upon the basic functions to analyze complex scenarios encountered in aerospace engineering, propulsion systems, and wind tunnel design.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../quickstart/">« Quick Start</a><a class="docs-footer-nextpage" href="../../api/isentropic/">Isentropic Relations »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Tuesday 11 November 2025 19:12">Tuesday 11 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
