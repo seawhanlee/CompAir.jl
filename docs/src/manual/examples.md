@@ -58,40 +58,40 @@ println("=== Shock Wave Interaction Analysis ===")
 println("Initial Mach number: $M1")
 
 # First oblique shock
-M2, rho21, p21, p021, beta1 = solve_oblique(M1, theta1)
+result1 = solve_oblique(M1, theta1)
 
 println("\nFirst Oblique Shock (θ = $(theta1)°):")
-println("Shock angle β₁ = $(round(beta1, digits=1))°")
-println("M₂ = $(round(M2, digits=3))")
-println("p₂/p₁ = $(round(p21, digits=3))")
+println("Shock angle β₁ = $(round(result1.beta, digits=1))°")
+println("M₂ = $(round(result1.M2, digits=3))")
+println("p₂/p₁ = $(round(result1.p2_ratio, digits=3))")
 
 # Second oblique shock with different angle
 theta2 = 15.0
-M3, rho32, p32, p032, beta2 = solve_oblique(M2, theta2)
+result2 = solve_oblique(result1.M2, theta2)
 
 println("\nSecond Oblique Shock (θ = $(theta2)°):")
-println("Shock angle β₂ = $(round(beta2, digits=1))°")
-println("M₃ = $(round(M3, digits=3))")
-println("p₃/p₂ = $(round(p32, digits=3))")
+println("Shock angle β₂ = $(round(result2.beta, digits=1))°")
+println("M₃ = $(round(result2.M2, digits=3))")
+println("p₃/p₂ = $(round(result2.p2_ratio, digits=3))")
 
 # Total pressure ratios and losses
-total_p_ratio = p21 * p32
-total_p0_ratio = p021 * p032
+total_p_ratio = result1.p2_ratio * result2.p2_ratio
+total_p0_ratio = result1.p0_ratio * result2.p0_ratio
 
 println("\nOverall Results:")
 println("Total deflection: $(theta1 + theta2)°")
-println("Final Mach number: $(round(M3, digits=3))")
+println("Final Mach number: $(round(result2.M2, digits=3))")
 println("Total pressure ratio p₃/p₁: $(round(total_p_ratio, digits=3))")
 println("Total pressure loss: $(round((1-total_p0_ratio)*100, digits=1))%")
 
 # Compare with single shock at same total angle
 theta_total = theta1 + theta2
-M_single, rho_single, p_single, p0_single, beta_single = solve_oblique(M1, theta_total)
+result_single = solve_oblique(M1, theta_total)
 
 println("\nComparison with Single Shock (θ = $(theta_total)°):")
-println("Single shock β = $(round(beta_single, digits=1))°")
-println("Single shock M₂ = $(round(M_single, digits=3))")
-println("Single shock pressure loss: $(round((1-p0_single)*100, digits=1))%")
+println("Single shock β = $(round(result_single.beta, digits=1))°")
+println("Single shock M₂ = $(round(result_single.M2, digits=3))")
+println("Single shock pressure loss: $(round((1-result_single.p0_ratio)*100, digits=1))%")
 ```
 
 ## Example 3: Nozzle Flow with Back Pressure Effects
@@ -224,15 +224,15 @@ println("Freestream Mach: $M_inf")
 println("\nUpper Surface:")
 
 # Leading edge oblique shock
-M2_upper, rho21_upper, p21_upper, p021_upper, beta1_upper = solve_oblique(M_inf, half_angle)
+result_upper_shock = solve_oblique(M_inf, half_angle)
 println("Leading edge shock:")
-println("  Shock angle: $(round(beta1_upper, digits=1))°")
-println("  M₂: $(round(M2_upper, digits=3))")
-println("  p₂/p₁: $(round(p21_upper, digits=3))")
+println("  Shock angle: $(round(result_upper_shock.beta, digits=1))°")
+println("  M₂: $(round(result_upper_shock.M2, digits=3))")
+println("  p₂/p₁: $(round(result_upper_shock.p2_ratio, digits=3))")
 
 # Trailing edge expansion
-M3_upper = expand_mach2(M2_upper, 2*half_angle)  # Turn back to freestream direction
-p31_upper = expand_p2(M2_upper, 2*half_angle)    # Pressure ratio p2/p3
+M3_upper = expand_mach2(result_upper_shock.M2, 2*half_angle)  # Turn back to freestream direction
+p31_upper = expand_p2(result_upper_shock.M2, 2*half_angle)    # Pressure ratio p2/p3
 
 println("Trailing edge expansion:")
 println("  M₃: $(round(M3_upper, digits=3))")
@@ -250,15 +250,15 @@ println("  M₂: $(round(M2_lower, digits=3))")
 println("  p₁/p₂: $(round(p21_lower, digits=3))")
 
 # Trailing edge shock
-M3_lower, rho32_lower, p32_lower, p032_lower, beta2_lower = solve_oblique(M2_lower, half_angle)
+result_lower_shock = solve_oblique(M2_lower, half_angle)
 
 println("Trailing edge shock:")
-println("  Shock angle: $(round(beta2_lower, digits=1))°")
-println("  M₃: $(round(M3_lower, digits=3))")
-println("  p₃/p₂: $(round(p32_lower, digits=3))")
+println("  Shock angle: $(round(result_lower_shock.beta, digits=1))°")
+println("  M₃: $(round(result_lower_shock.M2, digits=3))")
+println("  p₃/p₂: $(round(result_lower_shock.p2_ratio, digits=3))")
 
 # Pressure coefficient calculation
-p_upper = p21_upper  # Pressure on upper surface relative to freestream
+p_upper = result_upper_shock.p2_ratio  # Pressure on upper surface relative to freestream
 p_lower = 1.0 / p21_lower  # Pressure on lower surface relative to freestream
 
 Cp_upper = 2/(1.4 * M_inf^2) * (p_upper - 1)
@@ -293,7 +293,9 @@ println("Required pressure ratio p₀/pb: $(round(p_ratio_design, digits=2))")
 # Starting pressure ratio (when shock is at exit)
 # At nozzle exit, we need the shock to just disappear
 M_shock_upstream = M_exit_design
-M_shock_downstream, _, _, p0_loss, _ = solve_normal(M_shock_upstream)
+shock_result = solve_normal(M_shock_upstream)
+M_shock_downstream = shock_result.M2
+p0_loss = shock_result.p0_ratio
 
 # The upstream stagnation pressure must account for the shock loss
 p_ratio_starting = p_ratio_design / p0_loss
