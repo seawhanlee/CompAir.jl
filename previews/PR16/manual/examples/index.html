@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Examples · CompAir.jl</title><meta name="title" content="Examples · CompAir.jl"/><meta property="og:title" content="Examples · CompAir.jl"/><meta property="twitter:title" content="Examples · CompAir.jl"/><meta name="description" content="Documentation for CompAir.jl."/><meta property="og:description" content="Documentation for CompAir.jl."/><meta property="twitter:description" content="Documentation for CompAir.jl."/><meta property="og:url" content="https://seawhanlee.github.io/CompAir.jl/manual/examples/"/><meta property="twitter:url" content="https://seawhanlee.github.io/CompAir.jl/manual/examples/"/><link rel="canonical" href="https://seawhanlee.github.io/CompAir.jl/manual/examples/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">CompAir.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Manual</span><ul><li><a class="tocitem" href="../installation/">Installation</a></li><li><a class="tocitem" href="../quickstart/">Quick Start</a></li><li class="is-active"><a class="tocitem" href>Examples</a><ul class="internal"><li><a class="tocitem" href="#Example-1:-Supersonic-Wind-Tunnel-Design"><span>Example 1: Supersonic Wind Tunnel Design</span></a></li><li><a class="tocitem" href="#Example-2:-Shock-Wave-Interaction-Analysis"><span>Example 2: Shock Wave Interaction Analysis</span></a></li><li><a class="tocitem" href="#Example-3:-Nozzle-Flow-with-Back-Pressure-Effects"><span>Example 3: Nozzle Flow with Back Pressure Effects</span></a></li><li><a class="tocitem" href="#Example-4:-Atmospheric-Flight-Analysis"><span>Example 4: Atmospheric Flight Analysis</span></a></li><li><a class="tocitem" href="#Example-5:-Shock-Expansion-Method-for-Airfoil-Analysis"><span>Example 5: Shock-Expansion Method for Airfoil Analysis</span></a></li><li><a class="tocitem" href="#Example-6:-Converging-Diverging-Nozzle-Starting-Problem"><span>Example 6: Converging-Diverging Nozzle Starting Problem</span></a></li><li><a class="tocitem" href="#Example-7:-Method-of-Characteristics-Application"><span>Example 7: Method of Characteristics Application</span></a></li></ul></li></ul></li><li><span class="tocitem">API Reference</span><ul><li><a class="tocitem" href="../../api/isentropic/">Isentropic Relations</a></li><li><a class="tocitem" href="../../api/normal_shock/">Normal Shock Waves</a></li><li><a class="tocitem" href="../../api/oblique_shock/">Oblique Shock Waves</a></li><li><a class="tocitem" href="../../api/prandtl_expand/">Prandtl-Meyer Expansion</a></li><li><a class="tocitem" href="../../api/cone_shock/">Cone Shock Analysis</a></li><li><a class="tocitem" href="../../api/nozzle/">Nozzle Analysis</a></li><li><a class="tocitem" href="../../api/intake/">Intake Ramp Analysis</a></li><li><a class="tocitem" href="../../api/atmos1976/">Atmospheric Model</a></li></ul></li><li><span class="tocitem">Development</span><ul><li><a class="tocitem" href="../../dev/contributing/">Contributing</a></li><li><a class="tocitem" href="../../dev/changelog/">Changelog</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Manual</a></li><li class="is-active"><a href>Examples</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Examples</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/seawhanlee/CompAir.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/seawhanlee/CompAir.jl/blob/main/docs/src/manual/examples.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Examples"><a class="docs-heading-anchor" href="#Examples">Examples</a><a id="Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Examples" title="Permalink"></a></h1><p>This page provides comprehensive examples demonstrating practical use cases and workflows with CompAir.jl.</p><h2 id="Example-1:-Supersonic-Wind-Tunnel-Design"><a class="docs-heading-anchor" href="#Example-1:-Supersonic-Wind-Tunnel-Design">Example 1: Supersonic Wind Tunnel Design</a><a id="Example-1:-Supersonic-Wind-Tunnel-Design-1"></a><a class="docs-heading-anchor-permalink" href="#Example-1:-Supersonic-Wind-Tunnel-Design" title="Permalink"></a></h2><p>Design a supersonic wind tunnel to achieve Mach 2.5 test conditions.</p><pre><code class="language-julia hljs">using CompAir
+
+# Design requirements
+M_test = 2.5  # Test section Mach number
+p0 = 500000   # Stagnation pressure (Pa)
+T0 = 300      # Stagnation temperature (K)
+
+println(&quot;=== Supersonic Wind Tunnel Design ===&quot;)
+println(&quot;Target test Mach number: $M_test&quot;)
+
+# Calculate nozzle area ratio
+area_ratio = area_ratio_at(M_test)
+println(&quot;Required nozzle area ratio A/A*: $(round(area_ratio, digits=2))&quot;)
+
+# Calculate test section conditions
+T_ratio = total_to_static_temperature_ratio(M_test)
+p_ratio = total_to_static_pressure_ratio(M_test)
+rho_ratio = total_to_static_density_ratio(M_test)
+
+T_test = T0 / T_ratio
+p_test = p0 / p_ratio
+rho_test = 1.225 * p_test / (287 * T_test)  # Using ideal gas law
+
+println(&quot;\nTest Section Conditions:&quot;)
+println(&quot;Temperature: $(round(T_test, digits=1)) K&quot;)
+println(&quot;Pressure: $(round(p_test/1000, digits=1)) kPa&quot;)
+println(&quot;Density: $(round(rho_test, digits=3)) kg/m³&quot;)
+
+# Calculate Reynolds number per meter
+mu = sutherland_viscosity(T_test / 288.15)  # theta = T/T0
+Re_per_m = rho_test * M_test * sqrt(1.4 * 287 * T_test) / mu
+
+println(&quot;Dynamic viscosity: $(round(mu*1e6, digits=2)) μPa·s&quot;)
+println(&quot;Reynolds number per meter: $(round(Re_per_m/1e6, digits=2)) million/m&quot;)</code></pre><h2 id="Example-2:-Shock-Wave-Interaction-Analysis"><a class="docs-heading-anchor" href="#Example-2:-Shock-Wave-Interaction-Analysis">Example 2: Shock Wave Interaction Analysis</a><a id="Example-2:-Shock-Wave-Interaction-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Example-2:-Shock-Wave-Interaction-Analysis" title="Permalink"></a></h2><p>Analyze the interaction of an oblique shock with a normal shock.</p><pre><code class="language-julia hljs">using CompAir
+
+# Initial conditions
+M1 = 3.0      # Initial Mach number
+theta1 = 20.0 # First oblique shock angle (degrees)
+
+println(&quot;=== Shock Wave Interaction Analysis ===&quot;)
+println(&quot;Initial Mach number: $M1&quot;)
+
+# First oblique shock
+result1 = solve_oblique(M1, theta1)
+
+println(&quot;\nFirst Oblique Shock (θ = $(theta1)°):&quot;)
+println(&quot;Shock angle β₁ = $(round(result1.beta, digits=1))°&quot;)
+println(&quot;M₂ = $(round(result1.M2, digits=3))&quot;)
+println(&quot;p₂/p₁ = $(round(result1.p2_ratio, digits=3))&quot;)
+
+# Second oblique shock with different angle
+theta2 = 15.0
+result2 = solve_oblique(result1.M2, theta2)
+
+println(&quot;\nSecond Oblique Shock (θ = $(theta2)°):&quot;)
+println(&quot;Shock angle β₂ = $(round(result2.beta, digits=1))°&quot;)
+println(&quot;M₃ = $(round(result2.M2, digits=3))&quot;)
+println(&quot;p₃/p₂ = $(round(result2.p2_ratio, digits=3))&quot;)
+
+# Total pressure ratios and losses
+total_p_ratio = result1.p2_ratio * result2.p2_ratio
+total_p0_ratio = result1.p0_ratio * result2.p0_ratio
+
+println(&quot;\nOverall Results:&quot;)
+println(&quot;Total deflection: $(theta1 + theta2)°&quot;)
+println(&quot;Final Mach number: $(round(result2.M2, digits=3))&quot;)
+println(&quot;Total pressure ratio p₃/p₁: $(round(total_p_ratio, digits=3))&quot;)
+println(&quot;Total pressure loss: $(round((1-total_p0_ratio)*100, digits=1))%&quot;)
+
+# Compare with single shock at same total angle
+theta_total = theta1 + theta2
+result_single = solve_oblique(M1, theta_total)
+
+println(&quot;\nComparison with Single Shock (θ = $(theta_total)°):&quot;)
+println(&quot;Single shock β = $(round(result_single.beta, digits=1))°&quot;)
+println(&quot;Single shock M₂ = $(round(result_single.M2, digits=3))&quot;)
+println(&quot;Single shock pressure loss: $(round((1-result_single.p0_ratio)*100, digits=1))%&quot;)</code></pre><h2 id="Example-3:-Nozzle-Flow-with-Back-Pressure-Effects"><a class="docs-heading-anchor" href="#Example-3:-Nozzle-Flow-with-Back-Pressure-Effects">Example 3: Nozzle Flow with Back Pressure Effects</a><a id="Example-3:-Nozzle-Flow-with-Back-Pressure-Effects-1"></a><a class="docs-heading-anchor-permalink" href="#Example-3:-Nozzle-Flow-with-Back-Pressure-Effects" title="Permalink"></a></h2><p>Analyze nozzle performance under different back pressure conditions.</p><pre><code class="language-julia hljs">using CompAir
+
+# Nozzle geometry
+A_ratio_exit = 3.0  # Exit area ratio A_e/A*
+
+println(&quot;=== Nozzle Back Pressure Analysis ===&quot;)
+println(&quot;Nozzle exit area ratio: $A_ratio_exit&quot;)
+
+# Find design exit Mach number
+M_design = mach_by_area_ratio(A_ratio_exit, 1.4, 2.0)  # Supersonic solution
+println(&quot;Design exit Mach number: $(round(M_design, digits=3))&quot;)
+
+# Design exit pressure ratio
+p_design = total_to_static_pressure_ratio(M_design)
+println(&quot;Design exit pressure ratio p₀/pₑ: $(round(p_design, digits=2))&quot;)
+
+# Operating conditions
+p0 = 300000  # Stagnation pressure (Pa)
+p_design_exit = p0 / p_design
+
+println(&quot;\nOperating Analysis:&quot;)
+println(&quot;Stagnation pressure: $(p0/1000) kPa&quot;)
+println(&quot;Design exit pressure: $(round(p_design_exit/1000, digits=1)) kPa&quot;)
+
+# Different back pressure scenarios
+back_pressures = [0.5, 0.8, 1.0, 1.2, 1.5] .* p_design_exit
+
+println(&quot;\nBack Pressure Effects:&quot;)
+println(&quot;pb/p₀\t\tpb (kPa)\tFlow Condition&quot;)
+println(&quot;-----\t\t--------\t--------------&quot;)
+
+for pb in back_pressures
+    pb_ratio = pb / p0
+    
+    if pb &lt; p_design_exit
+        condition = &quot;Overexpanded (design)&quot;
+        M_exit = M_design
+    elseif pb_ratio &gt; 1/total_to_static_pressure_ratio(1.0)  # Critical pressure ratio
+        condition = &quot;Subsonic throughout&quot;
+        M_exit = mach_by_area_ratio(A_ratio_exit, 1.4, 0.1)  # Subsonic solution
+    else
+        condition = &quot;Shock in nozzle&quot;
+        M_exit = &quot;Complex&quot;
+    end
+    
+    println(&quot;$(round(pb_ratio, digits=3))\t\t$(round(pb/1000, digits=1))\t\t$condition&quot;)
+end</code></pre><h2 id="Example-4:-Atmospheric-Flight-Analysis"><a class="docs-heading-anchor" href="#Example-4:-Atmospheric-Flight-Analysis">Example 4: Atmospheric Flight Analysis</a><a id="Example-4:-Atmospheric-Flight-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Example-4:-Atmospheric-Flight-Analysis" title="Permalink"></a></h2><p>Calculate flight conditions at different altitudes and speeds.</p><pre><code class="language-julia hljs">using CompAir
+
+# Flight envelope analysis
+altitudes = [0.0, 5.0, 11.0, 20.0, 30.0]  # km
+velocities = [200, 300, 400, 500]          # m/s
+
+println(&quot;=== Atmospheric Flight Analysis ===&quot;)
+println(&quot;Alt(km)\tV(m/s)\tM\tT(K)\tp(kPa)\tρ(kg/m³)\tRe/m(×10⁶)&quot;)
+println(&quot;------\t------\t-----\t-----\t------\t--------\t----------&quot;)
+
+for alt in altitudes
+    # Get atmospheric properties
+    rho, p, T, a, mu = atmosphere_properties_at(alt)
+    
+    for V in velocities
+        # Calculate flight Mach number
+        M = V / a
+        
+        # Calculate Reynolds number per meter
+        Re_per_m = rho * V / mu
+        
+        # Only print if subsonic or low supersonic (practical range)
+        if M &lt; 3.0
+            println(&quot;$(alt)\t$(V)\t$(round(M, digits=2))\t$(round(T, digits=1))\t$(round(p/1000, digits=1))\t$(round(rho, digits=3))\t\t$(round(Re_per_m/1e6, digits=2))&quot;)
+        end
+    end
+end
+
+# High-altitude supersonic analysis
+println(&quot;\n=== High-Altitude Supersonic Flight ===&quot;)
+alt_cruise = 18.0  # km (typical supersonic cruise altitude)
+M_cruise = 2.0     # Cruise Mach number
+
+rho, p, T, a, mu = atmosphere_properties_at(alt_cruise)
+V_cruise = M_cruise * a
+
+println(&quot;Cruise conditions at $(alt_cruise) km altitude:&quot;)
+println(&quot;Mach number: $M_cruise&quot;)
+println(&quot;True airspeed: $(round(V_cruise, digits=1)) m/s&quot;)
+println(&quot;Temperature: $(round(T, digits=1)) K&quot;)
+println(&quot;Pressure: $(round(p/1000, digits=1)) kPa&quot;)
+println(&quot;Density: $(round(rho, digits=3)) kg/m³&quot;)
+
+# Calculate stagnation conditions
+T0 = T * total_to_static_temperature_ratio(M_cruise)
+p0 = p * total_to_static_pressure_ratio(M_cruise)
+
+println(&quot;\nStagnation conditions:&quot;)
+println(&quot;Stagnation temperature: $(round(T0, digits=1)) K&quot;)
+println(&quot;Stagnation pressure: $(round(p0/1000, digits=1)) kPa&quot;)</code></pre><h2 id="Example-5:-Shock-Expansion-Method-for-Airfoil-Analysis"><a class="docs-heading-anchor" href="#Example-5:-Shock-Expansion-Method-for-Airfoil-Analysis">Example 5: Shock-Expansion Method for Airfoil Analysis</a><a id="Example-5:-Shock-Expansion-Method-for-Airfoil-Analysis-1"></a><a class="docs-heading-anchor-permalink" href="#Example-5:-Shock-Expansion-Method-for-Airfoil-Analysis" title="Permalink"></a></h2><p>Analyze supersonic flow over a diamond airfoil using shock-expansion theory.</p><pre><code class="language-julia hljs">using CompAir
+
+# Diamond airfoil geometry
+half_angle = 5.0  # degrees
+M_inf = 2.5       # Freestream Mach number
+
+println(&quot;=== Diamond Airfoil Analysis ===&quot;)
+println(&quot;Half angle: $(half_angle)°&quot;)
+println(&quot;Freestream Mach: $M_inf&quot;)
+
+# Upper surface analysis
+println(&quot;\nUpper Surface:&quot;)
+
+# Leading edge oblique shock
+result_upper_shock = solve_oblique(M_inf, half_angle)
+println(&quot;Leading edge shock:&quot;)
+println(&quot;  Shock angle: $(round(result_upper_shock.beta, digits=1))°&quot;)
+println(&quot;  M₂: $(round(result_upper_shock.M2, digits=3))&quot;)
+println(&quot;  p₂/p₁: $(round(result_upper_shock.p2_ratio, digits=3))&quot;)
+
+# Trailing edge expansion
+M3_upper = expand_mach2(result_upper_shock.M2, 2*half_angle)  # Turn back to freestream direction
+p31_upper = expand_p2(result_upper_shock.M2, 2*half_angle)    # Pressure ratio p2/p3
+
+println(&quot;Trailing edge expansion:&quot;)
+println(&quot;  M₃: $(round(M3_upper, digits=3))&quot;)
+println(&quot;  p₂/p₃: $(round(p31_upper, digits=3))&quot;)
+
+# Lower surface analysis  
+println(&quot;\nLower Surface:&quot;)
+
+# Leading edge expansion
+M2_lower = expand_mach2(M_inf, half_angle)
+p21_lower = expand_p2(M_inf, half_angle)
+
+println(&quot;Leading edge expansion:&quot;)
+println(&quot;  M₂: $(round(M2_lower, digits=3))&quot;)
+println(&quot;  p₁/p₂: $(round(p21_lower, digits=3))&quot;)
+
+# Trailing edge shock
+result_lower_shock = solve_oblique(M2_lower, half_angle)
+
+println(&quot;Trailing edge shock:&quot;)
+println(&quot;  Shock angle: $(round(result_lower_shock.beta, digits=1))°&quot;)
+println(&quot;  M₃: $(round(result_lower_shock.M2, digits=3))&quot;)
+println(&quot;  p₃/p₂: $(round(result_lower_shock.p2_ratio, digits=3))&quot;)
+
+# Pressure coefficient calculation
+p_upper = result_upper_shock.p2_ratio  # Pressure on upper surface relative to freestream
+p_lower = 1.0 / p21_lower  # Pressure on lower surface relative to freestream
+
+Cp_upper = 2/(1.4 * M_inf^2) * (p_upper - 1)
+Cp_lower = 2/(1.4 * M_inf^2) * (p_lower - 1)
+
+println(&quot;\nPressure Coefficients:&quot;)
+println(&quot;Upper surface Cp: $(round(Cp_upper, digits=4))&quot;)
+println(&quot;Lower surface Cp: $(round(Cp_lower, digits=4))&quot;)
+println(&quot;ΔCp (lift): $(round(Cp_lower - Cp_upper, digits=4))&quot;)</code></pre><h2 id="Example-6:-Converging-Diverging-Nozzle-Starting-Problem"><a class="docs-heading-anchor" href="#Example-6:-Converging-Diverging-Nozzle-Starting-Problem">Example 6: Converging-Diverging Nozzle Starting Problem</a><a id="Example-6:-Converging-Diverging-Nozzle-Starting-Problem-1"></a><a class="docs-heading-anchor-permalink" href="#Example-6:-Converging-Diverging-Nozzle-Starting-Problem" title="Permalink"></a></h2><p>Analyze the starting process of a supersonic nozzle.</p><pre><code class="language-julia hljs">using CompAir
+
+# Nozzle geometry
+A_ratio_exit = 4.0  # Exit area ratio
+
+println(&quot;=== CD Nozzle Starting Analysis ===&quot;)
+println(&quot;Exit area ratio A_e/A*: $A_ratio_exit&quot;)
+
+# Find required pressure ratios
+M_exit_design = mach_by_area_ratio(A_ratio_exit, 1.4, 2.0)  # Supersonic
+p_ratio_design = total_to_static_pressure_ratio(M_exit_design)
+
+println(&quot;Design exit Mach: $(round(M_exit_design, digits=3))&quot;)
+println(&quot;Required pressure ratio p₀/pb: $(round(p_ratio_design, digits=2))&quot;)
+
+# Starting pressure ratio (when shock is at exit)
+# At nozzle exit, we need the shock to just disappear
+M_shock_upstream = M_exit_design
+shock_result = solve_normal(M_shock_upstream)
+M_shock_downstream = shock_result.M2
+p0_loss = shock_result.p0_ratio
+
+# The upstream stagnation pressure must account for the shock loss
+p_ratio_starting = p_ratio_design / p0_loss
+
+println(&quot;Starting pressure ratio: $(round(p_ratio_starting, digits=2))&quot;)
+println(&quot;Overexpansion ratio: $(round(p_ratio_starting/p_ratio_design, digits=2))&quot;)
+
+# Operating map
+println(&quot;\nOperating Conditions:&quot;)
+println(&quot;p₀/pb\t\tCondition\t\tExit Mach&quot;)
+println(&quot;-----\t\t---------\t\t---------&quot;)
+
+pressure_ratios = [1.0, 2.0, 5.0, 10.0, p_ratio_starting, p_ratio_design * 1.1]
+
+for pr in pressure_ratios
+    if pr &lt; 1.89  # Critical pressure ratio for choking
+        condition = &quot;No choking&quot;
+        M_exit = &quot;&lt; 1&quot;
+    elseif pr &lt; p_ratio_starting
+        condition = &quot;Shock in nozzle&quot;
+        M_exit = &quot;Variable&quot;
+    elseif pr ≈ p_ratio_starting
+        condition = &quot;Shock at exit&quot;
+        M_exit = &quot;$(round(M_shock_downstream, digits=3))&quot;
+    elseif pr &lt; p_ratio_design
+        condition = &quot;Underexpanded&quot;
+        M_exit = &quot;$(round(M_exit_design, digits=3))&quot;
+    else
+        condition = &quot;Design/Overexpanded&quot;
+        M_exit = &quot;$(round(M_exit_design, digits=3))&quot;
+    end
+    
+    println(&quot;$(round(pr, digits=1))\t\t$condition\t\t$M_exit&quot;)
+end</code></pre><h2 id="Example-7:-Method-of-Characteristics-Application"><a class="docs-heading-anchor" href="#Example-7:-Method-of-Characteristics-Application">Example 7: Method of Characteristics Application</a><a id="Example-7:-Method-of-Characteristics-Application-1"></a><a class="docs-heading-anchor-permalink" href="#Example-7:-Method-of-Characteristics-Application" title="Permalink"></a></h2><p>Simple application showing characteristic line method concepts.</p><pre><code class="language-julia hljs">using CompAir
+
+# Prandtl-Meyer expansion around a corner
+M1 = 2.0
+theta_total = 30.0  # Total turning angle
+n_steps = 6         # Number of characteristic steps
+
+println(&quot;=== Method of Characteristics Example ===&quot;)
+println(&quot;Initial Mach: $M1&quot;)
+println(&quot;Total turning: $(theta_total)°&quot;)
+println(&quot;Steps: $n_steps&quot;)
+
+theta_step = theta_total / n_steps
+
+println(&quot;\nStep\tθ(°)\tM\tν(°)\tμ(°)&quot;)
+println(&quot;----\t----\t-----\t-----\t-----&quot;)
+
+for i in 0:n_steps
+    theta_current = i * theta_step
+    M_current = (i == 0) ? M1 : expand_mach2(M1, theta_current)
+    nu_current = prandtl_meyer(M_current)
+    mu_current = asind(1/M_current)  # Mach angle
+    println(&quot;$i\t$(round(theta_current, digits=1))\t$(round(M_current, digits=3))\t$(round(nu_current, digits=2))\t$(round(mu_current, digits=1))&quot;)
+end
+
+# Compare with exact solution
+M_exact = expand_mach2(M1, theta_total)
+println(&quot;\nExact solution M_final: $(round(M_exact, digits=3))&quot;)</code></pre><p>These examples demonstrate the versatility of CompAir.jl for solving practical compressible flow problems. Each example builds upon the basic functions to analyze complex scenarios encountered in aerospace engineering, propulsion systems, and wind tunnel design.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../quickstart/">« Quick Start</a><a class="docs-footer-nextpage" href="../../api/isentropic/">Isentropic Relations »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Tuesday 11 November 2025 10:38">Tuesday 11 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
