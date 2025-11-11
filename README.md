@@ -72,13 +72,13 @@ println("ρ₀/ρ = $(round(rho0_rho, digits=3))")
 ```julia
 # Analyze normal shock at Mach 3.0
 M1 = 3.0
-M2, rho_ratio, p_ratio, p0_ratio = solve_normal(M1)
+result = solve_normal(M1)
 
 println("Normal Shock Analysis (M₁ = $M1):")
-println("M₂ = $(round(M2, digits=3))")
-println("ρ₂/ρ₁ = $(round(rho_ratio, digits=3))")
-println("p₂/p₁ = $(round(p_ratio, digits=3))")
-println("p₀₂/p₀₁ = $(round(p0_ratio, digits=3))")
+println("M₂ = $(round(result.M2, digits=3))")
+println("ρ₂/ρ₁ = $(round(result.rho2_ratio, digits=3))")
+println("p₂/p₁ = $(round(result.p2_ratio, digits=3))")
+println("p₀₂/p₀₁ = $(round(result.p0_ratio, digits=3))")
 ```
 
 ### Oblique Shock Analysis
@@ -88,12 +88,12 @@ println("p₀₂/p₀₁ = $(round(p0_ratio, digits=3))")
 M1 = 2.5
 theta = 15.0  # wedge angle in degrees
 
-M2, rho_ratio, p_ratio, p0_ratio, beta = solve_oblique(M1, theta)
+result = solve_oblique(M1, theta)
 
 println("Oblique Shock Analysis:")
 println("M₁ = $M1, θ = $(theta)°")
-println("Shock angle β = $(round(beta, digits=1))°")
-println("M₂ = $(round(M2, digits=3))")
+println("Shock angle β = $(round(result.beta, digits=1))°")
+println("M₂ = $(round(result.M2, digits=3))")
 ```
 
 ### Prandtl-Meyer Expansion
