@@ -68,10 +68,10 @@ function _beta_weak(M::Real, theta::Real, gamma::Real=1.4)
     # Convert deg to rad
     theta_r = deg2rad(theta)
 
-    f(x) = _tangent_theta(x, M, gamma) - tan(theta_r)
+    beta_objective(beta_angle) = _tangent_theta(beta_angle, M, gamma) - tan(theta_r)
 
     # Solve theta-beta-M using Newton-Raphson method
-    return Roots.find_zero(f, 1e-3)
+    return Roots.find_zero(beta_objective, 1e-3)
 end
 
 """
@@ -108,16 +108,16 @@ for a given Mach number `M`.
 """
 function theta_max(M::Real, gamma::Real=1.4)
     # Maximize tangent theta
-    f(x) = -_tangent_theta(x, M, gamma)
+    negative_tan_theta(beta_angle) = -_tangent_theta(beta_angle, M, gamma)
 
     # Optimization using Optim package
     # Use Brent's method for 1D optimization
-    res = Optim.optimize(f, 0.0, pi/2, Brent())
+    optimization_result = Optim.optimize(negative_tan_theta, 0.0, pi/2, Brent())
 
     # Get the maximum value of tangent theta
-    tan_theta = -Optim.minimum(res)
+    tan_theta_max = -Optim.minimum(optimization_result)
 
-    return rad2deg(atan(tan_theta))
+    return rad2deg(atan(tan_theta_max))
 end
 
 function _Mn1(M::Real, beta_r::Real, gamma::Real=1.4)

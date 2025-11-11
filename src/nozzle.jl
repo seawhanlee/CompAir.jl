@@ -1,9 +1,9 @@
 import Roots
 
-# 내부 함수: Float64 타입으로 동작
+# Internal function: Operates with Float64 type
 function _mdot(M::Float64, area::Float64=1.0, p0::Float64=1.0, t0::Float64=1.0, gamma::Float64=1.4, R::Float64=1.0)
-    mdot_a = sqrt(gamma/R/t0)*p0*M/(1+(gamma-1)/2*M^2)^((gamma+1)/2/(gamma-1))
-    return mdot_a*area
+    mass_flow_per_area = sqrt(gamma/R/t0)*p0*M/(1+(gamma-1)/2*M^2)^((gamma+1)/2/(gamma-1))
+    return mass_flow_per_area*area
 end
 
 """
@@ -71,7 +71,7 @@ function mach_by_area_ratio(area::Real, gamma::Real=1.4, x0::Real=0.1)
     _mach_by_area_ratio(Float64(area), Float64(gamma), Float64(x0))
 end
 
-# 내부 함수
+# Internal function
 function _subsonic_mach_from_area_ratio(area::Float64, gamma::Float64=1.4)
     return _mach_by_area_ratio(area, gamma)
 end
@@ -92,10 +92,10 @@ function subsonic_mach_from_area_ratio(area::Real, gamma::Real=1.4)
     _subsonic_mach_from_area_ratio(Float64(area), Float64(gamma))
 end
 
-# 내부 함수
+# Internal function
 function _subsonic_pressure_from_area_ratio(area::Float64, gamma::Float64=1.4, p0::Float64=1.0)
-    Me6 = _subsonic_mach_from_area_ratio(area, gamma)
-    return 1/total_to_static_pressure_ratio(Me6, gamma)*p0
+    exit_mach = _subsonic_mach_from_area_ratio(area, gamma)
+    return 1/total_to_static_pressure_ratio(exit_mach, gamma)*p0
 end
 
 """
@@ -115,10 +115,10 @@ function subsonic_pressure_from_area_ratio(area::Real, gamma::Real=1.4, p0::Real
     _subsonic_pressure_from_area_ratio(Float64(area), Float64(gamma), Float64(p0))
 end
 
-# 내부 함수
+# Internal function
 function _mach_after_shock_at_exit(area::Float64, gamma::Float64=1.4)
-    Me = _subsonic_mach_from_area_ratio(area, gamma)
-    return mach_after_normal_shock(Me, gamma)
+    exit_mach = _subsonic_mach_from_area_ratio(area, gamma)
+    return mach_after_normal_shock(exit_mach, gamma)
 end
 
 """
@@ -137,11 +137,11 @@ function mach_after_shock_at_exit(area::Real, gamma::Real=1.4)
     _mach_after_shock_at_exit(Float64(area), Float64(gamma))
 end
 
-# 내부 함수
+# Internal function
 function _pressure_after_shock_at_exit(area::Float64, gamma::Float64=1.4, p0::Float64=1.0)
-    Me = _subsonic_mach_from_area_ratio(area, gamma)
-    pe = _subsonic_pressure_from_area_ratio(area, gamma, p0)
-    return pe*pressure_ratio_normal_shock(Me, gamma)
+    exit_mach = _subsonic_mach_from_area_ratio(area, gamma)
+    exit_pressure = _subsonic_pressure_from_area_ratio(area, gamma, p0)
+    return exit_pressure*pressure_ratio_normal_shock(exit_mach, gamma)
 end
 
 """

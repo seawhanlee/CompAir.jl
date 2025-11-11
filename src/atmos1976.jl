@@ -74,45 +74,45 @@ function _air1976(alt, gmr=34.163195)
         -6.5 0.0 1.0 2.8 0.0 -2.8 -2.0 0.0
     ]
 
-    tbase0 = air_layers[2, 1]
+    sea_level_temperature = air_layers[2, 1]
 
     # Compute geopotential altitude
-    h = geometric_to_geopotential_altitude(alt)
+    geopotential_altitude = geometric_to_geopotential_altitude(alt)
 
     # Find index - determine which atmospheric layer the altitude belongs to
-    if h >= air_layers[1, end]
+    if geopotential_altitude >= air_layers[1, end]
         # Altitude exceeds maximum, use last layer
-        idx = size(air_layers, 2)
+        layer_index = size(air_layers, 2)
     else
         # Find the layer that contains this altitude
-        idx = 1
+        layer_index = 1
         for i in 2:size(air_layers, 2)
-            if h < air_layers[1, i]
+            if geopotential_altitude < air_layers[1, i]
                 break
             end
-            idx = i
+            layer_index = i
         end
     end
 
-    # Get values
-    hbase, tbase, pbase, tgrad = air_layers[:, idx]
+    # Get values for the atmospheric layer
+    base_altitude, base_temperature, base_pressure, temperature_gradient = air_layers[:, layer_index]
 
     # Compute temperature and ratio
-    dh = h - hbase
-    tlocal = tbase + tgrad * dh
-    theta = tlocal / tbase0
+    altitude_difference = geopotential_altitude - base_altitude
+    local_temperature = base_temperature + temperature_gradient * altitude_difference
+    temperature_ratio = local_temperature / sea_level_temperature
 
     # Compute pressure ratio
-    if abs(tgrad) < 1e-6
-        delta = pbase * exp(-gmr * dh / tbase)
+    if abs(temperature_gradient) < 1e-6
+        pressure_ratio = base_pressure * exp(-gmr * altitude_difference / base_temperature)
     else
-        delta = pbase * (tbase / tlocal)^(gmr / tgrad)
+        pressure_ratio = base_pressure * (base_temperature / local_temperature)^(gmr / temperature_gradient)
     end
 
     # Compute density ratio
-    sigma = delta / theta
+    density_ratio = pressure_ratio / temperature_ratio
 
-    return sigma, delta, theta
+    return density_ratio, pressure_ratio, temperature_ratio
 end
 
 """
