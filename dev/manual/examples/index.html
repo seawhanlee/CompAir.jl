@@ -10,13 +10,13 @@ println(&quot;=== Supersonic Wind Tunnel Design ===&quot;)
 println(&quot;Target test Mach number: $M_test&quot;)
 
 # Calculate nozzle area ratio
-area_ratio = area_ratio_at(M_test)
+area_ratio = a_over_astar(M_test)
 println(&quot;Required nozzle area ratio A/A*: $(round(area_ratio, digits=2))&quot;)
 
 # Calculate test section conditions
-T_ratio = total_to_static_temperature_ratio(M_test)
-p_ratio = total_to_static_pressure_ratio(M_test)
-rho_ratio = total_to_static_density_ratio(M_test)
+T_ratio = t0_over_t(M_test)
+p_ratio = p0_over_p(M_test)
+rho_ratio = rho0_over_rho(M_test)
 
 T_test = T0 / T_ratio
 p_test = p0 / p_ratio
@@ -84,11 +84,11 @@ println(&quot;=== Nozzle Back Pressure Analysis ===&quot;)
 println(&quot;Nozzle exit area ratio: $A_ratio_exit&quot;)
 
 # Find design exit Mach number
-M_design = mach_by_area_ratio(A_ratio_exit, 1.4, 2.0)  # Supersonic solution
+M_design = mach_from_area_ratio(A_ratio_exit, 1.4, 2.0)  # Supersonic solution
 println(&quot;Design exit Mach number: $(round(M_design, digits=3))&quot;)
 
 # Design exit pressure ratio
-p_design = total_to_static_pressure_ratio(M_design)
+p_design = p0_over_p(M_design)
 println(&quot;Design exit pressure ratio p₀/pₑ: $(round(p_design, digits=2))&quot;)
 
 # Operating conditions
@@ -112,9 +112,9 @@ for pb in back_pressures
     if pb &lt; p_design_exit
         condition = &quot;Overexpanded (design)&quot;
         M_exit = M_design
-    elseif pb_ratio &gt; 1/total_to_static_pressure_ratio(1.0)  # Critical pressure ratio
+    else    if pb_ratio &gt; 1/p0_over_p(1.0)  # Critical pressure ratio
         condition = &quot;Subsonic throughout&quot;
-        M_exit = mach_by_area_ratio(A_ratio_exit, 1.4, 0.1)  # Subsonic solution
+        M_exit = mach_from_area_ratio(A_ratio_exit, 1.4, 0.1)  # Subsonic solution
     else
         condition = &quot;Shock in nozzle&quot;
         M_exit = &quot;Complex&quot;
@@ -133,7 +133,7 @@ println(&quot;------\t------\t-----\t-----\t------\t--------\t----------&quot;)
 
 for alt in altitudes
     # Get atmospheric properties
-    rho, p, T, a, mu = atmosphere_properties_at(alt)
+    rho, p, T, a, mu = atmos(alt)
     
     for V in velocities
         # Calculate flight Mach number
@@ -154,7 +154,7 @@ println(&quot;\n=== High-Altitude Supersonic Flight ===&quot;)
 alt_cruise = 18.0  # km (typical supersonic cruise altitude)
 M_cruise = 2.0     # Cruise Mach number
 
-rho, p, T, a, mu = atmosphere_properties_at(alt_cruise)
+rho, p, T, a, mu = atmos(alt_cruise)
 V_cruise = M_cruise * a
 
 println(&quot;Cruise conditions at $(alt_cruise) km altitude:&quot;)
@@ -165,8 +165,8 @@ println(&quot;Pressure: $(round(p/1000, digits=1)) kPa&quot;)
 println(&quot;Density: $(round(rho, digits=3)) kg/m³&quot;)
 
 # Calculate stagnation conditions
-T0 = T * total_to_static_temperature_ratio(M_cruise)
-p0 = p * total_to_static_pressure_ratio(M_cruise)
+T0 = T * t0_over_t(M_cruise)
+p0 = p * p0_over_p(M_cruise)
 
 println(&quot;\nStagnation conditions:&quot;)
 println(&quot;Stagnation temperature: $(round(T0, digits=1)) K&quot;)
@@ -191,8 +191,8 @@ println(&quot;  M₂: $(round(result_upper_shock.M2, digits=3))&quot;)
 println(&quot;  p₂/p₁: $(round(result_upper_shock.p2_ratio, digits=3))&quot;)
 
 # Trailing edge expansion
-M3_upper = expand_mach2(result_upper_shock.M2, 2*half_angle)  # Turn back to freestream direction
-p31_upper = expand_p2(result_upper_shock.M2, 2*half_angle)    # Pressure ratio p2/p3
+M3_upper = pm_mach2(result_upper_shock.M2, 2*half_angle)  # Turn back to freestream direction
+p31_upper = pm_p1_over_p2(result_upper_shock.M2, 2*half_angle)    # Pressure ratio p2/p3
 
 println(&quot;Trailing edge expansion:&quot;)
 println(&quot;  M₃: $(round(M3_upper, digits=3))&quot;)
@@ -202,8 +202,8 @@ println(&quot;  p₂/p₃: $(round(p31_upper, digits=3))&quot;)
 println(&quot;\nLower Surface:&quot;)
 
 # Leading edge expansion
-M2_lower = expand_mach2(M_inf, half_angle)
-p21_lower = expand_p2(M_inf, half_angle)
+M2_lower = pm_mach2(M_inf, half_angle)
+p21_lower = pm_p1_over_p2(M_inf, half_angle)
 
 println(&quot;Leading edge expansion:&quot;)
 println(&quot;  M₂: $(round(M2_lower, digits=3))&quot;)
@@ -236,8 +236,8 @@ println(&quot;=== CD Nozzle Starting Analysis ===&quot;)
 println(&quot;Exit area ratio A_e/A*: $A_ratio_exit&quot;)
 
 # Find required pressure ratios
-M_exit_design = mach_by_area_ratio(A_ratio_exit, 1.4, 2.0)  # Supersonic
-p_ratio_design = total_to_static_pressure_ratio(M_exit_design)
+M_exit_design = mach_from_area_ratio(A_ratio_exit, 1.4, 2.0)  # Supersonic
+p_ratio_design = p0_over_p(M_exit_design)
 
 println(&quot;Design exit Mach: $(round(M_exit_design, digits=3))&quot;)
 println(&quot;Required pressure ratio p₀/pb: $(round(p_ratio_design, digits=2))&quot;)
@@ -300,12 +300,12 @@ println(&quot;----\t----\t-----\t-----\t-----&quot;)
 
 for i in 0:n_steps
     theta_current = i * theta_step
-    M_current = (i == 0) ? M1 : expand_mach2(M1, theta_current)
+    M_current = (i == 0) ? M1 : pm_mach2(M1, theta_current)
     nu_current = prandtl_meyer(M_current)
     mu_current = asind(1/M_current)  # Mach angle
     println(&quot;$i\t$(round(theta_current, digits=1))\t$(round(M_current, digits=3))\t$(round(nu_current, digits=2))\t$(round(mu_current, digits=1))&quot;)
 end
 
 # Compare with exact solution
-M_exact = expand_mach2(M1, theta_total)
-println(&quot;\nExact solution M_final: $(round(M_exact, digits=3))&quot;)</code></pre><p>These examples demonstrate the versatility of CompAir.jl for solving practical compressible flow problems. Each example builds upon the basic functions to analyze complex scenarios encountered in aerospace engineering, propulsion systems, and wind tunnel design.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../quickstart/">« Quick Start</a><a class="docs-footer-nextpage" href="../../api/isentropic/">Isentropic Relations »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Monday 24 November 2025 01:51">Monday 24 November 2025</span>. Using Julia version 1.12.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+M_exact = pm_mach2(M1, theta_total)
+println(&quot;\nExact solution M_final: $(round(M_exact, digits=3))&quot;)</code></pre><p>These examples demonstrate the versatility of CompAir.jl for solving practical compressible flow problems. Each example builds upon the basic functions to analyze complex scenarios encountered in aerospace engineering, propulsion systems, and wind tunnel design.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../quickstart/">« Quick Start</a><a class="docs-footer-nextpage" href="../../api/isentropic/">Isentropic Relations »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Saturday 7 February 2026 20:33">Saturday 7 February 2026</span>. Using Julia version 1.12.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
