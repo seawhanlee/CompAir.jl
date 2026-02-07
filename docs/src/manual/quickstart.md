@@ -25,9 +25,9 @@ For a flow at Mach 2.0, calculate the stagnation property ratios:
 M = 2.0
 
 # Stagnation to static ratios
-T0_T = total_to_static_temperature_ratio(M)        # Temperature ratio
-p0_p = total_to_static_pressure_ratio(M)        # Pressure ratio  
-rho0_rho = total_to_static_density_ratio(M) # Density ratio
+T0_T = t0_over_t(M)        # Temperature ratio
+p0_p = p0_over_p(M)        # Pressure ratio  
+rho0_rho = rho0_over_rho(M) # Density ratio
 
 println("Isentropic Relations at M = $M:")
 println("T₀/T = $(round(T0_T, digits=3))")
@@ -107,8 +107,8 @@ M1 = 2.0
 theta = 20.0  # turning angle in degrees
 
 # Calculate downstream Mach number and pressure ratio
-M2 = expand_mach2(M1, theta)
-p_ratio = expand_p2(M1, theta)
+M2 = pm_mach2(M1, theta)
+p_ratio = pm_p1_over_p2(M1, theta)
 
 println("Prandtl-Meyer Expansion:")
 println("M₁ = $M1 → M₂ = $(round(M2, digits=3))")
@@ -131,7 +131,7 @@ Calculate atmospheric conditions at different altitudes using the US Standard At
 altitudes = [0.0, 11.0]  # km
 
 for alt in altitudes
-    density, pressure, temperature, asound, viscosity = atmosphere_properties_at(alt)
+    density, pressure, temperature, asound, viscosity = atmos(alt)
     
     println("Altitude: $(alt) km")
     println("  Density: $(round(density, digits=3)) kg/m³")
@@ -164,7 +164,7 @@ Analyze nozzle flow for a given area ratio:
 ```julia
 # Design exit Mach number
 M_exit = 3.0
-area_ratio = area_ratio_at(M_exit)
+area_ratio = a_over_astar(M_exit)
 
 println("Nozzle Design:")
 println("Exit Mach number: $M_exit")
@@ -172,8 +172,8 @@ println("Area ratio A/A*: $(round(area_ratio, digits=2))")
 
 # Find Mach numbers for given area ratio
 A_ratio = 5.0
-M_subsonic = mach_by_area_ratio(A_ratio, 1.4, 0.1)    # subsonic solution
-M_supersonic = mach_by_area_ratio(A_ratio, 1.4, 2.0)  # supersonic solution
+M_subsonic = mach_from_area_ratio(A_ratio, 1.4, 0.1)    # subsonic solution
+M_supersonic = mach_from_area_ratio(A_ratio, 1.4, 2.0)  # supersonic solution
 
 println("\nFor A/A* = $A_ratio:")
 println("Subsonic M = $(round(M_subsonic, digits=3))")
@@ -199,10 +199,10 @@ Most functions accept a `gamma` parameter for different gases:
 M = 2.0
 
 # Air (γ = 1.4, default)
-T0_T_air = total_to_static_temperature_ratio(M)
+T0_T_air = t0_over_t(M)
 
 # Helium (γ ≈ 1.67)
-T0_T_helium = total_to_static_temperature_ratio(M, 1.67)
+T0_T_helium = t0_over_t(M, 1.67)
 
 println("Temperature ratios at M = $M:")
 println("Air (γ=1.4): $(round(T0_T_air, digits=3))")
@@ -237,8 +237,8 @@ Most functions use sensible defaults:
 
 ```julia
 # These are equivalent
-p0_p_1 = total_to_static_pressure_ratio(2.0, 1.4)  # explicit gamma
-p0_p_2 = total_to_static_pressure_ratio(2.0)       # default gamma=1.4
+p0_p_1 = p0_over_p(2.0, 1.4)  # explicit gamma
+p0_p_2 = p0_over_p(2.0)       # default gamma=1.4
 
 println(p0_p_1 == p0_p_2)  # true
 ```

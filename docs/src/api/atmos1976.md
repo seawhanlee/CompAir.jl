@@ -56,18 +56,18 @@ Where:
 ## Functions
 
 ```@docs
-atmosphere_properties_at
-geometric_to_geopotential_altitude
-geopotential_to_geometric_altitude
+atmos
+geo_to_geopot
+geopot_to_geo
 sutherland_viscosity
 ```
 
 ## Function Details
 
-### atmosphere_properties_at
+### atmos
 
 ```julia
-atmosphere_properties_at(alt)
+atmos(alt)
 ```
 
 Calculate complete atmospheric properties at a given altitude using the US Standard Atmosphere 1976 model.
@@ -84,17 +84,17 @@ Calculate complete atmospheric properties at a given altitude using the US Stand
 
 **Example:**
 ```julia
-julia> density, pressure, temperature, asound, viscosity = atmosphere_properties_at(11.0)
+julia> density, pressure, temperature, asound, viscosity = atmos(11.0)
 (0.36391, 22632.1, 216.65, 295.07, 1.4216e-5)
 
 julia> println("At 11 km: ρ=$(round(density, digits=3)) kg/m³, p=$(round(pressure/1000, digits=1)) kPa")
 At 11 km: ρ=0.364 kg/m³, p=22.6 kPa
 ```
 
-### geometric_to_geopotential_altitude
+### geo_to_geopot
 
 ```julia
-geometric_to_geopotential_altitude(alt, rearth=6369.0)
+geo_to_geopot(alt, rearth=6369.0)
 ```
 
 Convert geometric altitude to geopotential altitude.
@@ -111,17 +111,17 @@ $$h' = \frac{r_0 h}{r_0 + h}$$
 
 **Example:**
 ```julia
-julia> geometric_to_geopotential_altitude(20.0)
+julia> geo_to_geopot(20.0)
 19.93743718592965
 
-julia> geometric_to_geopotential_altitude(50.0)
+julia> geo_to_geopot(50.0)
 49.61139896373057
 ```
 
-### geopotential_to_geometric_altitude
+### geopot_to_geo
 
 ```julia
-geopotential_to_geometric_altitude(alt, rearth=6369.0)
+geopot_to_geo(alt, rearth=6369.0)
 ```
 
 Convert geopotential altitude to geometric altitude.
@@ -138,10 +138,10 @@ $$h = \frac{r_0 h'}{r_0 - h'}$$
 
 **Example:**
 ```julia
-julia> geopotential_to_geometric_altitude(19.937)
+julia> geopot_to_geo(19.937)
 19.999685738514174
 
-julia> geopotential_to_geometric_altitude(49.611)
+julia> geopot_to_geo(49.611)
 49.999743718592965
 ```
 
@@ -186,7 +186,7 @@ cruise_alt = 11.0  # km (36,000 ft)
 airspeed = 250     # m/s
 
 # Get atmospheric properties
-rho, p, T, a, mu = atmosphere_properties_at(cruise_alt)
+rho, p, T, a, mu = atmos(cruise_alt)
 
 # Calculate flight parameters
 Mach = airspeed / a
@@ -214,7 +214,7 @@ println("Alt(km)\tρ(kg/m³)\tp(kPa)\tT(K)\ta(m/s)\tμ(μPa·s)")
 println("------\t--------\t------\t-----\t------\t--------")
 
 for alt in altitudes
-    density, pressure, temperature, asound, viscosity = atmosphere_properties_at(alt)
+    density, pressure, temperature, asound, viscosity = atmos(alt)
     
     println("$(alt)\t$(round(density, digits=3))\t\t$(round(pressure/1000, digits=1))\t$(round(temperature, digits=1))\t$(round(asound, digits=1))\t$(round(viscosity*1e6, digits=1))")
 end
@@ -233,10 +233,10 @@ println("------\t--------\t------\t-----------")
 V_rocket = 500  # m/s (approximate)
 
 for alt in 0:5:30
-    rho, p, T, a, mu = atmosphere_properties_at(alt)
+    rho, p, T, a, mu = atmos(alt)
     
     # Relative density and dynamic pressure
-    rho0, _, _, _, _ = atmosphere_properties_at(0.0)
+    rho0, _, _, _, _ = atmos(0.0)
     rho_rel = rho / rho0
     q_rel = rho_rel  # Assuming constant velocity
     
@@ -261,10 +261,10 @@ println("Location\tAlt(km)\tρ(kg/m³)\tp(kPa)\tRe correction")
 println("--------\t------\t--------\t------\t-------------")
 
 # Reference: sea level
-rho_ref, p_ref, T_ref, a_ref, mu_ref = atmosphere_properties_at(0.0)
+rho_ref, p_ref, T_ref, a_ref, mu_ref = atmos(0.0)
 
 for (location, alt) in test_conditions
-    rho, p, T, a, mu = atmosphere_properties_at(alt)
+    rho, p, T, a, mu = atmos(alt)
     
     # Reynolds number correction factor
     Re_correction = (rho/rho_ref) * (mu_ref/mu)
@@ -287,7 +287,7 @@ println("Alt(km)\tT(K)\ta(m/s)\tV(m/s)\tρ(kg/m³)\tRe/m(×10⁶)")
 println("------\t-----\t------\t------\t--------\t----------")
 
 for alt in cruise_alts
-    rho, p, T, a, mu = atmosphere_properties_at(alt)
+    rho, p, T, a, mu = atmos(alt)
     
     V_cruise = cruise_mach * a
     Re_per_m = rho * V_cruise / mu
@@ -315,7 +315,7 @@ println("Alt(km)\tParameter\tCalculated\tStandard\tError(%)")
 println("------\t---------\t----------\t--------\t-------")
 
 for (alt, rho_std, p_std, T_std) in validation_points
-    rho_calc, p_calc, T_calc, _, _ = atmosphere_properties_at(alt)
+    rho_calc, p_calc, T_calc, _, _ = atmos(alt)
     
     rho_error = abs(rho_calc - rho_std) / rho_std * 100
     p_error = abs(p_calc - p_std) / p_std * 100
@@ -338,8 +338,8 @@ println("Geometric(km)\tGeopotential(km)\tDifference(m)")
 println("------------\t---------------\t-------------")
 
 for h_geom in [0, 10, 20, 30, 50, 80]
-    h_geop = geometric_to_geopotential_altitude(h_geom)
-    h_back = geopotential_to_geometric_altitude(h_geop)
+    h_geop = geo_to_geopot(h_geom)
+    h_back = geopot_to_geo(h_geop)
     difference = (h_geom - h_geop) * 1000  # Convert to meters
     error = abs(h_back - h_geom)
     
@@ -386,8 +386,8 @@ for i in 1:length(altitudes)-1
     alt1 = altitudes[i]
     alt2 = altitudes[i+1]
     
-    rho1, _, _, _, _ = atmosphere_properties_at(alt1)
-    rho2, _, _, _, _ = atmosphere_properties_at(alt2)
+    rho1, _, _, _, _ = atmos(alt1)
+    rho2, _, _, _, _ = atmos(alt2)
     
     # Calculate scale height: H = Δh / ln(ρ₁/ρ₂)
     delta_h = alt2 - alt1
@@ -406,7 +406,7 @@ Working with different unit systems:
 alt_ft = 36000  # feet
 alt_km = alt_ft * 0.0003048  # Convert to km
 
-rho, p, T, a, mu = atmosphere_properties_at(alt_km)
+rho, p, T, a, mu = atmos(alt_km)
 
 # Convert to imperial units
 rho_slugft3 = rho / 515.379  # kg/m³ to slug/ft³

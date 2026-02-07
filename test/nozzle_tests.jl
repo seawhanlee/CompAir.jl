@@ -9,12 +9,12 @@
     @test isapprox(CompAir.mdot(4.0), 0.06388, rtol=1e-3)
 end
 
-@testset "area_ratio_at" begin
+@testset "a_over_astar" begin
     # Test critical area ratio
-    @test isapprox(CompAir.area_ratio_at(1.0), 1.0, rtol=1e-3)
-    @test isapprox(CompAir.area_ratio_at(2.0), 1.6875, rtol=1e-3)
-    @test isapprox(CompAir.area_ratio_at(3.0), 4.2345, rtol=1e-3)
-    @test isapprox(CompAir.area_ratio_at(4.0), 10.7187, rtol=1e-3)
+    @test isapprox(CompAir.a_over_astar(1.0), 1.0, rtol=1e-3)
+    @test isapprox(CompAir.a_over_astar(2.0), 1.6875, rtol=1e-3)
+    @test isapprox(CompAir.a_over_astar(3.0), 4.2345, rtol=1e-3)
+    @test isapprox(CompAir.a_over_astar(4.0), 10.7187, rtol=1e-3)
 end
 
 @testset "subsonic_mach_from_area_ratio" begin

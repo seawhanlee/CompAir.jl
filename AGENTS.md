@@ -50,26 +50,44 @@ CompAir/
 
 | Function | File | Returns | Domain |
 |----------|------|---------|--------|
-| `total_to_static_temperature_ratio(M, γ)` | isentropic.jl | Float64 | T₀/T |
-| `total_to_static_pressure_ratio(M, γ)` | isentropic.jl | Float64 | p₀/p |
-| `total_to_static_density_ratio(M, γ)` | isentropic.jl | Float64 | ρ₀/ρ |
+| `t0_over_t(M, γ)` | isentropic.jl | Float64 | T₀/T |
+| `p0_over_p(M, γ)` | isentropic.jl | Float64 | p₀/p |
+| `rho0_over_rho(M, γ)` | isentropic.jl | Float64 | ρ₀/ρ |
+| `ns_mach2(M, γ)` | normal_shock.jl | Float64 | Post-shock Mach |
+| `ns_rho2_over_rho1(M, γ)` | normal_shock.jl | Float64 | Normal shock density ratio |
+| `ns_p2_over_p1(M, γ)` | normal_shock.jl | Float64 | Normal shock pressure ratio |
+| `ns_t2_over_t1(M, γ)` | normal_shock.jl | Float64 | Normal shock temperature ratio |
+| `ns_p02(M, γ)` | normal_shock.jl | Float64 | Post-shock total pressure |
+| `ns_p02_over_p01(M, γ)` | normal_shock.jl | Float64 | Total pressure ratio |
 | `solve_normal(M, γ)` | normal_shock.jl | NamedTuple `(M2, rho2_ratio, p2_ratio, p0_ratio)` | Normal shock |
-| `solve_oblique(M, θ, γ)` | oblique_shock.jl | NamedTuple `(M2, rho2_ratio, p2_ratio, p0_ratio, beta)` | Oblique shock |
+| `theta_from_beta(M, β, γ)` | oblique_shock.jl | Float64 | Deflection from shock angle |
+| `beta_from_theta(M, θ, γ)` | oblique_shock.jl | Float64 | Weak shock angle |
+| `mn1(M, β)` | oblique_shock.jl | Float64 | Normal Mach component |
+| `os_mach2(M, θ, γ)` | oblique_shock.jl | Float64 | Post-oblique-shock Mach |
 | `theta_max(M, γ)` | oblique_shock.jl | Float64 | Max wedge angle |
+| `solve_oblique(M, θ, γ)` | oblique_shock.jl | NamedTuple `(M2, rho2_ratio, p2_ratio, p0_ratio, beta)` | Oblique shock |
 | `prandtl_meyer(M, γ)` | prandtl_expand.jl | Float64 (degrees) | ν(M) |
-| `expand_mach2(M1, θ, γ)` | prandtl_expand.jl | Float64 | Post-expansion M |
-| `solve_shock(M, angle, γ)` | cone_shock.jl | NamedTuple | Cone shock via Taylor-Maccoll |
+| `pm_mach2(M1, θ, γ)` | prandtl_expand.jl | Float64 | Post-expansion M |
+| `pm_p1_over_p2(M1, θ, γ)` | prandtl_expand.jl | Float64 | Expansion pressure ratio |
+| `pm_theta_from_pratio(M1, p_ratio, γ)` | prandtl_expand.jl | Float64 | Turning angle from p ratio |
+| `cone_theta_eff(M, angle, γ)` | cone_shock.jl | Float64 | Effective cone half-angle |
+| `cone_beta(M, angle, γ)` | cone_shock.jl | Float64 | Cone shock angle |
+| `solve_cone(M, angle, γ)` | cone_shock.jl | NamedTuple | Cone shock via Taylor-Maccoll |
 | `solve_cone_properties(M, angle; psi, γ)` | cone_shock.jl | Tuple (5 or 6 values) | Cone surface properties |
 | `mdot(M, area, p0, t0, γ, R)` | nozzle.jl | Float64 | Mass flow rate |
-| `area_ratio_at(M, γ)` | nozzle.jl | Float64 | A/A* |
-| `mach_by_area_ratio(A, γ, x0)` | nozzle.jl | Float64 | M from A/A* (x0 < 1 → subsonic) |
-| `atmosphere_properties_at(alt)` | atmos1976.jl | Tuple (ρ, p, T, a, μ) | US Std Atmos 1976 |
+| `a_over_astar(M, γ)` | nozzle.jl | Float64 | A/A* |
+| `mach_from_area_ratio(A, γ, x0)` | nozzle.jl | Float64 | M from A/A* (x0 < 1 → subsonic) |
+| `mach_after_exit_shock(M, A, γ)` | nozzle.jl | Float64 | Mach after exit shock |
+| `pressure_after_exit_shock(M, A, γ)` | nozzle.jl | Float64 | Pressure after exit shock |
+| `atmos(alt)` | atmos1976.jl | Tuple (ρ, p, T, a, μ) | US Std Atmos 1976 |
+| `geo_to_geopot(alt)` | atmos1976.jl | Float64 | Geometric → geopotential alt |
+| `geopot_to_geo(alt)` | atmos1976.jl | Float64 | Geopotential → geometric alt |
 | `sutherland_viscosity(θ)` | atmos1976.jl | Float64 | Dynamic viscosity |
 | `intake_ramp(M∞, angles, γ)` | intake.jl | NamedTuple `(M, rho2_ratio, p2_ratio, p0_ratio, beta)` | Multi-stage ramp |
 
 ### Internal helpers (not exported, prefixed with `_`)
 
-`_tangent_theta`, `_beta_weak`, `_Mn1`, `_taylor_maccoll`, `_integrate_tm`, `_cone_mach`, `_air1976`, `_mdot`, `_area_ratio_at`, `_mach_by_area_ratio`, `_intake_ramp`, etc.
+`_tangent_theta`, `_beta_weak`, `_Mn1`, `_taylor_maccoll`, `_integrate_tm`, `_cone_mach`, `_air1976`, `_mdot`, `_area_ratio_at`, `_mach_by_area_ratio`, `_subsonic_mach_from_area_ratio`, `_subsonic_pressure_from_area_ratio`, `_mach_after_shock_at_exit`, `_pressure_after_shock_at_exit`, `_intake_ramp`, etc.
 
 ## CONVENTIONS
 
@@ -96,6 +114,7 @@ CompAir/
 - **Do NOT remove Korean comments** — they are part of the original author's documentation
 - **Do NOT use `Float64` in public function signatures** — use `::Real` for flexibility, convert internally
 - **`solve_oblique` prints to stdout on bow shock** — this is known behavior (line 201), not a bug
+- **Backward compatibility**: All 25 renamed functions have `@deprecate` entries in `src/deprecated.jl`. Old names still work but emit deprecation warnings.
 
 ## COMMANDS
 
@@ -131,6 +150,6 @@ docker run -it compair
 - **Port origin**: Faithful port of Python CompAir by Inha AADL. Algorithms match original; improvements in type safety and numerical stability.
 - **Atmosphere model**: 7-layer model valid up to 86 km. Uses geopotential altitude internally. Layer selection is index-based (fixed in v1.1.0).
 - **`solve_cone_properties`** returns different tuple lengths depending on `psi` kwarg (5 without, 6 with) — not a NamedTuple, just positional values.
-- **`mach_by_area_ratio` initial guess matters**: `x0 < 1` → subsonic solution, `x0 ≥ 1` → supersonic solution. Two valid roots exist for any A/A* > 1.
+- **`mach_from_area_ratio` initial guess matters**: `x0 < 1` → subsonic solution, `x0 ≥ 1` → supersonic solution. Two valid roots exist for any A/A* > 1.
 - **`sutherland_viscosity` signature mismatch**: Docstring says `mu0=1.458e-6` but implementation uses `mu0=1.716e-5`. Implementation is correct (standard Sutherland constant).
 - **GEMINI.md exists**: Contains prior session context and project overview. Not authoritative — this file supersedes it for AI agent use.

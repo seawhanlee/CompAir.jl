@@ -7,23 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- Comprehensive documentation with Documenter.jl
-- API reference for all modules
-- Detailed examples and usage guides
-- Developer documentation and contributing guidelines
+## [1.2.0] - 2026-02-08
 
 ### Changed
-- Improved function documentation with mathematical background
-- Enhanced error messages and type annotations
-- **Improved internal variable naming for better code readability**:
-  - `atmos1976.jl`: More descriptive atmospheric model variables (e.g., `h` → `geopotential_altitude`, `dh` → `altitude_difference`)
-  - `nozzle.jl`: Clearer nozzle flow variables (e.g., `Me6` → `exit_mach`, `pe` → `exit_pressure`)
-  - `oblique_shock.jl`, `prandtl_expand.jl`: Better closure function names (e.g., `f(x)` → `beta_objective(beta_angle)`)
-  - `cone_shock.jl`: Improved Taylor-Maccoll integration variables (e.g., `vec` → `velocity_vector`, `v` → `velocity_magnitude`)
-  - `intake.jl`: More meaningful multi-stage intake variables (e.g., `n` → `num_stages`, `i` → `stage_index`)
-  - Translated Korean comments to English for consistency
-  - Note: Public API and domain-standard notation (M, gamma, theta, beta) remain unchanged for backward compatibility
+- **Renamed 25 public API functions** to concise, domain-standard notation following Anderson's textbook conventions:
+  - Isentropic: `total_to_static_temperature_ratio` → `t0_over_t`, `total_to_static_pressure_ratio` → `p0_over_p`, `total_to_static_density_ratio` → `rho0_over_rho`
+  - Normal shock: `mach_after_normal_shock` → `ns_mach2`, `density_ratio_normal_shock` → `ns_rho2_over_rho1`, `pressure_ratio_normal_shock` → `ns_p2_over_p1`, `temperature_ratio_normal_shock` → `ns_t2_over_t1`, `total_pressure_after_normal_shock` → `ns_p02`, `total_pressure_ratio_normal_shock` → `ns_p02_over_p01`
+  - Oblique shock: `theta_beta` → `theta_from_beta`, `oblique_beta_weak` → `beta_from_theta`, `Mn1` → `mn1`, `oblique_mach2` → `os_mach2`
+  - Prandtl-Meyer: `expand_mach2` → `pm_mach2`, `expand_p2` → `pm_p1_over_p2`, `theta_p` → `pm_theta_from_pratio`
+  - Cone shock: `theta_eff` → `cone_theta_eff`, `cone_beta_weak` → `cone_beta`, `solve_shock` → `solve_cone`
+  - Nozzle: `area_ratio_at` → `a_over_astar`, `mach_by_area_ratio` → `mach_from_area_ratio`, `mach_after_shock_at_exit` → `mach_after_exit_shock`, `pressure_after_shock_at_exit` → `pressure_after_exit_shock`
+  - Atmosphere: `atmosphere_properties_at` → `atmos`, `geometric_to_geopotential_altitude` → `geo_to_geopot`, `geopotential_to_geometric_altitude` → `geopot_to_geo`
+
+### Deprecated
+- All 25 old function names remain available via `@deprecate` in `src/deprecated.jl` and will emit deprecation warnings. They will be removed in a future major version.
+
+### Added
+- `src/deprecated.jl` — backward compatibility layer with `Base.@deprecate` for all renamed functions
 
 ## [1.0.0] - 2024-12-19
 
@@ -137,12 +137,12 @@ Most functions maintain the same names and signatures:
 # Python CompAir
 from compair import t0_over_t, solve_normal, atmos1976_at
 
-# Julia CompAir.jl
+# Julia CompAir.jl (v1.2.0+)
 using CompAir
-# Function names updated for clarity:
-# t0_over_t -> total_to_static_temperature_ratio
+# Function names use concise domain-standard notation:
+# t0_over_t (same as Python)
 # solve_normal (same)
-# atmos1976_at -> atmosphere_properties_at
+# atmos1976_at -> atmos
 ```
 
 #### API Consistency

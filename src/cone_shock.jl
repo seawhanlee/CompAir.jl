@@ -46,11 +46,11 @@ function _integrate_tm(M, angle, theta, gamma=1.4)
     maximum_deflection_angle = theta_max(M, gamma)
 
     if theta <= maximum_deflection_angle
-        shock_angle = oblique_beta_weak(M, theta, gamma)
-        downstream_mach = oblique_mach2(M, theta, gamma)
+        shock_angle = beta_from_theta(M, theta, gamma)
+        downstream_mach = os_mach2(M, theta, gamma)
     else
         shock_angle = 90
-        downstream_mach = mach_after_normal_shock(M, gamma)
+        downstream_mach = ns_mach2(M, gamma)
     end
 
     normalized_velocity = sqrt(((gamma - 1) / 2 * downstream_mach^2) / (1 + (gamma - 1) / 2 * downstream_mach^2))
@@ -73,7 +73,7 @@ function _integrate_tm(M, angle, theta, gamma=1.4)
 end
 
 """
-    theta_eff(M, angle, gamma=1.4)
+    cone_theta_eff(M, angle, gamma=1.4)
 
 Calculates the effective wedge angle for a conical shock.
 
@@ -85,13 +85,13 @@ Calculates the effective wedge angle for a conical shock.
 # Returns
 - `theta_eff::Float64`: Effective wedge angle (degrees)
 """
-function theta_eff(M, angle, gamma=1.4)
+function cone_theta_eff(M, angle, gamma=1.4)
     tangential_velocity_objective(wedge_angle) = _integrate_tm(M, angle, wedge_angle, gamma).u[end][2] # Use v_theta (tangential velocity component)
     return Roots.find_zero(tangential_velocity_objective, 1e-3)
 end
 
 """
-    cone_beta_weak(M, angle, gamma=1.4)
+    cone_beta(M, angle, gamma=1.4)
 
 Calculates the conical shock wave angle for a given Mach number `M` and cone half-angle.
 
@@ -103,9 +103,9 @@ Calculates the conical shock wave angle for a given Mach number `M` and cone hal
 # Returns
 - `beta::Float64`: Conical shock wave angle (degrees)
 """
-function cone_beta_weak(M, angle, gamma=1.4)
-    theta = theta_eff(M, angle, gamma)
-    return oblique_beta_weak(M, theta, gamma)
+function cone_beta(M, angle, gamma=1.4)
+    theta = cone_theta_eff(M, angle, gamma)
+    return beta_from_theta(M, theta, gamma)
 end
 
 """
@@ -123,8 +123,8 @@ upstream Mach number `M` and cone half-angle.
 - `M2::Float64`: Downstream Mach number
 """
 function cone_mach2(M, angle, gamma=1.4)
-    theta = theta_eff(M, angle, gamma)
-    return oblique_mach2(M, theta, gamma)
+    theta = cone_theta_eff(M, angle, gamma)
+    return os_mach2(M, theta, gamma)
 end
 
 """
@@ -168,12 +168,12 @@ and cone half-angle.
 - `M2::Float64`: Mach number at the cone surface
 """
 function cone_mach_surface(M, angle, gamma=1.4)
-    theta = theta_eff(M, angle, gamma)
+    theta = cone_theta_eff(M, angle, gamma)
     return _cone_mach(M, angle, theta, gamma)
 end
 
 """
-    solve_shock(M, angle, gamma=1.4)
+    solve_cone(M, angle, gamma=1.4)
 
 Calculates the flow properties downstream of a conical shock wave for a given
 upstream Mach number `M` and cone half-angle.
@@ -191,8 +191,8 @@ A `NamedTuple` containing:
 - `p0_ratio::Float64`: Total pressure ratio across the shock (p₀₂/p₀₁)
 - `beta::Float64`: Conical shock wave angle (degrees)
 """
-function solve_shock(M, angle, gamma=1.4)
-    theta = theta_eff(M, angle, gamma)
+function solve_cone(M, angle, gamma=1.4)
+    theta = cone_theta_eff(M, angle, gamma)
     return solve_oblique(M, theta, gamma)
 end
 
@@ -225,7 +225,7 @@ for a given upstream Mach number `M` and cone half-angle.
     - `phi::Float64`: Flow direction at psi (degrees)
 """
 function solve_cone_properties(M, angle; psi::Union{Float64, Nothing}=nothing, gamma=1.4)
-    theta_eff_val = theta_eff(M, angle, gamma)
+    theta_eff_val = cone_theta_eff(M, angle, gamma)
 
     # 충격파 직후 물성치 계산 (M은 자유흐름 마하수)
     # M_after_shock는 충격파 직후 마하수
@@ -246,12 +246,12 @@ function solve_cone_properties(M, angle; psi::Union{Float64, Nothing}=nothing, g
     # 밀도비 계산 (psi_calc 지점의 밀도 / 자유흐름 밀도)
     # rho_psi / rho_freestream = (rho_psi / rho_after_shock) * (rho_after_shock / rho_freestream)
     # 여기서 rho_psi / rho_after_shock = rho0_over_rho(M_after_shock) / rho0_over_rho(Mc_at_psi) (등엔트로피 과정)
-    rhoc_ratio_freestream = rho_ratio_across_shock * total_to_static_density_ratio(M_after_shock, gamma) / total_to_static_density_ratio(Mc_at_psi, gamma)
+    rhoc_ratio_freestream = rho_ratio_across_shock * rho0_over_rho(M_after_shock, gamma) / rho0_over_rho(Mc_at_psi, gamma)
 
     # 압력비 계산 (psi_calc 지점의 압력 / 자유흐름 압력)
     # p_psi / p_freestream = (p_psi / p_after_shock) * (p_after_shock / p_freestream)
     # 여기서 p_psi / p_after_shock = p0_over_p(M_after_shock) / p0_over_p(Mc_at_psi) (등엔트로피 과정)
-    pc_ratio_freestream = p_ratio_across_shock * total_to_static_pressure_ratio(M_after_shock, gamma) / total_to_static_pressure_ratio(Mc_at_psi, gamma)
+    pc_ratio_freestream = p_ratio_across_shock * p0_over_p(M_after_shock, gamma) / p0_over_p(Mc_at_psi, gamma)
 
     if psi === nothing
         # 기존 solve_cone_theta와 동일한 반환 (phi 제외)

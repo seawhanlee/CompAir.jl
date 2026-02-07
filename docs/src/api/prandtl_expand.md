@@ -41,9 +41,9 @@ Where:
 
 ```@docs
 prandtl_meyer
-expand_mach2
-expand_p2
-theta_p
+pm_mach2
+pm_p1_over_p2
+pm_theta_from_pratio
 ```
 
 ## Function Details
@@ -78,10 +78,10 @@ julia> prandtl_meyer(1.0)
 0.0
 ```
 
-### expand_mach2
+### pm_mach2
 
 ```julia
-expand_mach2(M1, theta, gamma=1.4)
+pm_mach2(M1, theta, gamma=1.4)
 ```
 
 Calculate the downstream Mach number after a Prandtl-Meyer expansion through angle θ.
@@ -96,17 +96,17 @@ Calculate the downstream Mach number after a Prandtl-Meyer expansion through ang
 
 **Example:**
 ```julia
-julia> expand_mach2(2.0, 20.0)
+julia> pm_mach2(2.0, 20.0)
 2.3848314132746953
 
-julia> expand_mach2(1.5, 10.0)
+julia> pm_mach2(1.5, 10.0)
 1.7985676229179285
 ```
 
-### expand_p2
+### pm_p1_over_p2
 
 ```julia
-expand_p2(M1, theta, gamma=1.4)
+pm_p1_over_p2(M1, theta, gamma=1.4)
 ```
 
 Calculate the pressure ratio (p₁/p₂) across a Prandtl-Meyer expansion.
@@ -121,17 +121,17 @@ Calculate the pressure ratio (p₁/p₂) across a Prandtl-Meyer expansion.
 
 **Example:**
 ```julia
-julia> expand_p2(2.0, 20.0)
+julia> pm_p1_over_p2(2.0, 20.0)
 1.687094471207049
 
-julia> expand_p2(3.0, 15.0)
+julia> pm_p1_over_p2(3.0, 15.0)
 1.4720270270270274
 ```
 
-### theta_p
+### pm_theta_from_pratio
 
 ```julia
-theta_p(pratio, M1, gamma=1.4)
+pm_theta_from_pratio(pratio, M1, gamma=1.4)
 ```
 
 Calculate the turning angle required to achieve a specified pressure ratio across an expansion.
@@ -146,10 +146,10 @@ Calculate the turning angle required to achieve a specified pressure ratio acros
 
 **Example:**
 ```julia
-julia> theta_p(1.5, 2.0)
+julia> pm_theta_from_pratio(1.5, 2.0)
 14.396394107665233
 
-julia> theta_p(2.0, 2.5)
+julia> pm_theta_from_pratio(2.0, 2.5)
 22.69419642857143
 ```
 
@@ -181,7 +181,7 @@ if theta_required/2 <= theta_max
     println("Design feasible - wall angle: $(round(theta_required/2, digits=1))°")
     
     # Calculate area ratio
-    area_ratio = area_ratio_at(M_exit)
+    area_ratio = a_over_astar(M_exit)
     println("Area ratio A_exit/A*: $(round(area_ratio, digits=2))")
 else
     println("Design not feasible - requires curved walls or multiple sections")
@@ -217,8 +217,8 @@ for i in 0:n_waves
         M_current = M1
         p_ratio = 1.0
     else
-        M_current = expand_mach2(M1, theta_current)
-        p_ratio = 1.0 / expand_p2(M1, theta_current)
+     M_current = pm_mach2(M1, theta_current)
+     p_ratio = 1.0 / pm_p1_over_p2(M1, theta_current)
     end
     
     mu = asind(1/M_current)  # Mach angle
@@ -241,8 +241,8 @@ println("Upstream Mach: $M1")
 println("Corner angle: $step_angle°")
 
 # Expansion analysis
-M2 = expand_mach2(M1, step_angle)
-p_ratio = expand_p2(M1, step_angle)
+M2 = pm_mach2(M1, step_angle)
+p_ratio = pm_p1_over_p2(M1, step_angle)
 
 # Calculate other properties
 T_ratio = (1 + 0.2*M1^2) / (1 + 0.2*M2^2)
@@ -291,16 +291,16 @@ for i in 0:n_steps
         nu_current = prandtl_meyer(M_current)
         mu_current = asind(1/M_current)  # Mach angle
         println("$i\t$(round(theta_current, digits=1))\t$(round(M_current, digits=3))\t$(round(nu_current, digits=2))\t$(round(mu_current, digits=1))")
-    else
-        M_current = expand_mach2(M1, theta_current)
-        nu_current = prandtl_meyer(M_current)
-        mu_current = asind(1/M_current)
-        println("$i\t$(round(theta_current, digits=1))\t$(round(M_current, digits=3))\t$(round(nu_current, digits=2))\t$(round(mu_current, digits=1))")
-    end
+     else
+         M_current = pm_mach2(M1, theta_current)
+         nu_current = prandtl_meyer(M_current)
+         mu_current = asind(1/M_current)
+         println("$i\t$(round(theta_current, digits=1))\t$(round(M_current, digits=3))\t$(round(nu_current, digits=2))\t$(round(mu_current, digits=1))")
+     end
 end
 
 # Compare with exact solution
-M_exact = expand_mach2(M1, theta_total)
+M_exact = pm_mach2(M1, theta_total)
 println("\nExact solution M_final: $(round(M_exact, digits=3))")
 println("Final step M: $(round(M_current, digits=3))")
 println("Error: $(round(abs(M_exact - M_current)/M_exact * 100, digits=2))%")
@@ -327,8 +327,8 @@ println("Gas\tγ\tM₂\tp₁/p₂\tν₁ (°)\tν₂ (°)")
 println("---\t----\t----\t----- -----\t------\t------")
 
 for (gas, gamma) in gases
-    M2 = expand_mach2(M1, theta, gamma)
-    p_ratio = expand_p2(M1, theta, gamma)
+     M2 = pm_mach2(M1, theta, gamma)
+     p_ratio = pm_p1_over_p2(M1, theta, gamma)
     nu1 = prandtl_meyer(M1, gamma)
     nu2 = prandtl_meyer(M2, gamma)
     
@@ -408,7 +408,7 @@ println("Given turning angle: $theta_given°")
 println("Required M₁: $(round(M1_estimate, digits=3))")
 
 # Verify
-M2_check = expand_mach2(M1_estimate, theta_given)
+M2_check = pm_mach2(M1_estimate, theta_given)
 println("Verification M₂: $(round(M2_check, digits=3))")
 ```
 

@@ -40,21 +40,21 @@ Where subscript 1 denotes upstream conditions and subscript 2 denotes downstream
 ## Functions
 
 ```@docs
-mach_after_normal_shock
-density_ratio_normal_shock
-pressure_ratio_normal_shock
-temperature_ratio_normal_shock
-total_pressure_after_normal_shock
-total_pressure_ratio_normal_shock
+ns_mach2
+ns_rho2_over_rho1
+ns_p2_over_p1
+ns_t2_over_t1
+ns_p02
+ns_p02_over_p01
 solve_normal
 ```
 
 ## Function Details
 
-### mach_after_normal_shock
+### ns_mach2
 
 ```julia
-mach_after_normal_shock(M, gamma=1.4)
+ns_mach2(M, gamma=1.4)
 ```
 
 Calculate the downstream Mach number after a normal shock wave.
@@ -71,17 +71,17 @@ $$M_2 = \sqrt{\frac{1 + \frac{\gamma-1}{2}M_1^2}{\gamma M_1^2 - \frac{\gamma-1}{
 
 **Example:**
 ```julia
-julia> mach_after_normal_shock(2.0)
+julia> ns_mach2(2.0)
 0.5773502691896257
 
-julia> mach_after_normal_shock(3.0)
+julia> ns_mach2(3.0)
 0.4752229748622233
 ```
 
-### density_ratio_normal_shock
+### ns_rho2_over_rho1
 
 ```julia
-density_ratio_normal_shock(M, gamma=1.4)
+ns_rho2_over_rho1(M, gamma=1.4)
 ```
 
 Calculate the density ratio across a normal shock wave.
@@ -98,17 +98,17 @@ $$\frac{\rho_2}{\rho_1} = \frac{(\gamma+1)M_1^2}{2 + (\gamma-1)M_1^2}$$
 
 **Example:**
 ```julia
-julia> density_ratio_normal_shock(2.0)
+julia> ns_rho2_over_rho1(2.0)
 2.6666666666666665
 
-julia> density_ratio_normal_shock(5.0)
+julia> ns_rho2_over_rho1(5.0)
 5.714285714285714
 ```
 
-### pressure_ratio_normal_shock
+### ns_p2_over_p1
 
 ```julia
-pressure_ratio_normal_shock(M, gamma=1.4)
+ns_p2_over_p1(M, gamma=1.4)
 ```
 
 Calculate the pressure ratio across a normal shock wave.
@@ -125,17 +125,17 @@ $$\frac{p_2}{p_1} = 1 + \frac{2\gamma}{\gamma+1}(M_1^2 - 1)$$
 
 **Example:**
 ```julia
-julia> pressure_ratio_normal_shock(2.0)
+julia> ns_p2_over_p1(2.0)
 4.5
 
-julia> pressure_ratio_normal_shock(3.0)
+julia> ns_p2_over_p1(3.0)
 10.333333333333334
 ```
 
-### temperature_ratio_normal_shock
+### ns_t2_over_t1
 
 ```julia
-temperature_ratio_normal_shock(M, gamma=1.4)
+ns_t2_over_t1(M, gamma=1.4)
 ```
 
 Calculate the temperature ratio across a normal shock wave.
@@ -152,17 +152,17 @@ $$\frac{T_2}{T_1} = \frac{p_2}{p_1} \cdot \frac{\rho_1}{\rho_2}$$
 
 **Example:**
 ```julia
-julia> temperature_ratio_normal_shock(2.0)
+julia> ns_t2_over_t1(2.0)
 1.6874999999999998
 
-julia> temperature_ratio_normal_shock(3.0)
+julia> ns_t2_over_t1(3.0)
 1.8076923076923077
 ```
 
-### total_pressure_after_normal_shock
+### ns_p02
 
 ```julia
-total_pressure_after_normal_shock(M, gamma=1.4)
+ns_p02(M, gamma=1.4)
 ```
 
 Calculate the downstream stagnation pressure after a normal shock wave.
@@ -176,17 +176,17 @@ Calculate the downstream stagnation pressure after a normal shock wave.
 
 **Example:**
 ```julia
-julia> total_pressure_after_normal_shock(2.0)
+julia> ns_p02(2.0)
 8.526315789473685
 
-julia> total_pressure_after_normal_shock(3.0)
+julia> ns_p02(3.0)
 12.061224489795916
 ```
 
-### total_pressure_ratio_normal_shock
+### ns_p02_over_p01
 
 ```julia
-total_pressure_ratio_normal_shock(M, gamma=1.4)
+ns_p02_over_p01(M, gamma=1.4)
 ```
 
 Calculate the stagnation pressure ratio across a normal shock wave.
@@ -200,10 +200,10 @@ Calculate the stagnation pressure ratio across a normal shock wave.
 
 **Example:**
 ```julia
-julia> total_pressure_ratio_normal_shock(2.0)
+julia> ns_p02_over_p01(2.0)
 0.7208738938053097
 
-julia> total_pressure_ratio_normal_shock(3.0)
+julia> ns_p02_over_p01(3.0)
 0.32834049679486917
 ```
 
@@ -275,7 +275,7 @@ println("---\t----\t-----\t-----\t-----\t------\t------")
 
 for M1 in 1.1:0.2:4.0
     sol = solve_normal(M1)
-    T_ratio = temperature_ratio_normal_shock(M1)
+    T_ratio = ns_t2_over_t1(M1)
     loss_percent = (1 - sol.p0_ratio) * 100
     
     println("$(round(M1, digits=1))\t$(round(sol.M2, digits=2))\t$(round(sol.p2_ratio, digits=2))\t$(round(sol.rho2_ratio, digits=2))\t$(round(T_ratio, digits=2))\t$(round(sol.p0_ratio, digits=3))\t$(round(loss_percent, digits=1))")
@@ -296,10 +296,10 @@ sol = solve_normal(M1)
 
 # Pressures
 p2_static = p_static * sol.p2_ratio           # Static pressure behind shock
-p02_pitot = p2_static * total_to_static_pressure_ratio(sol.M2)    # Pitot pressure behind shock
+p02_pitot = p2_static * p0_over_p(sol.M2)    # Pitot pressure behind shock
 
 # Compare with direct pitot measurement (incorrect for supersonic)
-p01_direct = p_static * total_to_static_pressure_ratio(M1)    # What pitot would read in supersonic flow
+p01_direct = p_static * p0_over_p(M1)    # What pitot would read in supersonic flow
 
 println("Pitot Tube Analysis in Supersonic Flow:")
 println("Freestream Mach: $M1")
@@ -326,7 +326,7 @@ M_shock = 5.0 # Shock Mach number
 
 # Calculate conditions behind shock (region 2)
 sol = solve_normal(M_shock)
-T_ratio = temperature_ratio_normal_shock(M_shock)
+T_ratio = ns_t2_over_t1(M_shock)
 
 p2 = p4 * sol.p2_ratio
 T2 = T4 * T_ratio
@@ -365,10 +365,10 @@ println("Gas\tγ\tM₂\tp₂/p₁\tρ₂/ρ₁\tp₀₂/p₀₁")
 println("---\t----\t----\t-----\t-----\t------")
 
 for (gas, gamma) in gases
-    M2 = mach_after_normal_shock(M1, gamma)
-    p_ratio = pressure_ratio_normal_shock(M1, gamma)
-    rho_ratio = density_ratio_normal_shock(M1, gamma)
-    p0_ratio = total_pressure_ratio_normal_shock(M1, gamma)
+    M2 = ns_mach2(M1, gamma)
+    p_ratio = ns_p2_over_p1(M1, gamma)
+    rho_ratio = ns_rho2_over_rho1(M1, gamma)
+    p0_ratio = ns_p02_over_p01(M1, gamma)
     
     println("$gas\t$gamma\t$(round(M2, digits=3))\t$(round(p_ratio, digits=2))\t$(round(rho_ratio, digits=2))\t$(round(p0_ratio, digits=3))")
 end
@@ -385,10 +385,10 @@ M1 = 3.0
 gamma = 1.4
 
 # Calculate all ratios
-M2 = mach_after_normal_shock(M1, gamma)
-p_ratio = pressure_ratio_normal_shock(M1, gamma)
-rho_ratio = density_ratio_normal_shock(M1, gamma)
-T_ratio = temperature_ratio_normal_shock(M1, gamma)
+M2 = ns_mach2(M1, gamma)
+p_ratio = ns_p2_over_p1(M1, gamma)
+rho_ratio = ns_rho2_over_rho1(M1, gamma)
+T_ratio = ns_t2_over_t1(M1, gamma)
 
 # Check ideal gas law: p₂/p₁ = (ρ₂/ρ₁)(T₂/T₁)
 ideal_gas_check = p_ratio - (rho_ratio * T_ratio)

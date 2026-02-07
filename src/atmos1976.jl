@@ -1,5 +1,5 @@
 """
-    atmosphere_properties_at(alt)
+    atmos(alt)
 
 Calculates properties of the US Standard Atmosphere 1976 at a given altitude.
 
@@ -13,7 +13,7 @@ Calculates properties of the US Standard Atmosphere 1976 at a given altitude.
 - `asound::Float64`: Speed of sound (m/s)
 - `viscosity::Float64`: Dynamic viscosity (Pa s)
 """
-function atmosphere_properties_at(alt)
+function atmos(alt)
     t0, p0, rho0, a0 = 288.15, 101325.0, 1.225, 340.294
 
     # Compute ratio
@@ -34,7 +34,7 @@ function atmosphere_properties_at(alt)
 end
 
 """
-    geometric_to_geopotential_altitude(alt, rearth=6369.0)
+    geo_to_geopot(alt, rearth=6369.0)
 
 Converts geometric altitude (Z) to geopotential altitude (H).
 
@@ -45,12 +45,12 @@ Converts geometric altitude (Z) to geopotential altitude (H).
 # Returns
 - `H::Float64`: Geopotential altitude (km)
 """
-function geometric_to_geopotential_altitude(alt, rearth=6369.0)
+function geo_to_geopot(alt, rearth=6369.0)
     return alt * rearth / (rearth + alt)
 end
 
 """
-    geopotential_to_geometric_altitude(alt, rearth=6369.0)
+    geopot_to_geo(alt, rearth=6369.0)
 
 Converts geopotential altitude (H) to geometric altitude (Z).
 
@@ -61,7 +61,7 @@ Converts geopotential altitude (H) to geometric altitude (Z).
 # Returns
 - `Z::Float64`: Geometric altitude (km)
 """
-function geopotential_to_geometric_altitude(alt, rearth=6369.0)
+function geopot_to_geo(alt, rearth=6369.0)
     return alt * rearth / (rearth - alt)
 end
 
@@ -77,7 +77,7 @@ function _air1976(alt, gmr=34.163195)
     sea_level_temperature = air_layers[2, 1]
 
     # Compute geopotential altitude
-    geopotential_altitude = geometric_to_geopotential_altitude(alt)
+    geopotential_altitude = geo_to_geopot(alt)
 
     # Find index - determine which atmospheric layer the altitude belongs to
     if geopotential_altitude >= air_layers[1, end]

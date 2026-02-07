@@ -28,11 +28,11 @@ end
 
 # 내부 함수
 function _area_ratio_at(M::Float64, gamma::Float64=1.4)
-    return 1/M*sqrt((2/(gamma+1)*total_to_static_temperature_ratio(M, gamma))^((gamma+1)/(gamma-1)))
+    return 1/M*sqrt((2/(gamma+1)*t0_over_t(M, gamma))^((gamma+1)/(gamma-1)))
 end
 
 """
-    area_ratio_at(M::Real, gamma::Real=1.4)
+    a_over_astar(M::Real, gamma::Real=1.4)
 
 Calculates the area ratio (A/A*) for a given Mach number, where A* is the throat area.
 
@@ -43,7 +43,7 @@ Calculates the area ratio (A/A*) for a given Mach number, where A* is the throat
 # Returns
 - `Float64`: Area ratio (A/A*)
 """
-function area_ratio_at(M::Real, gamma::Real=1.4)
+function a_over_astar(M::Real, gamma::Real=1.4)
     _area_ratio_at(Float64(M), Float64(gamma))
 end
 
@@ -54,7 +54,7 @@ function _mach_by_area_ratio(area::Float64, gamma::Float64=1.4, x0::Float64=0.1)
 end
 
 """
-    mach_by_area_ratio(area::Real, gamma::Real=1.4, x0::Real=0.1)
+    mach_from_area_ratio(area::Real, gamma::Real=1.4, x0::Real=0.1)
 
 Calculates the Mach number for a given area ratio (A/A*).
 
@@ -67,7 +67,7 @@ Calculates the Mach number for a given area ratio (A/A*).
 # Returns
 - `Float64`: Mach number
 """
-function mach_by_area_ratio(area::Real, gamma::Real=1.4, x0::Real=0.1)
+function mach_from_area_ratio(area::Real, gamma::Real=1.4, x0::Real=0.1)
     _mach_by_area_ratio(Float64(area), Float64(gamma), Float64(x0))
 end
 
@@ -95,7 +95,7 @@ end
 # Internal function
 function _subsonic_pressure_from_area_ratio(area::Float64, gamma::Float64=1.4, p0::Float64=1.0)
     exit_mach = _subsonic_mach_from_area_ratio(area, gamma)
-    return 1/total_to_static_pressure_ratio(exit_mach, gamma)*p0
+    return 1/p0_over_p(exit_mach, gamma)*p0
 end
 
 """
@@ -118,11 +118,11 @@ end
 # Internal function
 function _mach_after_shock_at_exit(area::Float64, gamma::Float64=1.4)
     exit_mach = _subsonic_mach_from_area_ratio(area, gamma)
-    return mach_after_normal_shock(exit_mach, gamma)
+    return ns_mach2(exit_mach, gamma)
 end
 
 """
-    mach_after_shock_at_exit(area::Real, gamma::Real=1.4)
+    mach_after_exit_shock(area::Real, gamma::Real=1.4)
 
 Calculates the Mach number after a normal shock at the nozzle exit.
 
@@ -133,7 +133,7 @@ Calculates the Mach number after a normal shock at the nozzle exit.
 # Returns
 - `Float64`: Mach number after the shock
 """
-function mach_after_shock_at_exit(area::Real, gamma::Real=1.4)
+function mach_after_exit_shock(area::Real, gamma::Real=1.4)
     _mach_after_shock_at_exit(Float64(area), Float64(gamma))
 end
 
@@ -141,11 +141,11 @@ end
 function _pressure_after_shock_at_exit(area::Float64, gamma::Float64=1.4, p0::Float64=1.0)
     exit_mach = _subsonic_mach_from_area_ratio(area, gamma)
     exit_pressure = _subsonic_pressure_from_area_ratio(area, gamma, p0)
-    return exit_pressure*pressure_ratio_normal_shock(exit_mach, gamma)
+    return exit_pressure*ns_p2_over_p1(exit_mach, gamma)
 end
 
 """
-    pressure_after_shock_at_exit(area::Real, gamma::Real=1.4, p0::Real=1)
+    pressure_after_exit_shock(area::Real, gamma::Real=1.4, p0::Real=1)
 
 Calculates the pressure after a normal shock at the nozzle exit.
 
@@ -157,6 +157,6 @@ Calculates the pressure after a normal shock at the nozzle exit.
 # Returns
 - `Float64`: Pressure after the shock
 """
-function pressure_after_shock_at_exit(area::Real, gamma::Real=1.4, p0::Real=1)
+function pressure_after_exit_shock(area::Real, gamma::Real=1.4, p0::Real=1)
     _pressure_after_shock_at_exit(Float64(area), Float64(gamma), Float64(p0))
 end

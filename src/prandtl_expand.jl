@@ -20,7 +20,7 @@ function prandtl_meyer(M, gamma=1.4)
 end
 
 """
-    expand_mach2(M1, theta, gamma=1.4)
+    pm_mach2(M1, theta, gamma=1.4)
 
 Calculates the Mach number after a flow with Mach number M1 turns through an angle theta
 via a Prandtl-Meyer expansion wave.
@@ -33,7 +33,7 @@ via a Prandtl-Meyer expansion wave.
 # Returns
 - `mach::Float64`: Mach number after the expansion wave
 """
-function expand_mach2(M1, theta, gamma=1.4)
+function pm_mach2(M1, theta, gamma=1.4)
     initial_prandtl_meyer = prandtl_meyer(M1, gamma)
     final_prandtl_meyer = initial_prandtl_meyer + theta
 
@@ -42,7 +42,7 @@ function expand_mach2(M1, theta, gamma=1.4)
 end
 
 """
-    expand_p2(M1, theta, gamma=1.4)
+    pm_p1_over_p2(M1, theta, gamma=1.4)
 
 Calculates the pressure ratio after a flow with Mach number M1 turns through an angle theta
 via a Prandtl-Meyer expansion wave.
@@ -55,13 +55,13 @@ via a Prandtl-Meyer expansion wave.
 # Returns
 - `p::Float64`: Pressure ratio across the expansion wave (p₁/p₂)
 """
-function expand_p2(M1, theta, gamma=1.4)
-    M2 = expand_mach2(M1, theta, gamma)
-    return total_to_static_pressure_ratio(M1, gamma) / total_to_static_pressure_ratio(M2, gamma)
+function pm_p1_over_p2(M1, theta, gamma=1.4)
+    M2 = pm_mach2(M1, theta, gamma)
+    return p0_over_p(M1, gamma) / p0_over_p(M2, gamma)
 end
 
 """
-    theta_p(pratio, M1, gamma=1.4)
+    pm_theta_from_pratio(pratio, M1, gamma=1.4)
 
 Calculates the flow turning angle that produces a given pressure ratio
 through a Prandtl-Meyer expansion wave.
@@ -74,7 +74,7 @@ through a Prandtl-Meyer expansion wave.
 # Returns
 - `theta::Float64`: Flow turning angle (degrees)
 """
-function theta_p(pratio, M1, gamma=1.4)
-    pressure_objective(turning_angle) = expand_p2(M1, turning_angle, gamma) - pratio
+function pm_theta_from_pratio(pratio, M1, gamma=1.4)
+    pressure_objective(turning_angle) = pm_p1_over_p2(M1, turning_angle, gamma) - pratio
     return Roots.find_zero(pressure_objective, 0.1)
 end

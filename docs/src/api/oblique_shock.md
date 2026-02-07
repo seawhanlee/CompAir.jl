@@ -42,20 +42,20 @@ Where:
 ## Functions
 
 ```@docs
-theta_beta
-oblique_beta_weak
+theta_from_beta
+beta_from_theta
 theta_max
-Mn1
-oblique_mach2
+mn1
+os_mach2
 solve_oblique
 ```
 
 ## Function Details
 
-### theta_beta
+### theta_from_beta
 
 ```julia
-theta_beta(beta, M, gamma=1.4)
+theta_from_beta(beta, M, gamma=1.4)
 ```
 
 Calculate the deflection angle θ from shock angle β and Mach number using the θ-β-M relationship.
@@ -73,17 +73,17 @@ $$\tan\theta = 2\cot\beta \frac{M_1^2\sin^2\beta - 1}{M_1^2(\gamma + \cos 2\beta
 
 **Example:**
 ```julia
-julia> theta_beta(45.0, 2.0)
+julia> theta_from_beta(45.0, 2.0)
 11.309932474020215
 
-julia> theta_beta(60.0, 3.0)
+julia> theta_from_beta(60.0, 3.0)
 28.040946798183083
 ```
 
-### oblique_beta_weak
+### beta_from_theta
 
 ```julia
-oblique_beta_weak(M, theta, gamma=1.4)
+beta_from_theta(M, theta, gamma=1.4)
 ```
 
 Calculate the weak shock angle β for given Mach number and deflection angle using numerical solution of the θ-β-M relationship.
@@ -98,10 +98,10 @@ Calculate the weak shock angle β for given Mach number and deflection angle usi
 
 **Example:**
 ```julia
-julia> oblique_beta_weak(2.0, 10.0)
+julia> beta_from_theta(2.0, 10.0)
 39.31417164408201
 
-julia> oblique_beta_weak(3.0, 20.0)
+julia> beta_from_theta(3.0, 20.0)
 47.40460643973166
 ```
 
@@ -129,10 +129,10 @@ julia> theta_max(3.0)
 34.07775155814027
 ```
 
-### Mn1
+### mn1
 
 ```julia
-Mn1(M, theta, gamma=1.4)
+mn1(M, theta, gamma=1.4)
 ```
 
 Calculate the normal component of the upstream Mach number (component perpendicular to the shock wave).
@@ -150,17 +150,17 @@ $$M_{n1} = M_1 \sin\beta$$
 
 **Example:**
 ```julia
-julia> Mn1(2.0, 10.0)
+julia> mn1(2.0, 10.0)
 1.2649110640673516
 
-julia> Mn1(3.0, 15.0)
+julia> mn1(3.0, 15.0)
 2.0788046194771835
 ```
 
-### oblique_mach2
+### os_mach2
 
 ```julia
-oblique_mach2(M, theta, gamma=1.4)
+os_mach2(M, theta, gamma=1.4)
 ```
 
 Calculate the downstream Mach number after an oblique shock wave.
@@ -175,10 +175,10 @@ Calculate the downstream Mach number after an oblique shock wave.
 
 **Example:**
 ```julia
-julia> oblique_mach2(2.0, 10.0)
+julia> os_mach2(2.0, 10.0)
 1.640880221070567
 
-julia> oblique_mach2(3.0, 20.0)
+julia> os_mach2(3.0, 20.0)
 2.1862348686827446
 ```
 
@@ -410,8 +410,8 @@ println("Gas\tγ\tβ (°)\tM₂\tp₂/p₁")
 println("---\t----\t-----\t----\t-----")
 
 for (gas, gamma) in gases
-    beta = oblique_beta_weak(M1, theta, gamma)
-    M2 = oblique_mach2(M1, theta, gamma)
+    beta = beta_from_theta(M1, theta, gamma)
+    M2 = os_mach2(M1, theta, gamma)
     
     # Calculate pressure ratio using normal shock relations
     Mn1 = M1 * sind(beta)
@@ -432,7 +432,7 @@ M1 = 2.0
 theta = 10.0
 
 # Calculate weak shock angle
-beta_weak = oblique_beta_weak(M1, theta)
+beta_weak = beta_from_theta(M1, theta)
 
 println("Shock Solutions for M₁ = $M1, θ = $theta°:")
 println("Weak shock angle: $(round(beta_weak, digits=1))°")
@@ -460,8 +460,8 @@ println("-----\t-----\t----")
 
 for theta in 0:2:max_theta
     if theta > 0
-        beta = oblique_beta_weak(M1, theta)
-        M2 = oblique_mach2(M1, theta)
+        beta = beta_from_theta(M1, theta)
+        M2 = os_mach2(M1, theta)
         println("$(round(theta, digits=1))\t$(round(beta, digits=1))\t$(round(M2, digits=3))")
     else
         println("$(round(theta, digits=1))\t$(round(asind(1/M1), digits=1))\t$(round(M1, digits=3))")

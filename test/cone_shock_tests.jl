@@ -1,15 +1,15 @@
 # Test cases for cone shock calculations
 # Reference values from NACA Report 1135
 
-@testset "theta_eff" begin
-    @test isapprox(CompAir.theta_eff(2, 20), 8.5704, rtol=1e-3)
-    @test isapprox(CompAir.theta_eff(3, 20), 12.3773, rtol=1e-3)
+@testset "cone_theta_eff" begin
+    @test isapprox(CompAir.cone_theta_eff(2, 20), 8.5704, rtol=1e-3)
+    @test isapprox(CompAir.cone_theta_eff(3, 20), 12.3773, rtol=1e-3)
 end
 
-@testset "cone_beta_weak" begin
+@testset "cone_beta" begin
     # Test cone shock angle calculation
-    @test isapprox(CompAir.cone_beta_weak(2.0, 20.0), 37.7955, rtol=1e-3)
-    @test isapprox(CompAir.cone_beta_weak(3.0, 20.0), 29.6146, rtol=1e-3)
+    @test isapprox(CompAir.cone_beta(2.0, 20.0), 37.7955, rtol=1e-3)
+    @test isapprox(CompAir.cone_beta(3.0, 20.0), 29.6146, rtol=1e-3)
 end
 
 @testset "cone_mach2" begin
@@ -23,16 +23,16 @@ end
     @test isapprox(CompAir.cone_mach_surface(3.0, 20.0)[1], 2.2899, rtol=1e-3)
 end
 
-@testset "solve_shock" begin
+@testset "solve_cone" begin
 
-    sol1 = CompAir.solve_shock(2, 10)
+    sol1 = CompAir.solve_cone(2, 10)
     @test isapprox(sol1.M2, 1.9469, rtol=1e-3)
     @test isapprox(sol1.rho2_ratio, 1.0605, rtol=1e-3)
     @test isapprox(sol1.p2_ratio, 1.0857, rtol=1e-3)
     @test isapprox(sol1.p0_ratio, 0.9999, rtol=1e-3)
     @test isapprox(sol1.beta, 31.2018, rtol=1e-3)
 
-    sol2 = CompAir.solve_shock(3, 20)
+    sol2 = CompAir.solve_cone(3, 20)
     @test isapprox(sol2.M2, 2.3871, rtol=1e-3)
     @test isapprox(sol2.rho2_ratio, 1.8320, rtol=1e-3)
     @test isapprox(sol2.p2_ratio, 2.3973, rtol=1e-3)

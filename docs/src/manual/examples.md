@@ -18,13 +18,13 @@ println("=== Supersonic Wind Tunnel Design ===")
 println("Target test Mach number: $M_test")
 
 # Calculate nozzle area ratio
-area_ratio = area_ratio_at(M_test)
+area_ratio = a_over_astar(M_test)
 println("Required nozzle area ratio A/A*: $(round(area_ratio, digits=2))")
 
 # Calculate test section conditions
-T_ratio = total_to_static_temperature_ratio(M_test)
-p_ratio = total_to_static_pressure_ratio(M_test)
-rho_ratio = total_to_static_density_ratio(M_test)
+T_ratio = t0_over_t(M_test)
+p_ratio = p0_over_p(M_test)
+rho_ratio = rho0_over_rho(M_test)
 
 T_test = T0 / T_ratio
 p_test = p0 / p_ratio
@@ -108,11 +108,11 @@ println("=== Nozzle Back Pressure Analysis ===")
 println("Nozzle exit area ratio: $A_ratio_exit")
 
 # Find design exit Mach number
-M_design = mach_by_area_ratio(A_ratio_exit, 1.4, 2.0)  # Supersonic solution
+M_design = mach_from_area_ratio(A_ratio_exit, 1.4, 2.0)  # Supersonic solution
 println("Design exit Mach number: $(round(M_design, digits=3))")
 
 # Design exit pressure ratio
-p_design = total_to_static_pressure_ratio(M_design)
+p_design = p0_over_p(M_design)
 println("Design exit pressure ratio p₀/pₑ: $(round(p_design, digits=2))")
 
 # Operating conditions
@@ -136,9 +136,9 @@ for pb in back_pressures
     if pb < p_design_exit
         condition = "Overexpanded (design)"
         M_exit = M_design
-    elseif pb_ratio > 1/total_to_static_pressure_ratio(1.0)  # Critical pressure ratio
+    else    if pb_ratio > 1/p0_over_p(1.0)  # Critical pressure ratio
         condition = "Subsonic throughout"
-        M_exit = mach_by_area_ratio(A_ratio_exit, 1.4, 0.1)  # Subsonic solution
+        M_exit = mach_from_area_ratio(A_ratio_exit, 1.4, 0.1)  # Subsonic solution
     else
         condition = "Shock in nozzle"
         M_exit = "Complex"
@@ -165,7 +165,7 @@ println("------\t------\t-----\t-----\t------\t--------\t----------")
 
 for alt in altitudes
     # Get atmospheric properties
-    rho, p, T, a, mu = atmosphere_properties_at(alt)
+    rho, p, T, a, mu = atmos(alt)
     
     for V in velocities
         # Calculate flight Mach number
@@ -186,7 +186,7 @@ println("\n=== High-Altitude Supersonic Flight ===")
 alt_cruise = 18.0  # km (typical supersonic cruise altitude)
 M_cruise = 2.0     # Cruise Mach number
 
-rho, p, T, a, mu = atmosphere_properties_at(alt_cruise)
+rho, p, T, a, mu = atmos(alt_cruise)
 V_cruise = M_cruise * a
 
 println("Cruise conditions at $(alt_cruise) km altitude:")
@@ -197,8 +197,8 @@ println("Pressure: $(round(p/1000, digits=1)) kPa")
 println("Density: $(round(rho, digits=3)) kg/m³")
 
 # Calculate stagnation conditions
-T0 = T * total_to_static_temperature_ratio(M_cruise)
-p0 = p * total_to_static_pressure_ratio(M_cruise)
+T0 = T * t0_over_t(M_cruise)
+p0 = p * p0_over_p(M_cruise)
 
 println("\nStagnation conditions:")
 println("Stagnation temperature: $(round(T0, digits=1)) K")
@@ -231,8 +231,8 @@ println("  M₂: $(round(result_upper_shock.M2, digits=3))")
 println("  p₂/p₁: $(round(result_upper_shock.p2_ratio, digits=3))")
 
 # Trailing edge expansion
-M3_upper = expand_mach2(result_upper_shock.M2, 2*half_angle)  # Turn back to freestream direction
-p31_upper = expand_p2(result_upper_shock.M2, 2*half_angle)    # Pressure ratio p2/p3
+M3_upper = pm_mach2(result_upper_shock.M2, 2*half_angle)  # Turn back to freestream direction
+p31_upper = pm_p1_over_p2(result_upper_shock.M2, 2*half_angle)    # Pressure ratio p2/p3
 
 println("Trailing edge expansion:")
 println("  M₃: $(round(M3_upper, digits=3))")
@@ -242,8 +242,8 @@ println("  p₂/p₃: $(round(p31_upper, digits=3))")
 println("\nLower Surface:")
 
 # Leading edge expansion
-M2_lower = expand_mach2(M_inf, half_angle)
-p21_lower = expand_p2(M_inf, half_angle)
+M2_lower = pm_mach2(M_inf, half_angle)
+p21_lower = pm_p1_over_p2(M_inf, half_angle)
 
 println("Leading edge expansion:")
 println("  M₂: $(round(M2_lower, digits=3))")
@@ -284,8 +284,8 @@ println("=== CD Nozzle Starting Analysis ===")
 println("Exit area ratio A_e/A*: $A_ratio_exit")
 
 # Find required pressure ratios
-M_exit_design = mach_by_area_ratio(A_ratio_exit, 1.4, 2.0)  # Supersonic
-p_ratio_design = total_to_static_pressure_ratio(M_exit_design)
+M_exit_design = mach_from_area_ratio(A_ratio_exit, 1.4, 2.0)  # Supersonic
+p_ratio_design = p0_over_p(M_exit_design)
 
 println("Design exit Mach: $(round(M_exit_design, digits=3))")
 println("Required pressure ratio p₀/pb: $(round(p_ratio_design, digits=2))")
@@ -356,14 +356,14 @@ println("----\t----\t-----\t-----\t-----")
 
 for i in 0:n_steps
     theta_current = i * theta_step
-    M_current = (i == 0) ? M1 : expand_mach2(M1, theta_current)
+    M_current = (i == 0) ? M1 : pm_mach2(M1, theta_current)
     nu_current = prandtl_meyer(M_current)
     mu_current = asind(1/M_current)  # Mach angle
     println("$i\t$(round(theta_current, digits=1))\t$(round(M_current, digits=3))\t$(round(nu_current, digits=2))\t$(round(mu_current, digits=1))")
 end
 
 # Compare with exact solution
-M_exact = expand_mach2(M1, theta_total)
+M_exact = pm_mach2(M1, theta_total)
 println("\nExact solution M_final: $(round(M_exact, digits=3))")
 ```
 

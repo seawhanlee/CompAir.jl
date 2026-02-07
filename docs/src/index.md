@@ -36,9 +36,9 @@ using CompAir
 
 # Isentropic flow properties at Mach 2.0
 M = 2.0
-T0_T = total_to_static_temperature_ratio(M)      # Total to static temperature ratio
-p0_p = total_to_static_pressure_ratio(M)      # Total to static pressure ratio
-rho0_rho = total_to_static_density_ratio(M)  # Total to static density ratio
+T0_T = t0_over_t(M)      # Total to static temperature ratio
+p0_p = p0_over_p(M)      # Total to static pressure ratio
+rho0_rho = rho0_over_rho(M)  # Total to static density ratio
 
 println("At M = $M:")
 println("T₀/T = $(round(T0_T, digits=3))")
@@ -96,12 +96,12 @@ Depth = 2
 CompAir.jl provides functions organized into several modules for different aspects of compressible flow analysis. See the API Reference for complete documentation.
 
 ### Core Functionality
-- **Isentropic Relations**: `total_to_static_temperature_ratio`, `total_to_static_pressure_ratio`, `total_to_static_density_ratio`
+- **Isentropic Relations**: `t0_over_t`, `p0_over_p`, `rho0_over_rho`
 - **Shock Wave Analysis**: `solve_normal`, `solve_oblique`
-- **Expansion Waves**: `expand_mach2`, `expand_p2`
-- **Atmospheric Model**: `atmosphere_properties_at`, `sutherland_viscosity`
-- **Nozzle Analysis**: `area_ratio_at`, `mach_by_area_ratio`
-- **Cone Shock Analysis**: `cone_beta_weak`, `cone_mach_surface`
+- **Expansion Waves**: `pm_mach2`, `pm_p1_over_p2`
+- **Atmospheric Model**: `atmos`, `sutherland_viscosity`
+- **Nozzle Analysis**: `a_over_astar`, `mach_from_area_ratio`
+- **Cone Shock Analysis**: `cone_beta`, `cone_mach_surface`
 
 ## About This Package
 

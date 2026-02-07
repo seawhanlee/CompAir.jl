@@ -20,7 +20,7 @@ function _tangent_theta(beta_r::Real, M::Real, gamma::Real=1.4)
 end
 
 """
-    theta_beta(beta::Real, M::Real, gamma::Real=1.4)
+    theta_from_beta(beta::Real, M::Real, gamma::Real=1.4)
 
 Calculates the wedge angle `θ` using the `θ-β-M` relation given the shock angle `β` and Mach number `M`.
 
@@ -32,7 +32,7 @@ Calculates the wedge angle `θ` using the `θ-β-M` relation given the shock ang
 # Returns
 - `theta::Float64`: Wedge angle (degrees)
 """
-function theta_beta(beta::Real, M::Real, gamma::Real=1.4)
+function theta_from_beta(beta::Real, M::Real, gamma::Real=1.4)
     # Input validation
     if beta == 0.0 || beta == 90.0
         throw(DomainError(beta, "beta must be between 0 and 90 degrees, exclusive."))
@@ -75,7 +75,7 @@ function _beta_weak(M::Real, theta::Real, gamma::Real=1.4)
 end
 
 """
-    oblique_beta_weak(M::Real, theta::Real, gamma::Real=1.4)
+    beta_from_theta(M::Real, theta::Real, gamma::Real=1.4)
 
 Numerically calculates the weak oblique shock wave angle `β` using the `θ-β-M` relation
 for a given Mach number `M` and wedge angle `θ`.
@@ -88,7 +88,7 @@ for a given Mach number `M` and wedge angle `θ`.
 # Returns
 - `beta::Float64`: Oblique shock wave angle (degrees)
 """
-function oblique_beta_weak(M::Real, theta::Real, gamma::Real=1.4)
+function beta_from_theta(M::Real, theta::Real, gamma::Real=1.4)
     # Convert rad to deg
     return rad2deg(_beta_weak(M, theta, gamma))
 end
@@ -125,7 +125,7 @@ function _Mn1(M::Real, beta_r::Real, gamma::Real=1.4)
 end
 
 """
-    Mn1(M::Real, theta::Real, gamma::Real=1.4)
+    mn1(M::Real, theta::Real, gamma::Real=1.4)
 
 Calculates the Mach number component normal to the oblique shock wave for a given
 Mach number `M` and wedge angle `θ`.
@@ -138,7 +138,7 @@ Mach number `M` and wedge angle `θ`.
 # Returns
 - `Mn1::Float64`: Normal component of Mach number upstream of the shock
 """
-function Mn1(M::Real, theta::Real, gamma::Real=1.4)
+function mn1(M::Real, theta::Real, gamma::Real=1.4)
     # Get beta in rad
     beta_r = _beta_weak(M, theta, gamma)
 
@@ -146,7 +146,7 @@ function Mn1(M::Real, theta::Real, gamma::Real=1.4)
 end
 
 """
-    oblique_mach2(M::Real, theta::Real, gamma::Real=1.4)
+    os_mach2(M::Real, theta::Real, gamma::Real=1.4)
 
 Calculates the Mach number downstream of an oblique shock wave for a given
 upstream Mach number `M` and wedge angle `θ`.
@@ -159,7 +159,7 @@ upstream Mach number `M` and wedge angle `θ`.
 # Returns
 - `M2::Float64`: Downstream Mach number
 """
-function oblique_mach2(M::Real, theta::Real, gamma::Real=1.4)
+function os_mach2(M::Real, theta::Real, gamma::Real=1.4)
     # Get beta in rad
     beta_r = _beta_weak(M, theta, gamma)
 
@@ -167,7 +167,7 @@ function oblique_mach2(M::Real, theta::Real, gamma::Real=1.4)
     Mn1 = _Mn1(M, beta_r, gamma)
 
     # Normal shock relation
-    Mn2 = mach_after_normal_shock(Mn1, gamma)
+    Mn2 = ns_mach2(Mn1, gamma)
 
     theta_r = deg2rad(theta)
 

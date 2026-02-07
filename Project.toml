@@ -1,7 +1,7 @@
 name = "CompAir"
 uuid = "4888ff1c-74b1-49c5-b7ba-2d54c6dc65c5"
 authors = ["Seawhan Lee"]
-version = "1.1.0"
+version = "1.2.0"
 license = "CC-BY-NC-SA-4.0"
 
 [deps]

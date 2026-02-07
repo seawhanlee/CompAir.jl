@@ -55,9 +55,9 @@ using CompAir
 
 # Isentropic flow properties at Mach 2.0
 M = 2.0
-T0_T = total_to_static_temperature_ratio(M)      # Total to static temperature ratio
-p0_p = total_to_static_pressure_ratio(M)      # Total to static pressure ratio
-rho0_rho = total_to_static_density_ratio(M)  # Total to static density ratio
+T0_T = t0_over_t(M)      # Total to static temperature ratio
+p0_p = p0_over_p(M)      # Total to static pressure ratio
+rho0_rho = rho0_over_rho(M)  # Total to static density ratio
 
 println("At M = $M:")
 println("T₀/T = $(round(T0_T, digits=3))")
@@ -103,8 +103,8 @@ println("M₂ = $(round(result.M2, digits=3))")
 M1 = 2.0
 theta = 20.0  # turning angle in degrees
 
-M2 = expand_mach2(M1, theta)
-p_ratio = expand_p2(M1, theta)
+M2 = pm_mach2(M1, theta)
+p_ratio = pm_p1_over_p2(M1, theta)
 
 println("Prandtl-Meyer Expansion:")
 println("M₁ = $M1 → M₂ = $(round(M2, digits=3))")
@@ -118,7 +118,7 @@ println("p₁/p₂ = $(round(p_ratio, digits=3))")
 altitudes = [0.0, 11.0, 20.0, 50.0]  # km
 
 for alt in altitudes
-    density, pressure, temperature, asound, viscosity = atmosphere_properties_at(alt)
+    density, pressure, temperature, asound, viscosity = atmos(alt)
 
     println("Altitude: $(alt) km")
     println("  Density: $(round(density, digits=3)) kg/m³")
@@ -134,7 +134,7 @@ end
 ```julia
 # Calculate area ratio and exit Mach number
 M_exit = 3.0
-area_ratio = area_ratio_at(M_exit)
+area_ratio = a_over_astar(M_exit)
 
 println("Nozzle Design:")
 println("Exit Mach number: $M_exit")
@@ -142,8 +142,8 @@ println("Area ratio A/A*: $(round(area_ratio, digits=2))")
 
 # Find Mach number for given area ratio
 A_ratio = 5.0
-M_subsonic = mach_by_area_ratio(A_ratio, 1.4, 0.1)    # subsonic solution
-M_supersonic = mach_by_area_ratio(A_ratio, 1.4, 2.0)  # supersonic solution
+M_subsonic = mach_from_area_ratio(A_ratio, 1.4, 0.1)    # subsonic solution
+M_supersonic = mach_from_area_ratio(A_ratio, 1.4, 2.0)  # supersonic solution
 
 println("For A/A* = $A_ratio:")
 println("Subsonic M = $(round(M_subsonic, digits=3))")
@@ -176,9 +176,9 @@ println("Supersonic M = $(round(M_supersonic, digits=3))")
 ## API Reference
 
 ### Isentropic Relations
-- `total_to_static_temperature_ratio(M, gamma=1.4)` - Total to static temperature ratio
-- `total_to_static_pressure_ratio(M, gamma=1.4)` - Total to static pressure ratio
-- `total_to_static_density_ratio(M, gamma=1.4)` - Total to static density ratio
+- `t0_over_t(M, gamma=1.4)` - Total to static temperature ratio
+- `p0_over_p(M, gamma=1.4)` - Total to static pressure ratio
+- `rho0_over_rho(M, gamma=1.4)` - Total to static density ratio
 
 ### Shock Wave Analysis
 - `solve_normal(M, gamma=1.4)` - Complete normal shock analysis
@@ -187,17 +187,17 @@ println("Supersonic M = $(round(M_supersonic, digits=3))")
 
 ### Expansion Waves
 - `prandtl_meyer(M, gamma=1.4)` - Prandtl-Meyer function ν(M)
-- `expand_mach2(M1, theta, gamma=1.4)` - Mach number after expansion
-- `expand_p2(M1, theta, gamma=1.4)` - Pressure ratio across expansion
+- `pm_mach2(M1, theta, gamma=1.4)` - Mach number after expansion
+- `pm_p1_over_p2(M1, theta, gamma=1.4)` - Pressure ratio across expansion
 
 ### Atmospheric Model
-- `atmosphere_properties_at(alt)` - Complete atmospheric properties at altitude
-- `geometric_to_geopotential_altitude(alt)` - Convert geometric to geopotential altitude
+- `atmos(alt)` - Complete atmospheric properties at altitude
+- `geo_to_geopot(alt)` - Convert geometric to geopotential altitude
 - `sutherland_viscosity(theta)` - Dynamic viscosity from Sutherland's law
 
 ### Nozzle Analysis
-- `area_ratio_at(M, gamma=1.4)` - Area ratio A/A* for given Mach number
-- `mach_by_area_ratio(A_ratio, gamma=1.4, x0=0.1)` - Mach number for area ratio
+- `a_over_astar(M, gamma=1.4)` - Area ratio A/A* for given Mach number
+- `mach_from_area_ratio(A_ratio, gamma=1.4, x0=0.1)` - Mach number for area ratio
 - `mdot(M, area, p0, t0, gamma, R)` - Mass flow rate calculation
 
 ## Dependencies
