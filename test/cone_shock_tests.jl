@@ -81,5 +81,85 @@ end
     @test isapprox(phi2_psi, 27.19117598207076, rtol=1e-3)
 end
 
+# Edge case tests for refactored _taylor_maccoll! / _integrate_tm
 
+@testset "cone_shock edge cases" begin
 
+    @testset "small cone half-angle (5°)" begin
+        @test isapprox(CompAir.cone_theta_eff(3.0, 5.0), 0.319, rtol=1e-3)
+        @test isapprox(CompAir.cone_beta(3.0, 5.0), 19.688, rtol=1e-3)
+
+        sol = CompAir.solve_cone(3.0, 5.0)
+        @test isapprox(sol.M2, 2.984, rtol=1e-3)
+        @test isapprox(sol.rho2_ratio, 1.018, rtol=1e-3)
+        @test isapprox(sol.p2_ratio, 1.025, rtol=1e-3)
+        @test isapprox(sol.p0_ratio, 1.000, rtol=1e-3)
+        @test isapprox(sol.beta, 19.688, rtol=1e-3)
+    end
+
+    @testset "high Mach M=4, angle=20°" begin
+        sol = CompAir.solve_cone(4.0, 20.0)
+        @test isapprox(sol.M2, 2.970, rtol=1e-3)
+        @test isapprox(sol.rho2_ratio, 2.333, rtol=1e-3)
+        @test isapprox(sol.p2_ratio, 3.546, rtol=1e-3)
+        @test isapprox(sol.p0_ratio, 0.820, rtol=1e-3)
+        @test isapprox(sol.beta, 26.485, rtol=1e-3)
+    end
+
+    @testset "high Mach M=5, angle=15°" begin
+        sol = CompAir.solve_cone(5.0, 15.0)
+        @test isapprox(sol.M2, 3.930, rtol=1e-3)
+        @test isapprox(sol.rho2_ratio, 2.218, rtol=1e-3)
+        @test isapprox(sol.p2_ratio, 3.254, rtol=1e-3)
+        @test isapprox(sol.p0_ratio, 0.851, rtol=1e-3)
+        @test isapprox(sol.beta, 20.028, rtol=1e-3)
+    end
+
+    @testset "bow shock (M=2, angle=40° exceeds θ_max)" begin
+        sol = CompAir.solve_cone(2.0, 40.0)
+        @test isapprox(sol.M2, 0.627, rtol=1e-3)
+        @test isapprox(sol.rho2_ratio, 2.667, rtol=1e-3)
+        @test isapprox(sol.p2_ratio, 4.5, rtol=1e-3)
+        @test isapprox(sol.p0_ratio, 0.721, rtol=1e-3)
+        @test isapprox(sol.beta, 90.0, rtol=1e-3)
+    end
+
+    @testset "non-air gamma γ=5/3 (monatomic gas)" begin
+        sol = CompAir.solve_cone(2.5, 10.0, 5 / 3)
+        @test isapprox(sol.M2, 2.365, rtol=1e-3)
+        @test isapprox(sol.rho2_ratio, 1.116, rtol=1e-3)
+        @test isapprox(sol.p2_ratio, 1.201, rtol=1e-3)
+        @test isapprox(sol.p0_ratio, 0.9995, rtol=1e-2)
+        @test isapprox(sol.beta, 25.528, rtol=1e-3)
+    end
+
+    @testset "non-air gamma γ=1.3 (high-temp diatomic)" begin
+        sol = CompAir.solve_cone(3.0, 15.0, 1.3)
+        @test isapprox(sol.M2, 2.676, rtol=1e-3)
+        @test isapprox(sol.rho2_ratio, 1.492, rtol=1e-3)
+        @test isapprox(sol.p2_ratio, 1.691, rtol=1e-3)
+        @test isapprox(sol.p0_ratio, 0.984, rtol=1e-3)
+        @test isapprox(sol.beta, 25.032, rtol=1e-3)
+    end
+
+    @testset "cone_mach_surface edge cases" begin
+        ms1 = CompAir.cone_mach_surface(2.5, 15.0)
+        @test isapprox(ms1[1], 2.118, rtol=1e-3)
+        @test isapprox(ms1[2], 15.0, rtol=1e-3)
+
+        ms2 = CompAir.cone_mach_surface(3.0, 5.0)
+        @test isapprox(ms2[1], 2.891, rtol=1e-3)
+        @test isapprox(ms2[2], 5.0, rtol=1e-3)
+    end
+
+    @testset "solve_cone_properties with intermediate psi" begin
+        mc, rhoc, pc, p0r, beta, phi = CompAir.solve_cone_properties(3.0, 15.0, psi=10.0)
+        @test isapprox(mc, 2.622, rtol=1e-3)
+        @test isapprox(rhoc, 1.483, rtol=1e-3)
+        @test isapprox(pc, 1.749, rtol=1e-3)
+        @test isapprox(p0r, 0.983, rtol=1e-3)
+        @test isapprox(beta, 25.259, rtol=1e-3)
+        @test isapprox(phi, 23.611, rtol=1e-3)
+    end
+
+end

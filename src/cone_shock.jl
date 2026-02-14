@@ -4,34 +4,50 @@ import OrdinaryDiffEq
 import LinearAlgebra
 
 """
-    _taylor_maccoll(theta, y, gamma=1.4)
+    _taylor_maccoll!(du, u, gamma, theta)
 
-Internal function to compute the differential equation for the Taylor-Maccoll equation.
+In-place Taylor-Maccoll ODE right-hand side in canonical DifferentialEquations.jl form `f!(du, u, p, t)`.
 
 # Arguments
-- `theta::Float64`: Angle (radians)
-- `y::Vector{Float64}`: Velocity vector [v_r, v_theta]
-- `gamma::Float64=1.4`: Specific heat ratio
+- `du::Vector{Float64}`: Derivative output vector (mutated in-place)
+- `u::Vector{Float64}`: State vector `[v_r, v_theta]`
+- `gamma`: Specific heat ratio (passed as ODE parameter `p`)
+- `theta`: Polar angle in radians (ODE independent variable `t`)
 
 # Returns
-- `dydt::Vector{Float64}`: Right-hand side vector of the differential equation
-"""
-function _taylor_maccoll(theta, y, gamma=1.4)
-    # Taylor-Maccoll function
-    # Source: https://www.grc.nasa.gov/www/k-12/airplane/coneflow.html
-    v_r, v_theta = y
-    dydt = [
-        v_theta;
-        (v_theta^2 * v_r - (gamma - 1) / 2 * (1 - v_r^2 - v_theta^2) * (2 * v_r + v_theta / tan(theta)))/ ((gamma - 1) / 2 * (1 - v_r^2 - v_theta^2) - v_theta^2)
-    ]
+- `nothing`
 
-    return dydt
+# References
+- [NASA Taylor-Maccoll](https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/shockc/)
+"""
+function _taylor_maccoll!(du, u, gamma, theta)
+    @inbounds begin
+        v_r = u[1]
+        v_theta = u[2]
+
+        q = 1.0 - v_r * v_r - v_theta * v_theta
+        a = 0.5 * (gamma - 1) * q
+
+        sinθ = sin(theta)
+        cosθ = cos(theta)
+        cotθ = cosθ / sinθ
+
+        denom = a - v_theta * v_theta
+
+        du[1] = v_theta
+        du[2] = (v_theta * v_theta * v_r - a * (2.0 * v_r + v_theta * cotθ)) / denom
+    end
+    return nothing
 end
 
 """
     _integrate_tm(M, angle, theta, gamma=1.4)
 
-Internal function to numerically integrate the Taylor-Maccoll equation.
+Internal function to numerically integrate the Taylor-Maccoll equation using
+the canonical DifferentialEquations.jl interface.
+
+Uses the default composite algorithm for automatic stiffness detection with in-place
+RHS and minimal saving for performance in root-finding loops.
 
 # Arguments
 - `M::Float64`: Upstream Mach number
@@ -40,7 +56,7 @@ Internal function to numerically integrate the Taylor-Maccoll equation.
 - `gamma::Float64=1.4`: Specific heat ratio
 
 # Returns
-- `sol`: Solution object from DifferentialEquations.jl
+- `sol`: Solution object from DifferentialEquations.jl (only endpoint saved)
 """
 function _integrate_tm(M, angle, theta, gamma=1.4)
     maximum_deflection_angle = theta_max(M, gamma)
@@ -57,19 +73,19 @@ function _integrate_tm(M, angle, theta, gamma=1.4)
     tangential_velocity = -normalized_velocity * sind(shock_angle - theta)
     radial_velocity = normalized_velocity * cosd(shock_angle - theta)
 
-    # Integrate over [shock_angle, angle]
-    integration_span = (deg2rad(shock_angle), deg2rad(angle))
+    tspan = (deg2rad(shock_angle), deg2rad(angle))
+    u0 = [radial_velocity, tangential_velocity]
 
-    # Define ODE function wrapper
-    ode_function_wrapper = (velocity_state, specific_heat_ratio, cone_angle) -> _taylor_maccoll(cone_angle, velocity_state, specific_heat_ratio)
+    prob = DiffEqBase.ODEProblem(_taylor_maccoll!, u0, tspan, gamma)
+    sol = OrdinaryDiffEq.solve(
+        prob;
+        save_everystep=false,
+        save_start=false,
+        save_end=true,
+        dense=false,
+    )
 
-    # Set initial conditions
-    initial_state = [radial_velocity, tangential_velocity]
-
-    problem = DiffEqBase.ODEProblem(ode_function_wrapper, initial_state, integration_span, gamma)
-    solution = OrdinaryDiffEq.solve(problem)
-    # Return solution
-    return solution
+    return sol
 end
 
 """
