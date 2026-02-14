@@ -36,7 +36,11 @@ function _intake_ramp(M_infty::Float64, ramp_angle::Vector{Float64}, gamma::Floa
         shock_angle[stage_index] = shock_solution.beta
     end
     
-    return (M=mach_number, rho2_ratio=density_ratio, p2_ratio=pressure_ratio, p0_ratio=total_pressure_ratio, beta=shock_angle)
+    return (M=mach_number,
+            rho2_ratio=density_ratio,
+            p2_ratio=pressure_ratio,
+            p0_ratio=total_pressure_ratio,
+            beta=shock_angle)
 
 end
 
